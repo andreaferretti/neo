@@ -1,2 +1,3 @@
 nimcache
-/nimat
+.vscode
+tests/example
