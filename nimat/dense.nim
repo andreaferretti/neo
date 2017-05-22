@@ -57,6 +57,8 @@ proc to32*(m: Matrix[float64]): Matrix[float32] =
 proc to64*(m: Matrix[float32]): Matrix[float64] =
   result = Matrix[float64](data:m.data.mapIt(it.float64), order:m.order, M:m.M, N:m.N)
 
+# Initializers
+
 proc makeVector*[A](N: int, f: proc (i: int): A): Vector[A] =
   result = newSeq[A](N)
   for i in 0 ..< N:
@@ -151,6 +153,8 @@ proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   # should use makeMatrixIJ, go figure...
   makeMatrixIJ[A](xs.len, xs[0].len, proc(i, j: int): float32 = xs[i][j], order)
 
+# Accessors
+
 proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
   if m.order == colMajor: m.data[j * m.M + i]
   else: m.data[i * m.N + j]
@@ -181,6 +185,8 @@ proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
   for i in 0 ..< (m.M * m.N):
     result.data[i] = f(m.data[i])
 
+# Iterators
+
 iterator columns*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.N:
     yield m.column(i)
@@ -199,6 +205,8 @@ iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
     for j in 0 ..< m.N:
       yield ((i, j), m[i, j])
 
+# Pretty printing
+
 proc toStringHorizontal[A](v: Vector[A]): string =
   result = "[ "
   for i in 0 ..< (v.len - 1):
@@ -210,3 +218,31 @@ proc `$`*[A](m: Matrix[A]): string =
   for i in 0 .. < (m.M - 1):
     result &= toStringHorizontal(m.row(i)) & "\n  "
   result &= toStringHorizontal(m.row(m.M - 1)) & " ]"
+
+# Trivial operations
+
+proc t*[A](m: Matrix[A]): Matrix[A] =
+  new result
+  result.M = m.N
+  result.N = m.M
+  result.order = if m.order == rowMajor: colMajor else: rowMajor
+  shallowCopy(result.data, m.data)
+
+proc reshape*[A](m: Matrix[A], a, b: int): Matrix[A] =
+  assert(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
+  new result
+  result.M = a
+  result.N = b
+  result.order = m.order
+  shallowCopy(result.data, m.data)
+
+proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
+  assert(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
+  new result
+  result.order = order
+  shallowCopy(result.data, v)
+  result.M = a
+  result.N = b
+
+proc asVector*[A](m: Matrix[A]): Vector[A] =
+  shallowCopy(result, m.data)
