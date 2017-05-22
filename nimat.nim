@@ -1,3 +1,3 @@
-import nimat/sparse
+import nimat/dense, nimat/sparse
 
-export sparse
+export dense, sparse
