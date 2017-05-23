@@ -113,3 +113,15 @@ iterator items*[A](m: SparseMatrix[A]): A =
             nextC = m.cols[count]
         else:
           yield 0
+
+proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
+  result = Matrix[A](
+    order: (if m.kind == CSC: colMajor else: rowMajor),
+    M: m.M,
+    N: m.N,
+    data: newSeq[A](m.M * m.N)
+  )
+  var i = 0
+  for x in m:
+    result.data[i] = x
+    inc i
