@@ -13,6 +13,8 @@
 # limitations under the License.
 import nimblas, sequtils, random, math
 
+export nimblas.OrderType
+
 type
   Vector*[A] = seq[A]
   Matrix*[A] = ref object

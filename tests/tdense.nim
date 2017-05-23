@@ -15,6 +15,6 @@
 {.push warning[ProveInit]: off .}
 
 import initialize, access, equality, conversions, iterators, collection,
-  trivial_ops, ops#, row_major_ops, mixed_ops, compilation, types, ufunc
+  trivial_ops, ops, row_major_ops, mixed_ops#, compilation, types, ufunc
 
 {. pop .}
