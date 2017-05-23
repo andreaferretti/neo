@@ -16,14 +16,6 @@ import sequtils
 import nimcuda/[cuda_runtime_api, driver_types, cusparse, nimcuda]
 import ./sparse
 
-type
-  CArray{.unchecked.}[T] = array[1, T]
-  CPointer[T] = ptr CArray[T]
-
-proc first[T](p: CPointer[T]): ptr T {.inline.} = addr(p[0])
-
-proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
-
 template pointerTo(x: untyped) = cast[ptr pointer](addr x)
 
 type
