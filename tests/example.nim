@@ -1,9 +1,6 @@
-import nimat
+import nimat/sparse, nimat/cudasparse
 
 when isMainModule:
-  let a = eye(3)
-  echo a
-
   var
     rows = @[0'i32, 3, 4, 7, 9]
     cols = @[0'i32, 2, 3, 1, 0, 2, 3, 1, 3]
