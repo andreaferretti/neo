@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import sequtils
+import ./dense
 
 type
   CArray{.unchecked.}[T] = array[1, T]
@@ -30,14 +31,9 @@ type
   SparseMatrixObj*[A] = object
     kind*: SparseMatrixKind
     M*, N*, nnz*: int32
-    rows*, cols*: ptr int32
-    vals*: ptr A
+    rows*, cols*: seq[int32]
+    vals*: seq[A]
   SparseMatrix*[A] = ref SparseMatrixObj[A]
-
-proc dealloc*[A](m: SparseMatrix[A]) =
-  if m.rows != nil: dealloc(m.rows)
-  if m.cols != nil: dealloc(m.cols)
-  if m.vals != nil: dealloc(m.vals)
 
 proc rowLen*(m: SparseMatrix): int32 =
   case m.kind
@@ -56,25 +52,64 @@ proc sizes*[A](m: SparseMatrix[A]): tuple[r, c, v: int32] =
     (m.nnz * sizeof(A)).int32
   )
 
-proc sparse*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: var seq[int32], vals: var seq[A]): SparseMatrix[A] =
-  new result, dealloc
-  result.kind = kind
-  result.M = N
-  result.N = N
-  result.nnz = nnz
-  let (r, c, v) = result.sizes
-  result.rows = cast[ptr int32](alloc(r))
-  result.cols = cast[ptr int32](alloc(c))
-  result.vals = cast[ptr A](alloc(v))
-  copyMem(result.rows, rows.first, r)
-  copyMem(result.cols, cols.first, c)
-  copyMem(result.vals, vals.first, v)
+proc sparse*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
+  SparseMatrix[A](
+    kind: kind,
+    M: M,
+    N: N,
+    nnz: nnz,
+    rows: rows,
+    cols: cols,
+    vals: vals
+  )
 
-proc csr*[A: Number](rows, cols: var seq[int32], vals: var seq[A], numCols: int32): SparseMatrix[A] =
-  sparse(CSR, rows.len.int32, numCols, vals.len.int32, rows, cols, vals)
+proc csr*[A: Number](rows, cols: seq[int32], vals: seq[A], numCols: int32): SparseMatrix[A] =
+  sparse(CSR, rows.len.int32 - 1, numCols, vals.len.int32, rows, cols, vals)
 
-proc csc*[A: Number](rows, cols: var seq[int32], vals: var seq[A], numRows: int32): SparseMatrix[A] =
-  sparse(CSC, numRows, cols.len.int32, vals.len.int32, rows, cols, vals)
+proc csc*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows: int32): SparseMatrix[A] =
+  sparse(CSC, numRows, cols.len.int32 - 1, vals.len.int32, rows, cols, vals)
 
-proc coo*[A: Number](rows, cols: var seq[int32], vals: var seq[A], numRows, numCols: int32): SparseMatrix[A] =
+proc coo*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int32): SparseMatrix[A] =
   sparse(COO, numRows, numCols, vals.len.int32, rows, cols, vals)
+
+iterator items*[A](m: SparseMatrix[A]): A =
+  var count = 0
+  case m.kind
+  of CSR:
+    var next = m.cols[0]
+    for i in 0 ..< m.M:
+      let max = m.rows[i + 1]
+      for j in 0 ..< m.N:
+        if count < max and j == next:
+          yield m.vals[count]
+          inc count
+          if count < m.nnz:
+            next = m.cols[count]
+        else:
+          yield 0
+  of CSC:
+    var next = m.rows[0]
+    for j in 0 ..< m.N:
+      let max = m.cols[j + 1]
+      for i in 0 ..< m.M:
+        if count < max and i == next:
+          yield m.vals[count]
+          inc count
+          if count < m.nnz:
+            next = m.rows[count]
+        else:
+          yield 0
+  of COO:
+    var
+      nextR = m.rows[0]
+      nextC = m.cols[0]
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        if i == nextR and j == nextC:
+          yield m.vals[count]
+          inc count
+          if count < m.nnz:
+            nextR = m.rows[count]
+            nextC = m.cols[count]
+        else:
+          yield 0

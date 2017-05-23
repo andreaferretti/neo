@@ -3,3 +3,4 @@ nimcache
 tests/example
 tests/tdense
 tests/tcudadense
+tests/tsparse

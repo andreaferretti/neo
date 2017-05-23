@@ -45,6 +45,10 @@ task test, "run standard tests":
   configForTests()
   setCommand "c", "tests/tdense.nim"
 
+task testsparse, "run sparse tests":
+  configForTests()
+  setCommand "c", "tests/tsparse.nim"
+
 task testopenblas, "run standard tests on openblas":
   configForTests()
   --define: openblas
