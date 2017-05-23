@@ -246,3 +246,315 @@ proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
 
 proc asVector*[A](m: Matrix[A]): Vector[A] =
   shallowCopy(result, m.data)
+
+# BLAS level 1 operations
+
+proc `*=`*[A: SomeReal](v: var Vector[A], k: A) {. inline .} = scal(v.len, k, v.fp, 1)
+
+proc `*`*[A: SomeReal](v: Vector[A], k: A): Vector[A] {. inline .} =
+  let N = v.len
+  result = newSeq[A](N)
+  copy(N, v.fp, 1, result.fp, 1)
+  scal(N, k, result.fp, 1)
+
+proc `+=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  axpy(N, 1, w.fp, 1, v.fp, 1)
+
+proc `+`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  result = newSeq[A](N)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, 1, w.fp, 1, result.fp, 1)
+
+proc `-=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  axpy(N, -1, w.fp, 1, v.fp, 1)
+
+proc `-`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
+  assert(v.len == w.len)
+  let N = v.len
+  result = newSeq[A](N)
+  copy(N, v.fp, 1, result.fp, 1)
+  axpy(N, -1, w.fp, 1, result.fp, 1)
+
+proc `*`*[A: SomeReal](v, w: Vector[A]): A {. inline .} =
+  assert(v.len == w.len)
+  return dot(v.len, v.fp, 1, w.fp, 1)
+
+proc l_2*[A: SomeReal](v: Vector[A]): auto {. inline .} = nrm2(v.len, v.fp, 1)
+
+proc l_1*[A: SomeReal](v: Vector[A]): auto {. inline .} = asum(v.len, v.fp, 1)
+
+proc maxIndex*[A](v: Vector[A]): tuple[i: int, val: A] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val > m:
+      j = i
+      m = val
+  return (j, m)
+
+template max*[A](v: Vector[A]): A = maxIndex(v).val
+
+proc minIndex*[A](v: Vector[A]): tuple[i: int, val: A] =
+  var
+    j = 0
+    m = v[0]
+  for i, val in v:
+    if val < m:
+      j = i
+      m = val
+  return (j, m)
+
+template min*[A](v: Vector[A]): A = minIndex(v).val
+
+template len(m: Matrix): int = m.M * m.N
+
+template initLike[A](r, m: Matrix[A]) =
+  new r
+  r.data = newSeq[A](m.len)
+  r.order = m.order
+  r.M = m.M
+  r.N = m.N
+
+proc `*=`*[A: SomeReal](m: var Matrix[A], k: A) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
+
+proc `*`*[A: SomeReal](m: Matrix[A], k: A): Matrix[A]  {. inline .} =
+  result.initLike(m)
+  copy(m.len, m.fp, 1, result.fp, 1)
+  scal(m.len, k, result.fp, 1)
+
+template `*`*[A: SomeReal](k: A, v: Vector[A] or Matrix[A]): auto = v * k
+
+template `/`*[A: SomeReal](k: A, v: Vector[A] or Matrix[A]): auto = v * (1 / k)
+
+template `/=`*[A: SomeReal](v: var Vector[A] or var Matrix[A], k: A) =
+  v *= (1 / k)
+
+proc `+=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  if a.order == b.order:
+    axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
+  elif a.order == colMajor and b.order == rowMajor:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[j * a.M + i] += b.data[i * b.N + j]
+  else:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[i * a.N + j] += b.data[j * b.M + i]
+
+proc `+`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
+  result += b
+
+proc `-=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
+  assert a.M == b.M and a.N == a.N
+  if a.order == b.order:
+    axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
+  elif a.order == colMajor and b.order == rowMajor:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[j * a.M + i] -= b.data[i * b.N + j]
+  else:
+    for i in 0 .. < a.M:
+      for j in 0 .. < a.N:
+        a.data[i * a.N + j] -= b.data[j * b.M + i]
+
+proc `-`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
+  result.initLike(a)
+  copy(a.len, a.fp, 1, result.fp, 1)
+  result -= b
+
+proc l_2*[A: SomeReal](m: Matrix[A]): A {. inline .} = nrm2(m.len, m.fp, 1)
+
+proc l_1*[A: SomeReal](m: Matrix[A]): A {. inline .} = asum(m.len, m.fp, 1)
+
+template max*[A](m: Matrix[A]): A = max(m.data)
+
+template min*[A](m: Matrix[A]): A = min(m.data)
+
+# BLAS level 2 operations
+
+proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =
+  assert(a.N == v.len)
+  result = newSeq[A](a.M)
+  let lda = if a.order == colMajor: a.M.int else: a.N.int
+  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+
+# BLAS level 3 operations
+
+proc `*`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
+  new result
+  let
+    M = a.M
+    K = a.N
+    N = b.N
+  assert b.M == K
+  result.data = newSeq[A](M * N)
+  result.M = M
+  result.N = N
+  if a.order == colMajor and b.order == colMajor:
+    result.order = colMajor
+    gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+  elif a.order == rowMajor and b.order == rowMajor:
+    result.order = rowMajor
+    gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
+  elif a.order == colMajor and b.order == rowMajor:
+    result.order = colMajor
+    gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
+  else:
+    result.order = colMajor
+    gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+
+# Comparison
+
+template compareApprox(a, b: Vector or Matrix): bool =
+  const epsilon = 0.000001
+  let
+    aNorm = l_1(a)
+    bNorm = l_1(b)
+    dNorm = l_1(a - b)
+  (dNorm / (aNorm + bNorm)) < epsilon
+
+proc `=~`*[A: SomeReal](v, w: Vector[A]): bool =
+  compareApprox(v, w)
+
+proc `=~`*[A: SomeReal](v, w: Matrix[A]): bool =
+  compareApprox(v, w)
+
+template `!=~`*(a, b: Vector or Matrix): bool =
+  not (a =~ b)
+
+# Hadamard (component-wise) product
+proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
+  assert a.len == b.len
+  result = newSeq[A](a.len)
+  for i in 0 ..< N:
+    result[i] = a[i] * b[i]
+
+proc `|*|`*[A](a, b: Matrix[A]): Matrix[A] =
+  assert a.dim == b.dim
+  let (m, n) = a.dim
+  result.initLike(a)
+  if a.order == b.order:
+    result.order = a.order
+    for i in 0 ..< a.len:
+      result.data[i] = a.data[i] * b.data[i]
+  else:
+    for i in 0 ..< a.M:
+      for j in 0 ..< a.N:
+        result[i, j] = a[i, j] * b[i, j]
+
+# Universal functions
+
+template makeUniversal*(fname: untyped) =
+  when not compiles(fname(0'f32)):
+    proc fname*(x: float32): float32 = fname(x.float64).float32
+
+  proc fname*[A: SomeReal](v: Vector[A]): Vector[A] =
+    result = newSeq[A](v.len)
+    for i in 0 ..< (v.len):
+      result[i] = fname(v[i])
+
+  proc fname*[A: SomeReal](m: Matrix[A]): Matrix[A] =
+    result.initLike(m)
+    for i in 0 ..< m.len:
+      result.data[i] = fname(m.data[i])
+
+  export fname
+
+
+template makeUniversalLocal*(fname: untyped) =
+  when not compiles(fname(0'f32)):
+    proc fname(x: float32): float32 = fname(x.float64).float32
+
+  proc fname[A: SomeReal](v: Vector[A]): Vector[A] =
+    result = newSeq[A](v.len)
+    for i in 0 ..< (v.len):
+      result[i] = fname(v[i])
+
+  proc fname[A: SomeReal](m: Matrix[A]): Matrix[A] =
+    result.initLike(m)
+    for i in 0 ..< m.len:
+      result.data[i] = fname(m.data[i])
+
+makeUniversal(sqrt)
+makeUniversal(cbrt)
+makeUniversal(log10)
+makeUniversal(log2)
+makeUniversal(log)
+makeUniversal(exp)
+makeUniversal(arccos)
+makeUniversal(arcsin)
+makeUniversal(arctan)
+makeUniversal(cos)
+makeUniversal(cosh)
+makeUniversal(sin)
+makeUniversal(sinh)
+makeUniversal(tan)
+makeUniversal(tanh)
+makeUniversal(erf)
+makeUniversal(erfc)
+makeUniversal(lgamma)
+makeUniversal(tgamma)
+makeUniversal(trunc)
+makeUniversal(floor)
+makeUniversal(ceil)
+makeUniversal(degToRad)
+makeUniversal(radToDeg)
+
+# Functional API
+
+proc cumsum*[A](v: Vector[A]): Vector[A] =
+  result = newSeq[A](v.len)
+  result[0] = v[0]
+  for i in 1 ..< v.len:
+    result[i] = result[i - 1] + v[i]
+
+proc sum*[A](v: Vector[A]): A =
+  foldl(v, a + b)
+
+proc mean*[A: SomeReal](v: Vector[A]): A {.inline.} =
+  sum(v) / A(v.len)
+
+proc variance*[A: SomeReal](v: Vector[A]): A =
+  let m = v.mean
+  result = v[0] - v[0]
+  for x in v:
+    let y = x - m
+    result += y * y
+  result /= A(v.len)
+
+template stddev*[A: SomeReal](v: Vector[A]): A =
+  sqrt(variance(v))
+
+template sum*(m: Matrix): auto = m.asVector.sum
+
+template mean*(m: Matrix): auto = m.asVector.mean
+
+template variance*(m: Matrix): auto = m.asVector.variance
+
+template stddev*(m: Matrix): auto = m.asVector.stddev
+
+# Rewrites
+
+proc linearCombination[A: SomeReal](a: A, v, w: Vector[A]): Vector[A]  {. inline .} =
+  new result
+  copy(v.len, v.fp, 1, result.fp, 1)
+  axpy(v.len, a, w.fp, 1, result.fp, 1)
+
+proc linearCombinationMut[A: SomeReal](a: A, v: var Vector[A], w: Vector[A])  {. inline .} =
+  axpy(v.len, a, w.fp, 1, v.fp, 1)
+
+template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeReal](a: A, v, w: Vector[A]): auto =
+  linearCombination(a, v, w)
+
+template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var Vector[A], w: Vector[A]): auto =
+  linearCombinationMut(a, v, w)
