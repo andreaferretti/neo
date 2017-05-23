@@ -90,7 +90,7 @@ proc ones*(N: int, A: typedesc[float32]): auto = constantVector(N, 1'f32)
 
 proc ones*(N: int, A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
-proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order: OrderType): Matrix[A] =
+proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order = colMajor): Matrix[A] =
   new result
   result.data = newSeq[A](M * N)
   result.M = M
@@ -105,30 +105,41 @@ proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order: OrderType): Matrix
       for j in 0 ..< N:
         result.data[i * N + j] = f(i, j)
 
-template makeMatrixIJ*[A](M1, N1: int, f: untyped, ord = colMajor): auto =
-  new result
-  result.data = newSeq[A](M1 * N1)
-  result.M = M1
-  result.N = N1
-  result.order = order
+template makeMatrixIJ*(A: typedesc, M1, N1: int, f: untyped, ord = colMajor): auto =
+  var r: Matrix[A]
+  new(r)
+  r.data = newSeq[A](M1 * N1)
+  r.M = M1
+  r.N = N1
+  r.order = ord
   if ord == colMajor:
     for i {.inject.} in 0 ..< M1:
       for j {.inject.} in 0 ..< N1:
-        result.data[j * M1 + i] = f
+        r.data[j * M1 + i] = f
   else:
     for i {.inject.} in 0 ..< M1:
       for j {.inject.} in 0 ..< N1:
-        result.data[i * N1 + j] = f
-  result
+        r.data[i * N1 + j] = f
+  r
 
-proc randomMatrix*(M, N: int, max: float64 = 1, order = colMajor): Matrix[float64] =
-  makeMatrixIJ[float64](M, N, random(max), order)
+proc randomMatrix*[A: SomeReal](M, N: int, max: A = 1, order = colMajor): Matrix[A] =
+  new(result)
+  result.data = newSeq[A](M * N)
+  result.M = M
+  result.N = N
+  result.order = order
+  for i in 0 ..< (M * N):
+    result.data[i] = random(max)
 
-proc randomMatrix*(M, N: int, max: float32 = 1, order = colMajor): Matrix[float32] =
-  makeMatrixIJ[float32](M, N, random(max).float32, order)
+proc randomMatrix*(M, N: int, order = colMajor): Matrix[float64] =
+  randomMatrix(M, N, 1'f64, order)
 
 proc constantMatrix*[A](M, N: int, a: A, order = colMajor): Matrix[A] =
-  makeMatrixIJ[A](M, N, a, order)
+  new(result)
+  result.data = sequtils.repeat(a, M * N)
+  result.M = M
+  result.N = N
+  result.order = order
 
 proc zeros*(M, N: int): auto = constantMatrix(M, N, 0'f64)
 
@@ -143,15 +154,13 @@ proc ones*(M, N: int, A: typedesc[float32]): auto = constantMatrix(M, N, 1'f32)
 proc ones*(M, N: int, A: typedesc[float64]): auto = constantMatrix(M, N, 1'f64)
 
 proc eye*(N: int, order = colMajor): Matrix[float64] =
-  makeMatrixIJ[float64](N, N, if i == j: 1 else: 0, order)
+  makeMatrixIJ(float64, N, N, if i == j: 1 else: 0, order)
 
 proc eye*(N: int, A: typedesc[float32], order = colMajor): Matrix[float32] =
-  # should use makeMatrixIJ, go figure...
-  makeMatrix[float32](N, N, proc(i, j: int): float32 = (if i == j: 1 else: 0), order)
+  makeMatrixIJ(float32, N, N, if i == j: 1 else: 0, order)
 
 proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
-  # should use makeMatrixIJ, go figure...
-  makeMatrixIJ[A](xs.len, xs[0].len, proc(i, j: int): float32 = xs[i][j], order)
+  makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
 # Accessors
 
@@ -167,12 +176,12 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
   result = newSeq[A](m.M)
-  for i in 0 .. < m.M:
+  for i in 0 ..< m.M:
     result[i] = m[i, j]
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
   result = newSeq[A](m.N)
-  for j in 0 .. < m.N:
+  for j in 0 ..< m.N:
     result[j] = m[i, j]
 
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
@@ -215,7 +224,7 @@ proc toStringHorizontal[A](v: Vector[A]): string =
 
 proc `$`*[A](m: Matrix[A]): string =
   result = "[ "
-  for i in 0 .. < (m.M - 1):
+  for i in 0 ..< (m.M - 1):
     result &= toStringHorizontal(m.row(i)) & "\n  "
   result &= toStringHorizontal(m.row(m.M - 1)) & " ]"
 
@@ -341,12 +350,12 @@ proc `+=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   if a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
-    for i in 0 .. < a.M:
-      for j in 0 .. < a.N:
+    for i in 0 ..< a.M:
+      for j in 0 ..< a.N:
         a.data[j * a.M + i] += b.data[i * b.N + j]
   else:
-    for i in 0 .. < a.M:
-      for j in 0 .. < a.N:
+    for i in 0 ..< a.M:
+      for j in 0 ..< a.N:
         a.data[i * a.N + j] += b.data[j * b.M + i]
 
 proc `+`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
@@ -359,12 +368,12 @@ proc `-=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   if a.order == b.order:
     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
-    for i in 0 .. < a.M:
-      for j in 0 .. < a.N:
+    for i in 0 ..< a.M:
+      for j in 0 ..< a.N:
         a.data[j * a.M + i] -= b.data[i * b.N + j]
   else:
-    for i in 0 .. < a.M:
-      for j in 0 .. < a.N:
+    for i in 0 ..< a.M:
+      for j in 0 ..< a.N:
         a.data[i * a.N + j] -= b.data[j * b.M + i]
 
 proc `-`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
