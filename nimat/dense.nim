@@ -340,7 +340,7 @@ proc `*`*[A: SomeReal](m: Matrix[A], k: A): Matrix[A]  {. inline .} =
 
 template `*`*[A: SomeReal](k: A, v: Vector[A] or Matrix[A]): auto = v * k
 
-template `/`*[A: SomeReal](k: A, v: Vector[A] or Matrix[A]): auto = v * (1 / k)
+template `/`*[A: SomeReal](v: Vector[A] or Matrix[A], k: A): auto = v * (1 / k)
 
 template `/=`*[A: SomeReal](v: var Vector[A] or var Matrix[A], k: A) =
   v *= (1 / k)
@@ -445,12 +445,11 @@ template `!=~`*(a, b: Vector or Matrix): bool =
 proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
   assert a.len == b.len
   result = newSeq[A](a.len)
-  for i in 0 ..< N:
+  for i in 0 ..< a.len:
     result[i] = a[i] * b[i]
 
 proc `|*|`*[A](a, b: Matrix[A]): Matrix[A] =
   assert a.dim == b.dim
-  let (m, n) = a.dim
   result.initLike(a)
   if a.order == b.order:
     result.order = a.order
