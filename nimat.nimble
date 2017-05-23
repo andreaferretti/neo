@@ -8,7 +8,7 @@ license       = "Apache2"
 skipDirs      = @["tests", "bench"]
 skipFiles     = @["nimat.html"]
 
-requires "nim >= 0.17.0", "nimblas >= 0.1.3"
+requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.0"
 
 --forceBuild
 
@@ -60,7 +60,7 @@ task testmkl, "run standard tests on mkl":
 task testcuda, "run tests for the cuda implementation":
   configForTests()
   configForCuda()
-  setCommand "c", "tests/cublas.nim"
+  setCommand "c", "tests/tcudadense.nim"
 
 task bench, "run standard benchmarks":
   configForBenchmarks()

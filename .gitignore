@@ -2,3 +2,4 @@ nimcache
 .vscode
 tests/example
 tests/tdense
+tests/tcudadense
