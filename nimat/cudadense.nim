@@ -36,21 +36,35 @@ proc cudaMalloc[A](size: int): ptr A =
 proc freeDeviceMemory[A: SomeReal](p: ref[ptr A]) =
   check cudaFree(p[])
 
+# Initializing matrices
+
+template init*[A](v: CudaVector[A], n: int) =
+  new v.data, freeDeviceMemory
+  v.data[] = cudaMalloc[A](n)
+  v.N = n.int32
+
+template init*[A](v: CudaMatrix[A], m, n: int) =
+  new v.data, freeDeviceMemory
+  v.data[] = cudaMalloc[A](m * n)
+  v.M = m.int32
+  v.N = n.int32
+
+proc newCudaVector*[A](n: int) {.inline.} =
+  init(result, n)
+
+proc newCudaMatrix*[A](m, n: int) {.inline.} =
+  init(result, m, n)
+
 # Copying between host and device
 
 proc gpu*[A: SomeReal](v: Vector[A]): CudaVector[A] =
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc[A](v.len)
-  result.N = v.len.int32
+  init(result, v.len)
   check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, 1, result.fp, 1)
 
 proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
   if m.order == rowMajor:
     raise newException(ValueError, "m must be column major")
-  new result.data, freeDeviceMemory
-  result.data[] = cudaMalloc[A](m.M * m.N)
-  result.M = m.M.int32
-  result.N = m.N.int32
+  init(result, m.M, m.N)
   check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.M.int32, result.fp, m.M.int32)
 
 proc cpu*[A: SomeReal](v: CudaVector[A]): Vector[A] =
@@ -141,17 +155,6 @@ proc cublasGemm(handle: cublasHandle_t, transa, transb: cublasOperation_t,
   cublasDgemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
 
 # BLAS level 1 operations
-
-template init*[A](v: CudaVector[A], n: int) =
-  new v.data, freeDeviceMemory
-  v.data[] = cudaMalloc[A](n)
-  v.N = n
-
-template init*[A](v: CudaMatrix[A], m, n: int) =
-  new v.data, freeDeviceMemory
-  v.data[] = cudaMalloc[A](m * n)
-  v.M = m
-  v.N = n
 
 proc `*=`*[A: SomeReal](v: var CudaVector[A], k: A) {. inline .} =
   check cublasScal(defaultHandle, v.N, k, v.fp)
