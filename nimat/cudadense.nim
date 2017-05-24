@@ -49,10 +49,10 @@ template init*[A](v: CudaMatrix[A], m, n: int) =
   v.M = m.int32
   v.N = n.int32
 
-proc newCudaVector*[A](n: int) {.inline.} =
+proc newCudaVector*[A](n: int): CudaVector[A] {.inline.} =
   init(result, n)
 
-proc newCudaMatrix*[A](m, n: int) {.inline.} =
+proc newCudaMatrix*[A](m, n: int): CudaMatrix[A] {.inline.} =
   init(result, m, n)
 
 # Copying between host and device
