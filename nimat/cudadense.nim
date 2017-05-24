@@ -45,7 +45,8 @@ proc gpu*[A: SomeReal](v: Vector[A]): CudaVector[A] =
   check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, 1, result.fp, 1)
 
 proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
-  if m.order == rowMajor: quit("wrong order")
+  if m.order == rowMajor:
+    raise newException(ValueError, "m must be column major")
   new result.data, freeDeviceMemory
   result.data[] = cudaMalloc[A](m.M * m.N)
   result.M = m.M.int32
@@ -141,12 +142,12 @@ proc cublasGemm(handle: cublasHandle_t, transa, transb: cublasOperation_t,
 
 # BLAS level 1 operations
 
-template init[A](v: CudaVector[A], n: int) =
+template init*[A](v: CudaVector[A], n: int) =
   new v.data, freeDeviceMemory
   v.data[] = cudaMalloc[A](n)
   v.N = n
 
-template init[A](v: CudaMatrix[A], m, n: int) =
+template init*[A](v: CudaMatrix[A], m, n: int) =
   new v.data, freeDeviceMemory
   v.data[] = cudaMalloc[A](m * n)
   v.M = m
