@@ -29,7 +29,7 @@
 import unittest, sequtils, nimat
 
 
-suite "iterators on matrices":
+suite "conversions to dense matrices":
   let expected = matrix(@[
     @[1.0, 0.0, 2.0, 3.0],
     @[0.0, 4.0, 0.0, 0.0],
@@ -37,7 +37,7 @@ suite "iterators on matrices":
     @[0.0, 8.0, 0.0, 9.0]
   ])
 
-  test "csr matrix iterator":
+  test "csr matrix conversion":
     let m = csr(
       rows = @[0'i32, 3, 4, 7, 9],
       cols = @[0'i32, 2, 3, 1, 0, 2, 3, 1, 3],
@@ -45,7 +45,7 @@ suite "iterators on matrices":
       numCols = 4
     )
     check m.dense == expected
-  test "csc matrix iterator":
+  test "csc matrix conversion":
     let m = csc(
       rows = @[0'i32, 2, 1, 3, 0, 2, 0, 2, 3],
       cols = @[0'i32, 2, 4, 6, 9],
@@ -53,7 +53,7 @@ suite "iterators on matrices":
       numRows = 4
     )
     check m.dense == expected
-  test "coo matrix iterator":
+  test "coo matrix conversion":
     let m = coo(
       rows = @[0'i32, 0, 0, 1, 2, 2, 2, 3, 3],
       cols = @[0'i32, 2, 3, 1, 0, 2, 3, 1, 3],
