@@ -66,6 +66,11 @@ task testcuda, "run tests for the cuda implementation":
   configForCuda()
   setCommand "c", "tests/tcudadense.nim"
 
+task testcudasparse, "run tests for the cuda sparse implementation":
+  configForTests()
+  configForCuda()
+  setCommand "c", "tests/tcudasparse.nim"
+
 task bench, "run standard benchmarks":
   configForBenchmarks()
   setCommand "c", "bench/matrix_matrix_mult.nim"

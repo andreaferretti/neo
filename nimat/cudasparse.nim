@@ -18,6 +18,8 @@ import ./sparse
 
 template pointerTo(x: untyped) = cast[ptr pointer](addr x)
 
+proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
+
 type
   CudaSparseMatrixObj*[A] = object
     kind*: SparseMatrixKind
@@ -41,7 +43,7 @@ proc colLen*(m: CudaSparseMatrix): int32 =
   of CSR, COO: m.nnz
   of CSC: m.N + 1
 
-proc sizes*[A](m: CudaSparseMatrix[A]): tuple[r, c, v: int32] =
+proc sizes[A](m: SparseMatrix[A] or CudaSparseMatrix[A]): tuple[r, c, v: int32] =
   (
     (m.rowLen * sizeof(int32)).int32,
     (m.colLen * sizeof(int32)).int32,
@@ -68,23 +70,23 @@ proc gpu*[A: Number](m: SparseMatrix[A]): CudaSparseMatrix[A] =
   check cudaMalloc(pointerTo result.rows, r)
   check cudaMalloc(pointerTo result.cols, c)
   check cudaMalloc(pointerTo result.vals, v)
-  check cudaMemcpy(result.rows, m.rows, r, cudaMemcpyHostToDevice)
-  check cudaMemcpy(result.cols, m.cols, c, cudaMemcpyHostToDevice)
-  check cudaMemcpy(result.vals, m.vals, v, cudaMemcpyHostToDevice)
+  check cudaMemcpy(result.rows, m.rows.first, r, cudaMemcpyHostToDevice)
+  check cudaMemcpy(result.cols, m.cols.first, c, cudaMemcpyHostToDevice)
+  check cudaMemcpy(result.vals, m.vals.first, v, cudaMemcpyHostToDevice)
 
 proc cpu*[A: Number](m: CudaSparseMatrix[A]): SparseMatrix[A] =
-  new result, dealloc
+  new result
   result.kind = m.kind
   result.M = m.M
   result.N = m.N
   result.nnz = m.nnz
   let (r, c, v) = result.sizes
-  result.rows = cast[ptr int32](alloc(r))
-  result.cols = cast[ptr int32](alloc(c))
-  result.vals = cast[ptr A](alloc(v))
-  check cudaMemcpy(result.rows, m.rows, r, cudaMemcpyDeviceToHost)
-  check cudaMemcpy(result.cols, m.cols, c, cudaMemcpyDeviceToHost)
-  check cudaMemcpy(result.vals, m.vals, v, cudaMemcpyDeviceToHost)
+  result.rows = newSeq[int32](m.rowLen)
+  result.cols = newSeq[int32](m.colLen)
+  result.vals = newSeq[A](m.nnz)
+  check cudaMemcpy(result.rows.first, m.rows, r, cudaMemcpyDeviceToHost)
+  check cudaMemcpy(result.cols.first, m.cols, c, cudaMemcpyDeviceToHost)
+  check cudaMemcpy(result.vals.first, m.vals, v, cudaMemcpyDeviceToHost)
 
 proc toCsr*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
   new result, dealloc

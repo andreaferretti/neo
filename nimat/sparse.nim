@@ -45,12 +45,7 @@ proc colLen*(m: SparseMatrix): int32 =
   of CSR, COO: m.nnz
   of CSC: m.N + 1
 
-proc sizes*[A](m: SparseMatrix[A]): tuple[r, c, v: int32] =
-  (
-    (m.rowLen * sizeof(int32)).int32,
-    (m.colLen * sizeof(int32)).int32,
-    (m.nnz * sizeof(A)).int32
-  )
+# Initializers
 
 proc sparse*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
   SparseMatrix[A](
@@ -71,6 +66,8 @@ proc csc*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows: int32): Spar
 
 proc coo*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int32): SparseMatrix[A] =
   sparse(COO, numRows, numCols, vals.len.int32, rows, cols, vals)
+
+# Iterators
 
 iterator items*[A](m: SparseMatrix[A]): A =
   var count = 0
@@ -114,6 +111,8 @@ iterator items*[A](m: SparseMatrix[A]): A =
         else:
           yield 0
 
+# Conversions
+
 proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
   result = Matrix[A](
     order: (if m.kind == CSC: colMajor else: rowMajor),
@@ -125,3 +124,8 @@ proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
   for x in m:
     result.data[i] = x
     inc i
+
+# Equality
+
+# TODO: implement a faster way to check equality
+proc `==`*[A](m, n: SparseMatrix[A]): bool = m.dense == n.dense
