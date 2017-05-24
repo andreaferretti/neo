@@ -41,44 +41,44 @@ proc configForCuda() =
   switch("clibdir", "/usr/local/cuda/targets/x86_64-linux/lib")
   --define: cublas
 
-task test, "run standard tests":
+task test, "run CPU tests":
+  configForTests()
+  setCommand "c", "tests/all.nim"
+
+task testdense, "run CPU dense tests":
   configForTests()
   setCommand "c", "tests/tdense.nim"
 
-task testsparse, "run sparse tests":
+task testsparse, "run CPU sparse tests":
   configForTests()
   setCommand "c", "tests/tsparse.nim"
 
-task testopenblas, "run standard tests on openblas":
+task testopenblas, "run CPU tests on openblas":
   configForTests()
   --define: openblas
-  setCommand "c", "tests/tdense.nim"
+  setCommand "c", "tests/all.nim"
 
-task testmkl, "run standard tests on mkl":
+task testmkl, "run CPU tests on mkl":
   configForTests()
   --dynlibOverride:mkl_intel_lp64
   --passL:"/home/papillon/.intel/mkl/lib/intel64/libmkl_intel_lp64.a"
   --define: mkl
-  setCommand "c", "tests/tdense.nim"
+  setCommand "c", "tests/all.nim"
 
-task testcuda, "run tests for the cuda implementation":
+task testcuda, "run GPU tests":
+  configForTests()
+  configForCuda()
+  setCommand "c", "tests/allcuda.nim"
+
+task testcudadense, "run GPU dense tests":
   configForTests()
   configForCuda()
   setCommand "c", "tests/tcudadense.nim"
 
-task testcudasparse, "run tests for the cuda sparse implementation":
+task testcudasparse, "run GPU sparse tests":
   configForTests()
   configForCuda()
   setCommand "c", "tests/tcudasparse.nim"
-
-task bench, "run standard benchmarks":
-  configForBenchmarks()
-  setCommand "c", "bench/matrix_matrix_mult.nim"
-
-task benchcuda, "run benchmarks for the cuda implementation":
-  configForBenchmarks()
-  configForCuda()
-  setCommand "c", "bench/cuda/matrix_vector_mult.nim"
 
 task gendoc, "generate documentation":
   --define: cublas

@@ -14,7 +14,8 @@
 
 {.push warning[ProveInit]: off .}
 
-import initialize, access, equality, conversions, iterators, collection,
-  trivial_ops, ops, row_major_ops, mixed_ops, ufunc
+import dense/dinitialize, dense/daccess, dense/dequality, dense/dconversions,
+  dense/diterators, dense/dcollection, dense/dtrivial_ops, dense/dops,
+  dense/drow_major_ops, dense/dmixed_ops, dense/dufunc
 
 {. pop .}

@@ -101,6 +101,18 @@ proc cublasAsum(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y
 proc cublasAsum(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64): cublasStatus_t =
   cublasDasum(handle, n, x, incx, y)
 
+proc cublasNrm2(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32): cublasStatus_t =
+  cublasSnrm2(handle, n, x, incx, y)
+
+proc cublasNrm2(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64): cublasStatus_t =
+  cublasDnrm2(handle, n, x, incx, y)
+
+proc cublasDot(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32, incy: int32, res: ptr float32): cublasStatus_t =
+  cublasSdot(handle, n, x, incx, y, incy, res)
+
+proc cublasDot(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64, incy: int32, res: ptr float64): cublasStatus_t =
+  cublasDdot(handle, n, x, incx, y, incy, res)
+
 proc cublasCopy(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32, incy: int32): cublasStatus_t =
   cublasScopy(handle, n, x, incx, y, incy)
 
@@ -226,14 +238,14 @@ proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
 proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
   assert(a.N == v.N)
   init(result, a.M)
-  check cublasGemv(defaultHandle, cuNoTranspose, a.M, a.N, 1, a.fp, a.M, v.fp, 1, 0, result.fp, 1)
+  check cublasGemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, 1, a.fp, a.M, v.fp, 1, 0, result.fp, 1)
 
 # BLAS level 3 operations
 
 proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
   assert a.N == b.M
   init(result, a.M, b.N)
-  check cublasGemm(handle, cuNoTranspose, cuNoTranspose, a.M, b.N, a.N, 1,
+  check cublasGemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N, 1,
     a.fp, a.M, b.fp, a.N, 0, result.fp, a.M)
 
 # Comparison

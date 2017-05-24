@@ -20,7 +20,7 @@ suite "32-bit vector operations":
       v1 = randomVector(10, max=1'f32)
       p1 = v1.gpu()
     check(v1 * 3 == (p1 * 3).cpu())
-    check(2 * v1 == (2 * p1).cpu())
+    check(2'f32 * v1 == (2'f32 * p1).cpu())
   test "in place scalar vector multiplication":
     var
       v1 = randomVector(10, max=1'f32)
@@ -333,15 +333,15 @@ suite "64-bit matrix operations":
     check(m1 * 3.0 == m2)
     check(3.0 * m1 == m2)
   test "in place scalar multiplication":
-    var m1 = matrix([
-        [1.0, 3.0],
-        [2.0, 8.0],
-        [-2.0, 3.0]
+    var m1 = matrix(@[
+        @[1.0, 3.0],
+        @[2.0, 8.0],
+        @[-2.0, 3.0]
       ]).gpu()
-    let m2 = matrix([
-        [3.0, 9.0],
-        [6.0, 24.0],
-        [-6.0, 9.0]
+    let m2 = matrix(@[
+        @[3.0, 9.0],
+        @[6.0, 24.0],
+        @[-6.0, 9.0]
       ]).gpu()
     m1 *= 3.0
     check(m1 == m2)
