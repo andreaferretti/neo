@@ -267,3 +267,34 @@ proc `=~`*[A: SomeReal](v, w: CudaVector[A]): bool = compareApprox(v, w)
 proc `=~`*[A: SomeReal](v, w: CudaMatrix[A]): bool = compareApprox(v, w)
 
 template `!=~`*(a, b: CudaVector or CudaMatrix): bool = not (a =~ b)
+
+# Cloning and slicing
+
+proc clone*[A](v: CudaVector[A]): CudaVector[A] =
+  init(result, v.N)
+  check cudaMemcpy(result.fp, v.fp, v.N * sizeof(A), cudaMemcpyDeviceToDevice)
+
+proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
+  init(result, m.M, m.N)
+  check cudaMemcpy(result.fp, m.fp, m.M * m.N * sizeof(A), cudaMemcpyDeviceToDevice)
+
+type
+  CArray{.unchecked.}[T] = array[1, T]
+  CPointer[T] = ptr CArray[T]
+
+proc plus[A](p: ptr A, n: int): ptr A {.inline.} =
+  addr(cast[CPointer[A]](p)[n])
+
+proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
+  assert s.a >= 0
+  assert s.b < v.N
+  let L = s.b - s.a + 1
+  init(result, L)
+  check cudaMemcpy(result.fp, v.fp.plus(s.a), L * sizeof(A), cudaMemcpyDeviceToDevice)
+
+proc `[]`*[A](m: CudaMatrix[A], s: Slice[int]): CudaMatrix[A] =
+  assert s.a >= 0
+  assert s.b < m.N
+  let L = s.b - s.a + 1
+  init(result, m.M, L)
+  check cudaMemcpy(result.fp, m.fp.plus(s.a * m.M), m.M * L * sizeof(A), cudaMemcpyDeviceToDevice)
