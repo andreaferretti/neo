@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, nimat/dense, nimat/cudadense
+import unittest, neo/dense, neo/cudadense
 
 suite "32-bit vector operations":
   test "scalar vector multiplication":

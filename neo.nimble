@@ -1,12 +1,12 @@
 mode = ScriptMode.Verbose
 
-packageName   = "nimat"
+packageName   = "neo"
 version       = "0.1.0"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
 skipDirs      = @["tests", "bench"]
-skipFiles     = @["nimat.html"]
+skipFiles     = @["neo.html"]
 
 requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.0"
 
@@ -83,4 +83,4 @@ task testcudasparse, "run GPU sparse tests":
 task gendoc, "generate documentation":
   --define: cublas
   --docSeeSrcUrl: https://github.com/unicredit/linear-algebra/blob/master
-  setCommand "doc2", "nimat.nim"
+  setCommand "doc2", "neo.nim"

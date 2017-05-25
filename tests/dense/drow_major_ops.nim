@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, nimat/dense
+import unittest, neo/dense
 
 suite "row-major matrix/vector operations":
   test "multiplication of matrix and vector":

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, nimat/dense, nimat/cudadense
+import unittest, neo/dense, neo/cudadense
 
 suite "vector and matrix equality":
   test "strict 32-bit vector equality":

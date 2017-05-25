@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, nimat/sparse, nimat/cudasparse
+import unittest, neo/sparse, neo/cudasparse
 
 
 suite "copying back and forth":
