@@ -8,7 +8,7 @@ license       = "Apache2"
 skipDirs      = @["tests", "bench"]
 skipFiles     = @["neo.html"]
 
-requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.1"
+requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.2"
 
 --forceBuild
 
