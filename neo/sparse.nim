@@ -26,6 +26,10 @@ proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
 type
   Complex*[A] = tuple[re, im: A]
   Number* = float32 or float64 or Complex[float32] or Complex[float64]
+  SparseVector*[A] = ref object
+    N*: int32
+    indices*: seq[int32]
+    vals*: seq[A]
   SparseMatrixKind* = enum
     CSR, CSC, COO
   SparseMatrixObj*[A] = object
@@ -34,6 +38,8 @@ type
     rows*, cols*: seq[int32]
     vals*: seq[A]
   SparseMatrix*[A] = ref SparseMatrixObj[A]
+
+proc len*(v: SparseVector): int {.inline.} = v.N.int
 
 proc rowLen*(m: SparseMatrix): int32 =
   case m.kind
@@ -47,7 +53,10 @@ proc colLen*(m: SparseMatrix): int32 =
 
 # Initializers
 
-proc sparse*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
+proc sparseVector*[A](N: int32, indices: seq[int32], vals: seq[A]): SparseVector[A] =
+  SparseVector[A](N: N, indices: indices, vals: vals)
+
+proc sparseMatrix*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
   SparseMatrix[A](
     kind: kind,
     M: M,
@@ -59,15 +68,46 @@ proc sparse*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: se
   )
 
 proc csr*[A: Number](rows, cols: seq[int32], vals: seq[A], numCols: int32): SparseMatrix[A] =
-  sparse(CSR, rows.len.int32 - 1, numCols, vals.len.int32, rows, cols, vals)
+  sparseMatrix(CSR, rows.len.int32 - 1, numCols, vals.len.int32, rows, cols, vals)
 
 proc csc*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows: int32): SparseMatrix[A] =
-  sparse(CSC, numRows, cols.len.int32 - 1, vals.len.int32, rows, cols, vals)
+  sparseMatrix(CSC, numRows, cols.len.int32 - 1, vals.len.int32, rows, cols, vals)
 
 proc coo*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int32): SparseMatrix[A] =
-  sparse(COO, numRows, numCols, vals.len.int32, rows, cols, vals)
+  sparseMatrix(COO, numRows, numCols, vals.len.int32, rows, cols, vals)
 
 # Iterators
+
+iterator items*[A](v: SparseVector[A]): A =
+  var
+    next = v.indices[0]
+    count = 0
+  for i in 0 ..< v.N:
+    if i == next:
+      yield v.vals[count]
+      inc count
+      if count < v.indices.len:
+        next = v.indices[count]
+    else:
+      yield A(0)
+
+iterator pairs*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
+  var
+    next = v.indices[0]
+    count = 0
+  for i in 0 ..< v.N:
+    if i == next:
+      yield (i, v.vals[count])
+      inc count
+      if count < v.indices.len:
+        next = v.indices[count]
+    else:
+      yield (i, A(0))
+
+iterator nonzero*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
+  for i, j in v.indices:
+    yield (j, v.vals[i])
+
 
 iterator items*[A](m: SparseMatrix[A]): A =
   var count = 0
@@ -191,6 +231,11 @@ iterator nonzero*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
 
 # Conversions
 
+proc dense*[A](v: SparseVector[A]): Vector[A] =
+  result = zeros(v.N, A)
+  for i, x in v.nonzero:
+    result[i] = x
+
 proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
   result = zeros(m.M, m.N, A)
   for t, x in m.nonzero:
@@ -200,8 +245,12 @@ proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
 # Equality
 
 # TODO: implement a faster way to check equality
+proc `==`*[A](v, w: SparseVector[A]): bool = v.dense == w.dense
+
 proc `==`*[A](m, n: SparseMatrix[A]): bool = m.dense == n.dense
 
 # Printing
+
+proc `$`*[A](v: SparseVector[A]): string = $(v.dense)
 
 proc `$`*[A](m: SparseMatrix[A]): string = $(m.dense)

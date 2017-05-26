@@ -29,7 +29,7 @@
 import unittest, sequtils, neo
 
 
-suite "conversions to dense matrices":
+suite "conversions to dense":
   let expected = matrix(@[
     @[1.0, 0.0, 2.0, 3.0],
     @[0.0, 4.0, 0.0, 0.0],
@@ -37,6 +37,9 @@ suite "conversions to dense matrices":
     @[0.0, 8.0, 0.0, 9.0]
   ])
 
+  test "sparse vector conversion":
+    let v = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+    check v.dense == @[0.0, 0, 0, 2, 0, 3, 0, -1, 0, 0]
   test "csr matrix conversion":
     let m = csr(
       rows = @[0'i32, 3, 4, 7, 9],

@@ -37,6 +37,39 @@ import unittest, sequtils, neo/sparse
 # ]
 
 suite "iterators on matrices":
+  test "sparse vector iterator":
+    let
+      v = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+      values = toSeq(v.items)
+
+    check values == @[0.0, 0, 0, 2, 0, 3, 0, -1, 0, 0]
+  test "sparse vector pairs iterator":
+    let
+      v = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+      values = toSeq(v.pairs)
+
+    check values == @[
+      (0'i32, 0.0),
+      (1'i32, 0.0),
+      (2'i32, 0.0),
+      (3'i32, 2.0),
+      (4'i32, 0.0),
+      (5'i32, 3.0),
+      (6'i32, 0.0),
+      (7'i32, -1.0),
+      (8'i32, 0.0),
+      (9'i32, 0.0)
+    ]
+  test "sparse vector nonzero iterator":
+    let
+      v = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+      values = toSeq(v.nonzero)
+
+    check values == @[
+      (3'i32, 2.0),
+      (5'i32, 3.0),
+      (7'i32, -1.0)
+    ]
   test "csr matrix iterator":
     let
       m = csr(
