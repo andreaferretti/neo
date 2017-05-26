@@ -217,17 +217,9 @@ iterator nonzero*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
           if count < m.nnz:
             next = m.rows[count]
   of COO:
-    var
-      nextR = m.rows[0]
-      nextC = m.cols[0]
-    for i in 0 ..< m.M:
-      for j in 0 ..< m.N:
-        if i == nextR and j == nextC:
-          yield ((i, j), m.vals[count])
-          inc count
-          if count < m.nnz:
-            nextR = m.rows[count]
-            nextC = m.cols[count]
+    let L = m.rows.len
+    for k in 0 ..< L:
+      yield ((m.rows[k], m.cols[k]), m.vals[k])
 
 # Conversions
 
