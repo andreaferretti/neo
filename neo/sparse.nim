@@ -111,21 +111,97 @@ iterator items*[A](m: SparseMatrix[A]): A =
         else:
           yield 0
 
+iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
+  var count = 0
+  case m.kind
+  of CSR:
+    var next = m.cols[0]
+    for i in 0 ..< m.M:
+      let max = m.rows[i + 1]
+      for j in 0 ..< m.N:
+        if count < max and j == next:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            next = m.cols[count]
+        else:
+          yield ((i, j), A(0))
+  of CSC:
+    var next = m.rows[0]
+    for j in 0 ..< m.N:
+      let max = m.cols[j + 1]
+      for i in 0 ..< m.M:
+        if count < max and i == next:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            next = m.rows[count]
+        else:
+          yield ((i, j), A(0))
+  of COO:
+    var
+      nextR = m.rows[0]
+      nextC = m.cols[0]
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        if i == nextR and j == nextC:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            nextR = m.rows[count]
+            nextC = m.cols[count]
+        else:
+          yield ((i, j), A(0))
+
+iterator nonzero*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
+  var count = 0
+  case m.kind
+  of CSR:
+    var next = m.cols[0]
+    for i in 0 ..< m.M:
+      let max = m.rows[i + 1]
+      for j in 0 ..< m.N:
+        if count < max and j == next:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            next = m.cols[count]
+  of CSC:
+    var next = m.rows[0]
+    for j in 0 ..< m.N:
+      let max = m.cols[j + 1]
+      for i in 0 ..< m.M:
+        if count < max and i == next:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            next = m.rows[count]
+  of COO:
+    var
+      nextR = m.rows[0]
+      nextC = m.cols[0]
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        if i == nextR and j == nextC:
+          yield ((i, j), m.vals[count])
+          inc count
+          if count < m.nnz:
+            nextR = m.rows[count]
+            nextC = m.cols[count]
+
 # Conversions
 
 proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
-  result = Matrix[A](
-    order: (if m.kind == CSC: colMajor else: rowMajor),
-    M: m.M,
-    N: m.N,
-    data: newSeq[A](m.M * m.N)
-  )
-  var i = 0
-  for x in m:
-    result.data[i] = x
-    inc i
+  result = zeros(m.M, m.N, A)
+  for t, x in m.nonzero:
+    let (i, j) = t
+    result[i, j] = x
 
 # Equality
 
 # TODO: implement a faster way to check equality
 proc `==`*[A](m, n: SparseMatrix[A]): bool = m.dense == n.dense
+
+# Printing
+
+proc `$`*[A](m: SparseMatrix[A]): string = $(m.dense)

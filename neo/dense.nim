@@ -80,11 +80,11 @@ proc randomVector*(N: int, max: float32): Vector[float32] =
 
 proc constantVector*[A](N: int, a: A): Vector[A] = makeVectorI[A](N, a)
 
-proc zeros*(N: int): auto = constantVector(N, 0'f64)
+proc zeros*(N: int): auto = newSeq[float64](N)
 
-proc zeros*(N: int, A: typedesc[float32]): auto = constantVector(N, 0'f32)
+proc zeros*(N: int, A: typedesc[float32]): auto = newSeq[float32](N)
 
-proc zeros*(N: int, A: typedesc[float64]): auto = constantVector(N, 0'f64)
+proc zeros*(N: int, A: typedesc[float64]): auto = newSeq[float64](N)
 
 proc ones*(N: int): auto = constantVector(N, 1'f64)
 
@@ -143,11 +143,14 @@ proc constantMatrix*[A](M, N: int, a: A, order = colMajor): Matrix[A] =
   result.N = N
   result.order = order
 
-proc zeros*(M, N: int): auto = constantMatrix(M, N, 0'f64)
+proc zeros*(M, N: int): auto =
+  Matrix[float64](M: M, N: N, order: colMajor, data: newSeq[float64](M * N))
 
-proc zeros*(M, N: int, A: typedesc[float32]): auto = constantMatrix(M, N, 0'f32)
+proc zeros*(M, N: int, A: typedesc[float32]): auto =
+  Matrix[float32](M: M, N: N, order: colMajor, data: newSeq[float32](M * N))
 
-proc zeros*(M, N: int, A: typedesc[float64]): auto = constantMatrix(M, N, 0'f64)
+proc zeros*(M, N: int, A: typedesc[float64]): auto =
+  Matrix[float64](M: M, N: N, order: colMajor, data: newSeq[float64](M * N))
 
 proc ones*(M, N: int): auto = constantMatrix(M, N, 1'f64)
 
