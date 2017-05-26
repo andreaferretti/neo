@@ -16,7 +16,13 @@ import unittest, neo/sparse, neo/cudasparse
 
 
 suite "copying back and forth":
-  test "copy of a 64- bit matrix":
+  test "copy of a 64-bit vector":
+    let
+      v1 = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+      v2 = v1.gpu()
+      v3 = v2.cpu()
+    check v1 == v3
+  test "copy of a 64-bit matrix":
     let
       m1 = csr(
         rows = @[0'i32, 3, 4, 7, 9],

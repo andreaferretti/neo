@@ -21,12 +21,21 @@ template pointerTo(x: untyped) = cast[ptr pointer](addr x)
 proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
 
 type
+  CudaSparseVectorObj*[A] = object
+    N*, nnz*: int32
+    indices*: ptr int32
+    vals*: ptr A
+  CudaSparseVector*[A] = ref CudaSparseVectorObj[A]
   CudaSparseMatrixObj*[A] = object
     kind*: SparseMatrixKind
     M*, N*, nnz*: int32
     rows*, cols*: ptr int32
     vals*: ptr A
   CudaSparseMatrix*[A] = ref CudaSparseMatrixObj[A]
+
+proc dealloc*[A](v: CudaSparseVector[A]) =
+  if v.indices != nil: check cudaFree(v.indices)
+  if v.vals != nil: check cudaFree(v.vals)
 
 proc dealloc*[A](m: CudaSparseMatrix[A]) =
   if m.rows != nil: check cudaFree(m.rows)
@@ -42,6 +51,12 @@ proc colLen*(m: CudaSparseMatrix): int32 =
   case m.kind
   of CSR, COO: m.nnz
   of CSC: m.N + 1
+
+proc sizes[A](m: SparseVector[A] or CudaSparseVector[A]): tuple[i, v: int32] =
+  (
+    (m.N * sizeof(int32)).int32,
+    (m.nnz * sizeof(A)).int32
+  )
 
 proc sizes[A](m: SparseMatrix[A] or CudaSparseMatrix[A]): tuple[r, c, v: int32] =
   (
@@ -60,6 +75,16 @@ template allocateAll(x, r, c, v: untyped) =
   check cudaMalloc(pointerTo x.cols, c)
   check cudaMalloc(pointerTo x.vals, v)
 
+proc gpu*[A: Number](v: SparseVector[A]): CudaSparseVector[A] =
+  new result, dealloc
+  result.N = v.N
+  result.nnz = v.nnz
+  let (iLen, vLen) = v.sizes
+  check cudaMalloc(pointerTo result.indices, iLen)
+  check cudaMalloc(pointerTo result.vals, vLen)
+  check cudaMemcpy(result.indices, v.indices.first, iLen, cudaMemcpyHostToDevice)
+  check cudaMemcpy(result.vals, v.vals.first, vLen, cudaMemcpyHostToDevice)
+
 proc gpu*[A: Number](m: SparseMatrix[A]): CudaSparseMatrix[A] =
   new result, dealloc
   result.kind = m.kind
@@ -67,12 +92,20 @@ proc gpu*[A: Number](m: SparseMatrix[A]): CudaSparseMatrix[A] =
   result.N = m.N
   result.nnz = m.nnz
   let (r, c, v) = result.sizes
-  check cudaMalloc(pointerTo result.rows, r)
-  check cudaMalloc(pointerTo result.cols, c)
-  check cudaMalloc(pointerTo result.vals, v)
+  allocateAll(result, r, c, v)
   check cudaMemcpy(result.rows, m.rows.first, r, cudaMemcpyHostToDevice)
   check cudaMemcpy(result.cols, m.cols.first, c, cudaMemcpyHostToDevice)
   check cudaMemcpy(result.vals, m.vals.first, v, cudaMemcpyHostToDevice)
+
+proc cpu*[A: Number](v: CudaSparseVector[A]): SparseVector[A] =
+  result = SparseVector[A](
+    N: v.N,
+    indices: newSeq[int32](v.nnz),
+    vals: newSeq[A](v.nnz)
+  )
+  let (iLen, vLen) = v.sizes
+  check cudaMemcpy(result.indices.first, v.indices, iLen, cudaMemcpyDeviceToHost)
+  check cudaMemcpy(result.vals.first, v.vals, vLen, cudaMemcpyDeviceToHost)
 
 proc cpu*[A: Number](m: CudaSparseMatrix[A]): SparseMatrix[A] =
   new result

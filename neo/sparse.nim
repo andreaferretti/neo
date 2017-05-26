@@ -33,6 +33,8 @@ type
 
 proc len*(v: SparseVector): int {.inline.} = v.N.int
 
+proc nnz*(v: SparseVector): int32 {.inline.} = v.indices.len.int32
+
 proc rowLen*(m: SparseMatrix): int32 =
   case m.kind
   of CSR: m.M + 1
