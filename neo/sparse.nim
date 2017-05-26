@@ -192,28 +192,29 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
           yield ((i, j), zero)
 
 iterator nonzero*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
-  var count = 0
   case m.kind
   of CSR:
-    var next = m.cols[0]
-    for i in 0 ..< m.M:
-      let max = m.rows[i + 1]
-      for j in 0 ..< m.N:
-        if count < max and j == next:
-          yield ((i, j), m.vals[count])
-          inc count
-          if count < m.nnz:
-            next = m.cols[count]
+    var
+      count = 0
+      row = 0'i32
+    while count < m.nnz:
+      while count >= m.rows[row + 1]:
+        inc row
+      let n = m.rows[row + 1] - count
+      for _ in 1 .. n:
+        yield ((row, m.cols[count]), m.vals[count])
+        inc count
   of CSC:
-    var next = m.rows[0]
-    for j in 0 ..< m.N:
-      let max = m.cols[j + 1]
-      for i in 0 ..< m.M:
-        if count < max and i == next:
-          yield ((i, j), m.vals[count])
-          inc count
-          if count < m.nnz:
-            next = m.rows[count]
+    var
+      count = 0
+      col = 0'i32
+    while count < m.nnz:
+      while count >= m.cols[col + 1]:
+        inc col
+      let n = m.cols[col + 1] - count
+      for _ in 1 .. n:
+        yield ((m.rows[count], col), m.vals[count])
+        inc count
   of COO:
     let L = m.rows.len
     for k in 0 ..< L:
