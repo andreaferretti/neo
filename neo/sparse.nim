@@ -16,14 +16,6 @@ import sequtils
 import ./dense
 
 type
-  CArray{.unchecked.}[T] = array[1, T]
-  CPointer[T] = ptr CArray[T]
-
-proc first[T](p: CPointer[T]): ptr T {.inline.} = addr(p[0])
-
-proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
-
-type
   Complex*[A] = tuple[re, im: A]
   Number* = float32 or float64 or Complex[float32] or Complex[float64]
   SparseVector*[A] = ref object
@@ -80,6 +72,7 @@ proc coo*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int
 
 iterator items*[A](v: SparseVector[A]): A =
   var
+    zero: A
     next = v.indices[0]
     count = 0
   for i in 0 ..< v.N:
@@ -89,10 +82,11 @@ iterator items*[A](v: SparseVector[A]): A =
       if count < v.indices.len:
         next = v.indices[count]
     else:
-      yield A(0)
+      yield zero
 
 iterator pairs*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
   var
+    zero: A
     next = v.indices[0]
     count = 0
   for i in 0 ..< v.N:
@@ -102,7 +96,7 @@ iterator pairs*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
       if count < v.indices.len:
         next = v.indices[count]
     else:
-      yield (i, A(0))
+      yield (i, zero)
 
 iterator nonzero*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
   for i, j in v.indices:
@@ -111,6 +105,7 @@ iterator nonzero*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
 
 iterator items*[A](m: SparseMatrix[A]): A =
   var count = 0
+  var zero: A
   case m.kind
   of CSR:
     var next = m.cols[0]
@@ -123,7 +118,7 @@ iterator items*[A](m: SparseMatrix[A]): A =
           if count < m.nnz:
             next = m.cols[count]
         else:
-          yield 0
+          yield zero
   of CSC:
     var next = m.rows[0]
     for j in 0 ..< m.N:
@@ -135,7 +130,7 @@ iterator items*[A](m: SparseMatrix[A]): A =
           if count < m.nnz:
             next = m.rows[count]
         else:
-          yield 0
+          yield zero
   of COO:
     var
       nextR = m.rows[0]
@@ -149,10 +144,11 @@ iterator items*[A](m: SparseMatrix[A]): A =
             nextR = m.rows[count]
             nextC = m.cols[count]
         else:
-          yield 0
+          yield zero
 
 iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
   var count = 0
+  var zero: A
   case m.kind
   of CSR:
     var next = m.cols[0]
@@ -165,7 +161,7 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
           if count < m.nnz:
             next = m.cols[count]
         else:
-          yield ((i, j), A(0))
+          yield ((i, j), zero)
   of CSC:
     var next = m.rows[0]
     for j in 0 ..< m.N:
@@ -177,7 +173,7 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
           if count < m.nnz:
             next = m.rows[count]
         else:
-          yield ((i, j), A(0))
+          yield ((i, j), zero)
   of COO:
     var
       nextR = m.rows[0]
@@ -191,7 +187,7 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
             nextR = m.rows[count]
             nextC = m.cols[count]
         else:
-          yield ((i, j), A(0))
+          yield ((i, j), zero)
 
 iterator nonzero*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
   var count = 0
