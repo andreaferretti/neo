@@ -143,14 +143,14 @@ proc constantMatrix*[A](M, N: int, a: A, order = colMajor): Matrix[A] =
   result.N = N
   result.order = order
 
-proc zeros*(M, N: int): auto =
-  Matrix[float64](M: M, N: N, order: colMajor, data: newSeq[float64](M * N))
+proc zeros*(M, N: int, order = colMajor): auto =
+  Matrix[float64](M: M, N: N, order: order, data: newSeq[float64](M * N))
 
-proc zeros*(M, N: int, A: typedesc[float32]): auto =
-  Matrix[float32](M: M, N: N, order: colMajor, data: newSeq[float32](M * N))
+proc zeros*(M, N: int, A: typedesc[float32], order = colMajor): auto =
+  Matrix[float32](M: M, N: N, order: order, data: newSeq[float32](M * N))
 
-proc zeros*(M, N: int, A: typedesc[float64]): auto =
-  Matrix[float64](M: M, N: N, order: colMajor, data: newSeq[float64](M * N))
+proc zeros*(M, N: int, A: typedesc[float64], order = colMajor): auto =
+  Matrix[float64](M: M, N: N, order: order, data: newSeq[float64](M * N))
 
 proc ones*(M, N: int): auto = constantMatrix(M, N, 1'f64)
 
@@ -163,6 +163,9 @@ proc eye*(N: int, order = colMajor): Matrix[float64] =
 
 proc eye*(N: int, A: typedesc[float32], order = colMajor): Matrix[float32] =
   makeMatrixIJ(float32, N, N, if i == j: 1 else: 0, order)
+
+proc eye*(N: int, A: typedesc[float64], order = colMajor): Matrix[float64] =
+  makeMatrixIJ(float64, N, N, if i == j: 1 else: 0, order)
 
 proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
@@ -571,3 +574,58 @@ template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeReal](a: A, v, w: Vecto
 
 template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var Vector[A], w: Vector[A]): auto =
   linearCombinationMut(a, v, w)
+
+# Solvers
+
+import ./nimlapack
+
+template solveMatrix(M, N, a, b: untyped): auto =
+  var
+    ipvt = newSeq[int32](M)
+    info: cint
+    m = M.cint
+    n = N.cint
+  if a.order == colMajor and b.order == colMajor:
+    gesv(addr(m), addr(n), a.fp, addr(m), addr ipvt[0], b.fp, addr(m), addr(info))
+  elif a.order == rowMajor and b.order == rowMajor:
+    gesv(addr(m), addr(n), a.t.fp, addr(m), addr ipvt[0], b.t.fp, addr(m), addr(info))
+  elif a.order == colMajor and b.order == rowMajor:
+    gesv(addr(m), addr(n), a.fp, addr(m), addr ipvt[0], b.t.fp, addr(m), addr(info))
+  else:
+    gesv(addr(m), addr(n), a.t.fp, addr(m), addr ipvt[0], b.fp, addr(m), addr(info))
+  if info > 0:
+    raise newException(FloatingPointError, "Left hand matrix is singular or factorization failed")
+
+template solveVector(M, a, b: untyped): auto =
+  var
+    ipvt = newSeq[int32](M)
+    info: cint
+    m = M.cint
+    n = 1.cint
+  if a.order == colMajor:
+    gesv(addr m, addr n, a.fp, addr m, addr ipvt[0], b.fp, addr m, addr info)
+  else:
+    gesv(addr m, addr n, a.t.fp, addr m, addr ipvt[0], b.fp, addr m, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Left hand matrix is singular or factorization failed")
+
+proc solve*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {.inline.} =
+  assert(a.M == a.N, "Need a square matrix to solve the system")
+  assert(a.M == b.M, "The dimensions are incompatible")
+  result = zeros(b.M, b.N, A, b.order)
+  var acopy = a.clone
+  copy(b.M * b.N, b.fp, 1, result.fp, 1)
+  solveMatrix(b.M, b.N, acopy, result)
+
+proc solve*[A: SomeReal](a: Matrix[A], b: Vector[A]): Vector[A] {.inline.} =
+  assert(a.M == a.N, "Need a square matrix to solve the system")
+  result = zeros(a.M, A)
+  var acopy = a.clone
+  copy(a.M, b.fp, 1, result.fp, 1)
+  solveVector(a.M, acopy, result)
+
+proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
+  assert(a.M == a.N, "Need a square matrix to invert")
+  result = eye(a.M, A)
+  var acopy = a.clone
+  solveMatrix(a.M, a.M, acopy, result)
