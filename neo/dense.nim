@@ -632,6 +632,8 @@ proc solve*[A: SomeReal](a: Matrix[A], b: Vector[A]): Vector[A] {.inline.} =
   copy(a.M, b.fp, 1, result.fp, 1)
   solveVector(a.M, acopy, result)
 
+template `\`*(a: Matrix, b: Matrix or Vector): auto = solve(a, b)
+
 proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
   assert(a.M == a.N, "Need a square matrix to invert")
   result = eye(a.M, A)

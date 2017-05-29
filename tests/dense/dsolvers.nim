@@ -33,6 +33,23 @@ suite "linear system solving":
       ])
     check expected =~ x
 
+  test "matrix-matrix solve operator":
+    let
+      a = matrix(@[
+        @[3.0, 1.0],
+        @[1.0, -2.0]
+      ])
+      b = matrix(@[
+        @[1.0],
+        @[0.0]
+      ])
+      x = a \ b
+      expected = matrix(@[
+        @[2.0 / 7.0],
+        @[1.0 / 7.0]
+      ])
+    check expected =~ x
+
   test "singular matrix error":
     let
       a = matrix(@[
@@ -97,6 +114,17 @@ suite "linear system solving":
       ])
       b = @[1.0, 0.0]
       x = solve(a, b)
+      expected = @[2.0/7.0, 1.0/7.0]
+    check expected =~ x
+
+  test "matrix-vector solve operator":
+    let
+      a = matrix(@[
+        @[3.0, 1.0],
+        @[1.0, -2.0]
+      ])
+      b = @[1.0, 0.0]
+      x = a \ b
       expected = @[2.0/7.0, 1.0/7.0]
     check expected =~ x
 
