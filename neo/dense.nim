@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import nimblas, sequtils, random, math
+import nimblas, nimlapack, sequtils, random, math
 
 export nimblas.OrderType
 
@@ -575,9 +575,17 @@ template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeReal](a: A, v, w: Vecto
 template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var Vector[A], w: Vector[A]): auto =
   linearCombinationMut(a, v, w)
 
-# Solvers
+# LAPACK overloads
 
-import ./nimlapack
+proc gesv(n: ptr cint, nrhs: ptr cint, a: ptr cfloat, lda: ptr cint,
+  ipiv: ptr cint, b: ptr cfloat, ldb: ptr cint, info: ptr cint) =
+  sgesv(n, nrhs, a, lda, ipiv, b, ldb, info)
+
+proc gesv(n: ptr cint, nrhs: ptr cint, a: ptr cdouble, lda: ptr cint,
+  ipiv: ptr cint, b: ptr cdouble, ldb: ptr cint, info: ptr cint) =
+  dgesv(n, nrhs, a, lda, ipiv, b, ldb, info)
+
+# Solvers
 
 template solveMatrix(M, N, a, b: untyped): auto =
   var
