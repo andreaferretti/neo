@@ -603,6 +603,7 @@ template overload(s: untyped, p, q: typed) =
   overload(s, q)
 
 overload(gesv, sgesv, dgesv)
+overload(gebal, sgebal, dgebal)
 
 # Solvers
 
@@ -658,3 +659,28 @@ proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
   result = eye(a.M, A)
   var acopy = a.clone
   solveMatrix(a.M, a.M, acopy, result)
+
+# Eigenvalues
+
+type BalanceOp* {.pure.} = enum
+  NoOp, Permute, Scale, Both
+
+proc ch(op: BalanceOp): char =
+  case op
+  of BalanceOp.NoOp: 'N'
+  of BalanceOp.Permute: 'P'
+  of BalanceOp.Scale: 'S'
+  of BalanceOp.Both: 'B'
+
+proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): Matrix[A] =
+  assert(a.M == a.N, "`balance` requires a square matrix")
+  assert(a.order == colMajor, "`balance` requires a square matrix")
+  result = a.clone()
+  var
+    job = ch(op)
+    n = a.N.cint
+    ilo, ihi, info: cint
+    scale: A
+  gebal(addr job, addr n, result.fp, addr n, addr ilo, addr ihi, addr scale, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to balance matrix")

@@ -12,11 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{.push warning[ProveInit]: off .}
+import unittest, neo/dense
 
-import dense/dinitialize, dense/daccess, dense/dequality, dense/dconversions,
-  dense/diterators, dense/dcollection, dense/dtrivial_ops, dense/dops,
-  dense/drow_major_ops, dense/dmixed_ops, dense/dufunc, dense/dsolvers
-# import dense/deigenvalues
+suite "matrix reductions for eigenvalue computations":
+  test "balancing matrices":
+    let
+      a = matrix(@[
+        @[3.0, 1.0, 0.5, 2.1],
+        @[1.0, -2.0, 1.0, 1.1],
+        @[2.0, -1.0, 1.5, 0.1],
+        @[-1.0, 0.0, 1.1, 1.2],
+      ])
 
-{. pop .}
+    echo balance(a, BalanceOp.Both)
