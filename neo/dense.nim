@@ -580,6 +580,7 @@ template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var 
 
 overload(gesv, sgesv, dgesv)
 overload(gebal, sgebal, dgebal)
+overload(gehrd, sgehrd, dgehrd)
 
 # Solvers
 
@@ -655,7 +656,7 @@ proc ch(op: BalanceOp): char =
 
 proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] =
   assert(a.M == a.N, "`balance` requires a square matrix")
-  assert(a.order == colMajor, "`balance` requires a square matrix")
+  assert(a.order == colMajor, "`balance` requires a column-major matrix")
   result = BalanceResult[A](
     matrix: a.clone(),
     scale: newSeq[A](a.N)
@@ -668,3 +669,26 @@ proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] 
   gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
   if info > 0:
     raise newException(FloatingPointError, "Failed to balance matrix")
+
+proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
+  assert(a.M == a.N, "`hessenberg` requires a square matrix")
+  assert(a.order == colMajor, "`hessenberg` requires a column-major matrix")
+  result = a.clone()
+  var
+    n = a.N.cint
+    ilo = 1.cint
+    ihi = a.N.cint
+    info: cint
+    tau = newSeq[A](a.N)
+    workSize = (-1).cint
+    work = newSeq[A](1)
+  # First, we call gehrd to compute the optimal work size
+  gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to reduce matrix to upper Hessenberg form")
+  # Then, we allocate suitable space and call gehrd again
+  workSize = work[0].cint
+  work = newSeq[A](workSize)
+  gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to reduce matrix to upper Hessenberg form")

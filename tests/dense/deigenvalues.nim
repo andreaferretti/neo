@@ -27,3 +27,14 @@ suite "matrix reductions for eigenvalue computations":
 
     check(r.ilo == 1)
     check(r.ihi == 4)
+  test "computing the upper Hessenberg form":
+    let
+      a = matrix(@[
+        @[3.0, 1.0, 0.0, 0.0],
+        @[1.0, 0.0, 0.0, 0.0],
+        @[2.0, -1.0, 1.5, 0.1],
+        @[-1.0, 0.0, 1.1, 1.2],
+      ])
+      r = hessenberg(a)
+
+    check(r[0, 0] == 3)
