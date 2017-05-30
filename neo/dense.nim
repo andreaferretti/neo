@@ -577,13 +577,32 @@ template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var 
 
 # LAPACK overloads
 
-proc gesv(n: ptr cint, nrhs: ptr cint, a: ptr cfloat, lda: ptr cint,
-  ipiv: ptr cint, b: ptr cfloat, ldb: ptr cint, info: ptr cint) =
-  sgesv(n, nrhs, a, lda, ipiv, b, ldb, info)
+import macros
 
-proc gesv(n: ptr cint, nrhs: ptr cint, a: ptr cdouble, lda: ptr cint,
-  ipiv: ptr cint, b: ptr cdouble, ldb: ptr cint, info: ptr cint) =
-  dgesv(n, nrhs, a, lda, ipiv, b, ldb, info)
+macro overload(s: untyped, p: typed): auto =
+  let args = p.getTypeImpl[0]
+  var
+    params = toSeq(args.children)
+    callArgs = newSeq[NimNode]()
+    i = 0
+  for c in args.children:
+    if i > 0:
+      callArgs.add(c[0])
+    inc i
+  let
+    call = newCall(p, callArgs)
+    overloadedProc = newProc(
+      name = s,
+      params = params,
+      body = newStmtList(call)
+    )
+  result = newStmtList(overloadedProc)
+
+template overload(s: untyped, p, q: typed) =
+  overload(s, p)
+  overload(s, q)
+
+overload(gesv, sgesv, dgesv)
 
 # Solvers
 
