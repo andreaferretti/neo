@@ -14,11 +14,7 @@
 
 import sequtils
 import nimcuda/[cuda_runtime_api, driver_types, cusparse, nimcuda]
-import ./sparse
-
-template pointerTo(x: untyped) = cast[ptr pointer](addr x)
-
-proc first[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
+import ./sparse, ./private/neocommon
 
 type
   CudaSparseVectorObj*[A] = object

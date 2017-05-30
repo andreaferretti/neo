@@ -13,6 +13,8 @@
 # limitations under the License.
 import macros, sequtils
 
+template pointerTo*(x: untyped) = cast[ptr pointer](addr x)
+
 proc first*[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
 
 macro overload*(s: untyped, p: typed): auto =
