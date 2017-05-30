@@ -17,6 +17,8 @@ import ./private/neocommon
 export nimblas.OrderType
 
 type
+  Complex*[A] = tuple[re, im: A]
+  Number* = float32 or float64 or Complex[float32] or Complex[float64]
   Vector*[A] = seq[A]
   Matrix*[A] = ref object
     order*: OrderType
@@ -581,6 +583,8 @@ template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var 
 overload(gesv, sgesv, dgesv)
 overload(gebal, sgebal, dgebal)
 overload(gehrd, sgehrd, dgehrd)
+overload(orghr, sorghr, dorghr)
+overload(hseqr, shseqr, dhseqr)
 
 # Solvers
 
@@ -642,10 +646,16 @@ proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
 type
   BalanceOp* {.pure.} = enum
     NoOp, Permute, Scale, Both
+  EigenMode* {.pure.} = enum
+    Eigenvalues, Schur
+  SchurCompute* {.pure.} = enum
+    NoOp, Initialize, Provided
   BalanceResult*[A] = object
     matrix*: Matrix[A]
     ihi*, ilo*: cint
     scale*: seq[A]
+  EigenValues*[A] = ref object
+    real*, img*: Vector[A]
 
 proc ch(op: BalanceOp): char =
   case op
@@ -653,6 +663,17 @@ proc ch(op: BalanceOp): char =
   of BalanceOp.Permute: 'P'
   of BalanceOp.Scale: 'S'
   of BalanceOp.Both: 'B'
+
+proc ch(m: EigenMode): char =
+  case m
+  of EigenMode.Eigenvalues: 'E'
+  of EigenMode.Schur: 'S'
+
+proc ch(s: SchurCompute): char =
+  case s
+  of SchurCompute.NoOp: 'N'
+  of SchurCompute.Initialize: 'I'
+  of SchurCompute.Provided: 'V'
 
 proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] =
   assert(a.M == a.N, "`balance` requires a square matrix")
@@ -692,3 +713,42 @@ proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
   gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
     raise newException(FloatingPointError, "Failed to reduce matrix to upper Hessenberg form")
+
+proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
+  assert(a.M == a.N, "`eigenvalues` requires a square matrix")
+  assert(a.order == colMajor, "`eigenvalues` requires a column-major matrix")
+  var
+    h = a.clone()
+    n = a.N.cint
+    ilo = 1.cint
+    ihi = a.N.cint
+    info: cint
+    tau = newSeq[A](a.N)
+    workSize = (-1).cint
+    work = newSeq[A](1)
+  # First, we call gehrd to compute the optimal work size
+  gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to find eigenvalues")
+  # Then, we allocate suitable space and call gehrd again
+  workSize = work[0].cint
+  work = newSeq[A](workSize)
+  gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to find eigenvalues")
+  # Next, we need to find the matrix Q that transforms A into H
+  var q = h.clone()
+  orghr(addr n, addr ilo, addr ihi, q.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to find eigenvalues")
+  var
+    job = ch(EigenMode.Eigenvalues)
+    compz = ch(SchurCompute.Provided)
+  result = EigenValues[A](
+    real: newSeq[A](a.N),
+    img: newSeq[A](a.N)
+  )
+  hseqr(addr job, addr compz, addr n, addr ilo, addr ihi, h.fp, addr n,
+    result.real.first, result.img.first, q.fp, addr n, work.first, addr workSize, addr info)
+  if info > 0:
+    raise newException(FloatingPointError, "Failed to find eigenvalues")
