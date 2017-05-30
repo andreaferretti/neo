@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import nimblas, nimlapack, sequtils, random, math
+import ./private/neocommon
 
 export nimblas.OrderType
 
@@ -577,31 +578,6 @@ template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var 
 
 # LAPACK overloads
 
-import macros
-
-macro overload(s: untyped, p: typed): auto =
-  let args = p.getTypeImpl[0]
-  var
-    params = toSeq(args.children)
-    callArgs = newSeq[NimNode]()
-    i = 0
-  for c in args.children:
-    if i > 0:
-      callArgs.add(c[0])
-    inc i
-  let
-    call = newCall(p, callArgs)
-    overloadedProc = newProc(
-      name = s,
-      params = params,
-      body = newStmtList(call)
-    )
-  result = newStmtList(overloadedProc)
-
-template overload(s: untyped, p, q: typed) =
-  overload(s, p)
-  overload(s, q)
-
 overload(gesv, sgesv, dgesv)
 overload(gebal, sgebal, dgebal)
 
@@ -662,8 +638,13 @@ proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
 
 # Eigenvalues
 
-type BalanceOp* {.pure.} = enum
-  NoOp, Permute, Scale, Both
+type
+  BalanceOp* {.pure.} = enum
+    NoOp, Permute, Scale, Both
+  BalanceResult*[A] = object
+    matrix*: Matrix[A]
+    ihi*, ilo*: cint
+    scale*: seq[A]
 
 proc ch(op: BalanceOp): char =
   case op
@@ -672,15 +653,18 @@ proc ch(op: BalanceOp): char =
   of BalanceOp.Scale: 'S'
   of BalanceOp.Both: 'B'
 
-proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): Matrix[A] =
+proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] =
   assert(a.M == a.N, "`balance` requires a square matrix")
   assert(a.order == colMajor, "`balance` requires a square matrix")
-  result = a.clone()
+  result = BalanceResult[A](
+    matrix: a.clone(),
+    scale: newSeq[A](a.N)
+  )
+
   var
     job = ch(op)
     n = a.N.cint
-    ilo, ihi, info: cint
-    scale: A
-  gebal(addr job, addr n, result.fp, addr n, addr ilo, addr ihi, addr scale, addr info)
+    info: cint
+  gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
   if info > 0:
     raise newException(FloatingPointError, "Failed to balance matrix")

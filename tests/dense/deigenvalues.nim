@@ -18,10 +18,12 @@ suite "matrix reductions for eigenvalue computations":
   test "balancing matrices":
     let
       a = matrix(@[
-        @[3.0, 1.0, 0.5, 2.1],
-        @[1.0, -2.0, 1.0, 1.1],
+        @[3.0, 1.0, 0.0, 0.0],
+        @[1.0, 0.0, 0.0, 0.0],
         @[2.0, -1.0, 1.5, 0.1],
         @[-1.0, 0.0, 1.1, 1.2],
       ])
+      r = balance(a, BalanceOp.Permute)
 
-    echo balance(a, BalanceOp.Both)
+    check(r.ilo == 1)
+    check(r.ihi == 4)
