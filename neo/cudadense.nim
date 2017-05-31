@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import nimcuda/[cuda_runtime_api, driver_types, cublas_api, cublas_v2, nimcuda]
-import ./dense
+import ./dense, ./private/neocommon
 
 type
   CudaVector*[A] = object
@@ -165,27 +165,27 @@ proc `*`*[A: SomeReal](v: CudaVector[A], k: A): CudaVector[A]  {. inline .} =
   check cublasScal(defaultHandle, v.N, k, result.fp)
 
 proc `+=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
-  assert(v.N == w.N)
+  checkDim(v.N == w.N)
   check cublasAxpy(defaultHandle, v.N, 1, w.fp, v.fp)
 
 proc `+`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
-  assert(v.N == w.N)
+  checkDim(v.N == w.N)
   init(result, v.N)
   check cublasCopy(defaultHandle, v.N, v.fp, 1, result.fp, 1)
   check cublasAxpy(defaultHandle, v.N, 1, w.fp, result.fp)
 
 proc `-=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
-  assert(v.N == w.N)
+  checkDim(v.N == w.N)
   check cublasAxpy(defaultHandle, v.N, -1, w.fp, v.fp)
 
 proc `-`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
-  assert(v.N == w.N)
+  checkDim(v.N == w.N)
   init(result, v.N)
   check cublasCopy(defaultHandle, v.N, v.fp, 1, result.fp, 1)
   check cublasAxpy(defaultHandle, v.N, -1, w.fp, result.fp)
 
 proc `*`*[A: SomeReal](v, w: CudaVector[A]): A {. inline .} =
-  assert(v.N == w.N)
+  checkDim(v.N == w.N)
   check cublasDot(defaultHandle, v.N, v.fp, 1, w.fp, 1, addr(result))
 
 proc l_2*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
@@ -212,21 +212,21 @@ template `/=`*[A: SomeReal](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
   v *= (1 / k)
 
 proc `+=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   check cublasAxpy(defaultHandle, a.M * a.N, 1, b.fp, a.fp)
 
 proc `+`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   check cublasCopy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
   check cublasAxpy(defaultHandle, a.M * a.N, 1, b.fp, result.fp)
 
 proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   check cublasAxpy(defaultHandle, a.M * a.N, -1, b.fp, a.fp)
 
 proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   check cublasCopy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
   check cublasAxpy(defaultHandle, a.M * a.N, -1, b.fp, result.fp)
@@ -240,14 +240,14 @@ proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
 # BLAS level 2 operations
 
 proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
-  assert(a.N == v.N)
+  checkDim(a.N == v.N)
   init(result, a.M)
   check cublasGemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, 1, a.fp, a.M, v.fp, 1, 0, result.fp, 1)
 
 # BLAS level 3 operations
 
 proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
-  assert a.N == b.M
+  checkDim(a.N == b.M)
   init(result, a.M, b.N)
   check cublasGemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N, 1,
     a.fp, a.M, b.fp, a.N, 0, result.fp, a.M)
