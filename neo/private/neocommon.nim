@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import macros, sequtils
+import macros, sequtils, strutils
 
 template pointerTo*(x: untyped) = cast[ptr pointer](addr x)
 
@@ -49,3 +49,21 @@ macro overload*(s: untyped, p: typed): auto =
 template overload*(s: untyped, p, q: typed) =
   overload(s, p)
   overload(s, q)
+
+proc getAddress(n: NimNode): NimNode =
+  let t = n.getTypeImpl
+  if t.kind == nnkBracketExpr and $(t[0]) == "seq":
+    result = quote do:
+      addr `n`[0]
+  elif t.kind == nnkRefTy and $(t[0]) == "Matrix:ObjectType":
+    result = quote do:
+      addr `n`.data[0]
+  else:
+    result = quote do:
+      addr `n`
+
+macro fortran*(f: untyped, callArgs: varargs[typed]): auto =
+  var transformedCallArgs = newSeqOfCap[NimNode](callArgs.len)
+  for x in callArgs:
+    transformedCallArgs.add(getAddress(x))
+  result = newCall(f, transformedCallArgs)

@@ -589,32 +589,26 @@ overload(hseqr, shseqr, dhseqr)
 # Solvers
 
 template solveMatrix(M, N, a, b: untyped): auto =
+  assert(a.order == colMajor, "`solve` requires a column-major matrix")
+  assert(b.order == colMajor, "`solve` requires a column-major matrix")
+
   var
     ipvt = newSeq[int32](M)
     info: cint
     m = M.cint
     n = N.cint
-  if a.order == colMajor and b.order == colMajor:
-    gesv(addr(m), addr(n), a.fp, addr(m), addr ipvt[0], b.fp, addr(m), addr(info))
-  elif a.order == rowMajor and b.order == rowMajor:
-    gesv(addr(m), addr(n), a.t.fp, addr(m), addr ipvt[0], b.t.fp, addr(m), addr(info))
-  elif a.order == colMajor and b.order == rowMajor:
-    gesv(addr(m), addr(n), a.fp, addr(m), addr ipvt[0], b.t.fp, addr(m), addr(info))
-  else:
-    gesv(addr(m), addr(n), a.t.fp, addr(m), addr ipvt[0], b.fp, addr(m), addr(info))
+  fortran(gesv, m, n, a, m, ipvt, b, m, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
 template solveVector(M, a, b: untyped): auto =
+  assert(a.order == colMajor, "`solve` requires a column-major matrix")
   var
     ipvt = newSeq[int32](M)
     info: cint
     m = M.cint
     n = 1.cint
-  if a.order == colMajor:
-    gesv(addr m, addr n, a.fp, addr m, addr ipvt[0], b.fp, addr m, addr info)
-  else:
-    gesv(addr m, addr n, a.t.fp, addr m, addr ipvt[0], b.fp, addr m, addr info)
+  fortran(gesv, m, n, a, m, ipvt, b, m, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
@@ -687,7 +681,8 @@ proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] 
     job = ch(op)
     n = a.N.cint
     info: cint
-  gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
+  # gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
+  fortran(gebal, job, n, result.matrix, n, result.ilo, result.ihi, result.scale, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to balance matrix")
 
@@ -704,13 +699,14 @@ proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
     workSize = (-1).cint
     work = newSeq[A](1)
   # First, we call gehrd to compute the optimal work size
-  gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  # gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  fortran(gehrd, n, ilo, ihi, result, n, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
-  gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  fortran(gehrd, n, ilo, ihi, result, n, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
 
@@ -727,18 +723,18 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
     workSize = (-1).cint
     work = newSeq[A](1)
   # First, we call gehrd to compute the optimal work size
-  gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  fortran(gehrd, n, ilo, ihi, h, n, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
-  gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  fortran(gehrd, n, ilo, ihi, h, n, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Next, we need to find the matrix Q that transforms A into H
   var q = h.clone()
-  orghr(addr n, addr ilo, addr ihi, q.fp, addr n, tau.first, work.first, addr workSize, addr info)
+  fortran(orghr, n, ilo, ihi, q, n, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   var
@@ -748,7 +744,6 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
     real: newSeq[A](a.N),
     img: newSeq[A](a.N)
   )
-  hseqr(addr job, addr compz, addr n, addr ilo, addr ihi, h.fp, addr n,
-    result.real.first, result.img.first, q.fp, addr n, work.first, addr workSize, addr info)
+  fortran(hseqr, job, compz, n, ilo, ihi, h, n, result.real, result.img, q, n, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
