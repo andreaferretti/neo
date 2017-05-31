@@ -249,7 +249,7 @@ proc t*[A](m: Matrix[A]): Matrix[A] =
   shallowCopy(result.data, m.data)
 
 proc reshape*[A](m: Matrix[A], a, b: int): Matrix[A] =
-  assert(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
+  checkDim(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
   new result
   result.M = a
   result.N = b
@@ -257,7 +257,7 @@ proc reshape*[A](m: Matrix[A], a, b: int): Matrix[A] =
   shallowCopy(result.data, m.data)
 
 proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
-  assert(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
+  checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
   new result
   result.order = order
   shallowCopy(result.data, v)
@@ -278,31 +278,31 @@ proc `*`*[A: SomeReal](v: Vector[A], k: A): Vector[A] {. inline .} =
   scal(N, k, result.fp, 1)
 
 proc `+=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
-  assert(v.len == w.len)
+  checkDim(v.len == w.len)
   let N = v.len
   axpy(N, 1, w.fp, 1, v.fp, 1)
 
 proc `+`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
-  assert(v.len == w.len)
+  checkDim(v.len == w.len)
   let N = v.len
   result = newSeq[A](N)
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, 1, w.fp, 1, result.fp, 1)
 
 proc `-=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
-  assert(v.len == w.len)
+  checkDim(v.len == w.len)
   let N = v.len
   axpy(N, -1, w.fp, 1, v.fp, 1)
 
 proc `-`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
-  assert(v.len == w.len)
+  checkDim(v.len == w.len)
   let N = v.len
   result = newSeq[A](N)
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, -1, w.fp, 1, result.fp, 1)
 
 proc `*`*[A: SomeReal](v, w: Vector[A]): A {. inline .} =
-  assert(v.len == w.len)
+  checkDim(v.len == w.len)
   return dot(v.len, v.fp, 1, w.fp, 1)
 
 proc l_2*[A: SomeReal](v: Vector[A]): auto {. inline .} = nrm2(v.len, v.fp, 1)
@@ -357,7 +357,7 @@ template `/=`*[A: SomeReal](v: var Vector[A] or var Matrix[A], k: A) =
   v *= (1 / k)
 
 proc `+=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   if a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
@@ -375,7 +375,7 @@ proc `+`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
   result += b
 
 proc `-=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
-  assert a.M == b.M and a.N == a.N
+  checkDim(a.M == b.M and a.N == a.N)
   if a.order == b.order:
     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
@@ -403,7 +403,7 @@ template min*[A](m: Matrix[A]): A = min(m.data)
 # BLAS level 2 operations
 
 proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =
-  assert(a.N == v.len)
+  checkDim(a.N == v.len)
   result = newSeq[A](a.M)
   let lda = if a.order == colMajor: a.M.int else: a.N.int
   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
@@ -416,7 +416,7 @@ proc `*`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
     M = a.M
     K = a.N
     N = b.N
-  assert b.M == K
+  checkDim(b.M == K)
   result.data = newSeq[A](M * N)
   result.M = M
   result.N = N
@@ -454,13 +454,13 @@ template `!=~`*(a, b: Vector or Matrix): bool =
 
 # Hadamard (component-wise) product
 proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
-  assert a.len == b.len
+  checkDim(a.len == b.len)
   result = newSeq[A](a.len)
   for i in 0 ..< a.len:
     result[i] = a[i] * b[i]
 
 proc `|*|`*[A](a, b: Matrix[A]): Matrix[A] =
-  assert a.dim == b.dim
+  checkDim(a.dim == b.dim)
   result.initLike(a)
   if a.order == b.order:
     result.order = a.order
@@ -603,7 +603,7 @@ template solveMatrix(M, N, a, b: untyped): auto =
   else:
     gesv(addr(m), addr(n), a.t.fp, addr(m), addr ipvt[0], b.fp, addr(m), addr(info))
   if info > 0:
-    raise newException(FloatingPointError, "Left hand matrix is singular or factorization failed")
+    raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
 template solveVector(M, a, b: untyped): auto =
   var
@@ -616,18 +616,18 @@ template solveVector(M, a, b: untyped): auto =
   else:
     gesv(addr m, addr n, a.t.fp, addr m, addr ipvt[0], b.fp, addr m, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Left hand matrix is singular or factorization failed")
+    raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
 proc solve*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {.inline.} =
-  assert(a.M == a.N, "Need a square matrix to solve the system")
-  assert(a.M == b.M, "The dimensions are incompatible")
+  checkDim(a.M == a.N, "Need a square matrix to solve the system")
+  checkDim(a.M == b.M, "The dimensions are incompatible")
   result = zeros(b.M, b.N, A, b.order)
   var acopy = a.clone
   copy(b.M * b.N, b.fp, 1, result.fp, 1)
   solveMatrix(b.M, b.N, acopy, result)
 
 proc solve*[A: SomeReal](a: Matrix[A], b: Vector[A]): Vector[A] {.inline.} =
-  assert(a.M == a.N, "Need a square matrix to solve the system")
+  checkDim(a.M == a.N, "Need a square matrix to solve the system")
   result = zeros(a.M, A)
   var acopy = a.clone
   copy(a.M, b.fp, 1, result.fp, 1)
@@ -636,7 +636,7 @@ proc solve*[A: SomeReal](a: Matrix[A], b: Vector[A]): Vector[A] {.inline.} =
 template `\`*(a: Matrix, b: Matrix or Vector): auto = solve(a, b)
 
 proc inv*[A: SomeReal](a: Matrix[A]): Matrix[A] {.inline.} =
-  assert(a.M == a.N, "Need a square matrix to invert")
+  checkDim(a.M == a.N, "Need a square matrix to invert")
   result = eye(a.M, A)
   var acopy = a.clone
   solveMatrix(a.M, a.M, acopy, result)
@@ -676,7 +676,7 @@ proc ch(s: SchurCompute): char =
   of SchurCompute.Provided: 'V'
 
 proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] =
-  assert(a.M == a.N, "`balance` requires a square matrix")
+  checkDim(a.M == a.N, "`balance` requires a square matrix")
   assert(a.order == colMajor, "`balance` requires a column-major matrix")
   result = BalanceResult[A](
     matrix: a.clone(),
@@ -689,10 +689,10 @@ proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] 
     info: cint
   gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to balance matrix")
+    raise newException(LinearAlgebraError, "Failed to balance matrix")
 
 proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
-  assert(a.M == a.N, "`hessenberg` requires a square matrix")
+  checkDim(a.M == a.N, "`hessenberg` requires a square matrix")
   assert(a.order == colMajor, "`hessenberg` requires a column-major matrix")
   result = a.clone()
   var
@@ -706,16 +706,16 @@ proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
   # First, we call gehrd to compute the optimal work size
   gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to reduce matrix to upper Hessenberg form")
+    raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
   gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to reduce matrix to upper Hessenberg form")
+    raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
 
 proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
-  assert(a.M == a.N, "`eigenvalues` requires a square matrix")
+  checkDim(a.M == a.N, "`eigenvalues` requires a square matrix")
   assert(a.order == colMajor, "`eigenvalues` requires a column-major matrix")
   var
     h = a.clone()
@@ -729,18 +729,18 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
   # First, we call gehrd to compute the optimal work size
   gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to find eigenvalues")
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
   gehrd(addr n, addr ilo, addr ihi, h.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to find eigenvalues")
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Next, we need to find the matrix Q that transforms A into H
   var q = h.clone()
   orghr(addr n, addr ilo, addr ihi, q.fp, addr n, tau.first, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to find eigenvalues")
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   var
     job = ch(EigenMode.Eigenvalues)
     compz = ch(SchurCompute.Provided)
@@ -751,4 +751,4 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
   hseqr(addr job, addr compz, addr n, addr ilo, addr ihi, h.fp, addr n,
     result.real.first, result.img.first, q.fp, addr n, work.first, addr workSize, addr info)
   if info > 0:
-    raise newException(FloatingPointError, "Failed to find eigenvalues")
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
