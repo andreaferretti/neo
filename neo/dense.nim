@@ -173,6 +173,12 @@ proc eye*(N: int, A: typedesc[float64], order = colMajor): Matrix[float64] =
 proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
+proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
+  let n = xs.len
+  result = zeros(n, n, A)
+  for i in 0 ..< n:
+    result.data[i * (n + 1)] = xs[i]
+
 # Accessors
 
 proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
@@ -650,6 +656,9 @@ type
     scale*: seq[A]
   EigenValues*[A] = ref object
     real*, img*: Vector[A]
+  SchurResult*[A] = object
+    factorization*: Matrix[A]
+    eigenvalues*: EigenValues[A]
 
 proc ch(op: BalanceOp): char =
   case op
@@ -747,3 +756,42 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
   fortran(hseqr, job, compz, n, ilo, ihi, h, n, result.real, result.img, q, n, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
+
+proc schur*[A: SomeReal](a: Matrix[A]): SchurResult[A] =
+  checkDim(a.M == a.N, "`schur` requires a square matrix")
+  assert(a.order == colMajor, "`schur` requires a column-major matrix")
+  result.factorization = a.clone()
+  var
+    n = a.N.cint
+    ilo = 1.cint
+    ihi = a.N.cint
+    info: cint
+    tau = newSeq[A](a.N)
+    workSize = (-1).cint
+    work = newSeq[A](1)
+  # First, we call gehrd to compute the optimal work size
+  fortran(gehrd, n, ilo, ihi, result.factorization, n, tau, work, workSize, info)
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
+  # Then, we allocate suitable space and call gehrd again
+  workSize = work[0].cint
+  work = newSeq[A](workSize)
+  fortran(gehrd, n, ilo, ihi, result.factorization, n, tau, work, workSize, info)
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
+  # Next, we need to find the matrix Q that transforms A into H
+  var q = result.factorization.clone()
+  fortran(orghr, n, ilo, ihi, q, n, tau, work, workSize, info)
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
+  var
+    job = ch(EigenMode.Eigenvalues)
+    compz = ch(SchurCompute.Provided)
+  result.eigenvalues = EigenValues[A](
+    real: newSeq[A](a.N),
+    img: newSeq[A](a.N)
+  )
+  fortran(hseqr, job, compz, n, ilo, ihi, result.factorization, n,
+    result.eigenvalues.real, result.eigenvalues.img, q, n, work, workSize, info)
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
