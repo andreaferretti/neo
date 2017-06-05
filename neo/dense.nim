@@ -913,8 +913,10 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Next, we need to find the matrix Q that transforms A into H
-  var q = h.clone()
-  fortran(orghr, n, ilo, ihi, q, ldh, tau, work, workSize, info)
+  var
+    q = h.clone()
+    ldq = q.ld.cint
+  fortran(orghr, n, ilo, ihi, q, ldq, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   var
@@ -924,7 +926,7 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
     real: newSeq[A](a.N),
     img: newSeq[A](a.N)
   )
-  fortran(hseqr, job, compz, n, ilo, ihi, h, ldh, result.real, result.img, q, ldh, work, workSize, info)
+  fortran(hseqr, job, compz, n, ilo, ihi, h, ldh, result.real, result.img, q, ldq, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
 
