@@ -19,11 +19,15 @@ export nimblas.OrderType
 type
   Complex*[A] = tuple[re, im: A]
   Number* = float32 or float64 or Complex[float32] or Complex[float64]
+  MatrixShape* = enum
+    Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
   Vector*[A] = seq[A]
   Matrix*[A] = ref object
     order*: OrderType
-    M*, N*: int
+    M*, N*, ld*: int
+    fp*: ptr A
     data*: seq[A]
+    shape*: set[MatrixShape]
 
 # Float pointers
 template fp[A](v: Vector[A]): ptr A = cast[ptr A](unsafeAddr(v[0]))
@@ -95,12 +99,18 @@ proc ones*(N: int, A: typedesc[float32]): auto = constantVector(N, 1'f32)
 
 proc ones*(N: int, A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
+proc matrix*[A](order: OrderType, M, N: int, data: seq[A]): Matrix[A] =
+  result = Matrix[A](
+    order: order,
+    M: M,
+    N: N,
+    ld: if order == rowMajor: N else: M
+  )
+  shallowCopy(result.data, data)
+  result.fp = addr(result.data[0])
+
 proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order = colMajor): Matrix[A] =
-  new result
-  result.data = newSeq[A](M * N)
-  result.M = M
-  result.N = N
-  result.order = order
+  result = matrix[A](order, M, N, newSeq[A](M * N))
   if order == colMajor:
     for i in 0 ..< M:
       for j in 0 ..< N:
@@ -111,12 +121,7 @@ proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order = colMajor): Matrix
         result.data[i * N + j] = f(i, j)
 
 template makeMatrixIJ*(A: typedesc, M1, N1: int, f: untyped, ord = colMajor): auto =
-  var r: Matrix[A]
-  new(r)
-  r.data = newSeq[A](M1 * N1)
-  r.M = M1
-  r.N = N1
-  r.order = ord
+  var r = matrix[A](ord, M1, N1, newSeq[A](M1 * N1))
   if ord == colMajor:
     for i {.inject.} in 0 ..< M1:
       for j {.inject.} in 0 ..< N1:
@@ -128,11 +133,7 @@ template makeMatrixIJ*(A: typedesc, M1, N1: int, f: untyped, ord = colMajor): au
   r
 
 proc randomMatrix*[A: SomeReal](M, N: int, max: A = 1, order = colMajor): Matrix[A] =
-  new(result)
-  result.data = newSeq[A](M * N)
-  result.M = M
-  result.N = N
-  result.order = order
+  result = matrix[A](order, M, N, newSeq[A](M * N))
   for i in 0 ..< (M * N):
     result.data[i] = random(max)
 
@@ -140,20 +141,13 @@ proc randomMatrix*(M, N: int, order = colMajor): Matrix[float64] =
   randomMatrix(M, N, 1'f64, order)
 
 proc constantMatrix*[A](M, N: int, a: A, order = colMajor): Matrix[A] =
-  new(result)
-  result.data = sequtils.repeat(a, M * N)
-  result.M = M
-  result.N = N
-  result.order = order
+  matrix[A](order, M, N, sequtils.repeat(a, M * N))
 
 proc zeros*(M, N: int, order = colMajor): auto =
-  Matrix[float64](M: M, N: N, order: order, data: newSeq[float64](M * N))
+  matrix[float64](M = M, N = N, order = order, data = newSeq[float64](M * N))
 
-proc zeros*(M, N: int, A: typedesc[float32], order = colMajor): auto =
-  Matrix[float32](M: M, N: N, order: order, data: newSeq[float32](M * N))
-
-proc zeros*(M, N: int, A: typedesc[float64], order = colMajor): auto =
-  Matrix[float64](M: M, N: N, order: order, data: newSeq[float64](M * N))
+proc zeros*(M, N: int, A: typedesc, order = colMajor): auto =
+  matrix[A](M = M, N = N, order = order, data = newSeq[A](M * N))
 
 proc ones*(M, N: int): auto = constantMatrix(M, N, 1'f64)
 
@@ -204,10 +198,11 @@ proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
 
 proc clone*[A](m: Matrix[A]): Matrix[A] =
-  Matrix[A](data: m.data, order: m.order, M: m.M, N: m.N)
+  var dataCopy = m.data
+  matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
 
 proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
-  result = Matrix[A](data: newSeq[A](m.M * m.N), order: m.order, M: m.M, N: m.N)
+  result = zeros(m.M, m.N, A, m.order)
   for i in 0 ..< (m.M * m.N):
     result.data[i] = f(m.data[i])
 
@@ -342,11 +337,7 @@ template min*[A](v: Vector[A]): A = minIndex(v).val
 template len(m: Matrix): int = m.M * m.N
 
 template initLike[A](r, m: Matrix[A]) =
-  new r
-  r.data = newSeq[A](m.len)
-  r.order = m.order
-  r.M = m.M
-  r.N = m.N
+  r = matrix[A](m.order, m.M, m.N, newSeq[A](m.len))
 
 proc `*=`*[A: SomeReal](m: var Matrix[A], k: A) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
 
@@ -417,23 +408,17 @@ proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =
 # BLAS level 3 operations
 
 proc `*`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
-  new result
   let
     M = a.M
     K = a.N
     N = b.N
   checkDim(b.M == K)
-  result.data = newSeq[A](M * N)
-  result.M = M
-  result.N = N
+  result = matrix[A](a.order, M, N, newSeq[A](M * N))
   if a.order == colMajor and b.order == colMajor:
-    result.order = colMajor
     gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
   elif a.order == rowMajor and b.order == rowMajor:
-    result.order = rowMajor
     gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
   elif a.order == colMajor and b.order == rowMajor:
-    result.order = colMajor
     gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
   else:
     result.order = colMajor
