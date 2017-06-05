@@ -64,14 +64,14 @@ suite "32-bit vector operations":
     check(v1 == p1.cpu())
   test "dot product":
     let
-      v = @[1.0, 3.0, 2.0, 8.0, -2.0].to32().gpu()
-      w = @[2.0, -1.0, 2.0, 0.0, 4.0].to32().gpu()
+      v = vector(1.0, 3.0, 2.0, 8.0, -2.0).to32().gpu()
+      w = vector(2.0, -1.0, 2.0, 0.0, 4.0).to32().gpu()
     check(v * w == -5.0)
   test "ℓ² norm":
-    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].to32().gpu()
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
     check l_2(v) == 8.0
   test "ℓ¹ norm":
-    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].to32().gpu()
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).to32().gpu()
     check l_1(v) == 14.0
 
 suite "64-bit vector operations":
@@ -126,14 +126,14 @@ suite "64-bit vector operations":
     check(v1 == p1.cpu())
   test "dot product":
     let
-      v = @[1.0, 3.0, 2.0, 8.0, -2.0].gpu()
-      w = @[2.0, -1.0, 2.0, 0.0, 4.0].gpu()
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0]).gpu()
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0]).gpu()
     check(v * w == -5.0)
   test "ℓ² norm":
-    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].gpu()
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
     check l_2(v) == 8.0
   test "ℓ¹ norm":
-    let v = @[1.0, 1.0, 2.0, 3.0, -7.0].gpu()
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0]).gpu()
     check l_1(v) == 14.0
 
 suite "matrix/vector operations":
@@ -144,9 +144,9 @@ suite "matrix/vector operations":
         @[-1'f32, 1'f32, 3'f32, 1'f32],
         @[3'f32, 2'f32, 2'f32, 4'f32]
       ]).gpu()
-      v = @[1'f32, 3'f32, 2'f32, -2'f32].gpu()
+      v = vector([1'f32, 3'f32, 2'f32, -2'f32]).gpu()
 
-    check((m * v).cpu() == @[7'f32, 6'f32, 5'f32])
+    check((m * v).cpu() == vector([7'f32, 6'f32, 5'f32]))
   test "multiplication of 64-bit matrix and vector":
     let
       m = matrix(@[
@@ -154,9 +154,9 @@ suite "matrix/vector operations":
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ]).gpu()
-      v = @[1.0, 3.0, 2.0, -2.0].gpu()
+      v = vector([1.0, 3.0, 2.0, -2.0]).gpu()
 
-    check((m * v).cpu() == @[7.0, 6.0, 5.0])
+    check((m * v).cpu() == vector([7.0, 6.0, 5.0]))
 
 suite "32-bit matrix operations":
   test "scalar matrix multiplication":

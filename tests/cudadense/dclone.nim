@@ -32,11 +32,11 @@ suite "cloning and slicing":
     check m1 == m4
   test "slicing a vector":
     let
-      v1 = @[1'f64, 2, 3, 4, 5, 6, 7, 8, 9]
+      v1 = vector([1'f64, 2, 3, 4, 5, 6, 7, 8, 9])
       v2 = v1.gpu()
       v3 = v2[3 .. 6]
       v4 = v3.cpu()
-    check v4 == @[4'f64, 5, 6, 7]
+    check v4 == vector([4'f64, 5, 6, 7])
   test "slicing a matrix":
     let
       m1 = matrix(@[

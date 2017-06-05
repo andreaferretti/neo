@@ -18,7 +18,7 @@ export nimblas.OrderType
 
 type
   Complex*[A] = tuple[re, im: A]
-  Number* = float32 or float64 or Complex[float32] or Complex[float64]
+  Scalar* = float32 or float64 or Complex[float32] or Complex[float64]
   MatrixShape* = enum
     Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
   Vector*[A] = ref object

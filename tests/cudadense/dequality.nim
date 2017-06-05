@@ -17,17 +17,17 @@ import unittest, neo/dense, neo/cudadense
 suite "vector and matrix equality":
   test "strict 32-bit vector equality":
     let
-      u = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
-      v = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
-      w = @[1'f32, 3'f32, 3'f32, 4'f32].gpu()
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      w = vector([1'f32, 3'f32, 3'f32, 4'f32]).gpu()
     check u == v
     check v != w
   test "approximate 32-bit vector equality":
     let
-      u = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
-      v = @[1'f32, 2'f32, 3'f32, 4'f32].gpu()
-      w = @[1'f32, 2'f32, 2.999999'f32, 4.000001'f32].gpu()
-      z = @[1'f32, 3'f32, 3'f32, 4'f32].gpu()
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32]).gpu()
+      w = vector([1'f32, 2'f32, 2.999999'f32, 4.000001'f32]).gpu()
+      z = vector([1'f32, 3'f32, 3'f32, 4'f32]).gpu()
     check u =~ v
     check v =~ w
     check v != w
@@ -41,17 +41,17 @@ suite "vector and matrix equality":
     check n != p
   test "strict 64-bit vector equality":
     let
-      u = @[1.0, 2.0, 3.0, 4.0].gpu()
-      v = @[1.0, 2.0, 3.0, 4.0].gpu()
-      w = @[1.0, 3.0, 3.0, 4.0].gpu()
+      u = vector([1.0, 2.0, 3.0, 4.0]).gpu()
+      v = vector([1.0, 2.0, 3.0, 4.0]).gpu()
+      w = vector([1.0, 3.0, 3.0, 4.0]).gpu()
     check u == v
     check v != w
   test "approximate 64-bit vector equality":
     let
-      u = @[1.0, 2.0, 3.0, 4.0].gpu()
-      v = @[1.0, 2.0, 3.0, 4.0].gpu()
-      w = @[1.0, 2.0, 2.999999, 4.000001].gpu()
-      z = @[1.0, 3.0, 3.0, 4.0].gpu()
+      u = vector([1.0, 2.0, 3.0, 4.0]).gpu()
+      v = vector([1.0, 2.0, 3.0, 4.0]).gpu()
+      w = vector([1.0, 2.0, 2.999999, 4.000001]).gpu()
+      z = vector([1.0, 3.0, 3.0, 4.0]).gpu()
     check u =~ v
     check v =~ w
     check v != w

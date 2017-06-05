@@ -68,15 +68,11 @@ proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
   check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.M.int32, result.fp, m.M.int32)
 
 proc cpu*[A: SomeReal](v: CudaVector[A]): Vector[A] =
-  result = newSeq[A](v.N)
+  result = zeros(v.N, A)
   check cublasGetVector(v.N, sizeof(A).int32, v.fp, 1, result.fp, 1)
 
 proc cpu*[A: SomeReal](m: CudaMatrix[A]): Matrix[A] =
-  new result
-  result.order = colMajor
-  result.data = newSeq[A](m.M * m.N)
-  result.M = m.M.int32
-  result.N = m.N.int32
+  result = zeros(m.M, m.N, A, colMajor)
   check cublasGetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.M, result.fp, m.M)
 
 # Printing
