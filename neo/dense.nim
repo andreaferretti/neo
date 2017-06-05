@@ -473,11 +473,16 @@ template len(m: Matrix): int = m.M * m.N
 template initLike[A](r, m: Matrix[A]) =
   r = matrix[A](m.order, m.M, m.N, newSeq[A](m.len))
 
-proc `*=`*[A: SomeReal](m: var Matrix[A], k: A) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
+# TODO: fix this when , is not full
+proc `*=`*[A: SomeReal](m: var Matrix[A], k: A) {. inline .} =
+  scal(m.M * m.N, k, m.fp, 1)
 
 proc `*`*[A: SomeReal](m: Matrix[A], k: A): Matrix[A]  {. inline .} =
-  result.initLike(m)
-  copy(m.len, m.fp, 1, result.fp, 1)
+  if m.isFull:
+    result.initLike(m)
+    copy(m.len, m.fp, 1, result.fp, 1)
+  else:
+    result = m.clone()
   scal(m.len, k, result.fp, 1)
 
 template `*`*[A: SomeReal](k: A, v: Vector[A] or Matrix[A]): auto = v * k
@@ -489,47 +494,86 @@ template `/=`*[A: SomeReal](v: var Vector[A] or var Matrix[A], k: A) =
 
 proc `+=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  if a.order == b.order:
+  if a.isFull and b.isFull and a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
     for i in 0 ..< a.M:
       for j in 0 ..< a.N:
-        a.data[j * a.M + i] += b.data[i * b.N + j]
+        ap[j * a.ld + i] += bp[i * b.ld + j]
   else:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
     for i in 0 ..< a.M:
       for j in 0 ..< a.N:
-        a.data[i * a.N + j] += b.data[j * b.M + i]
+        ap[i * a.ld + j] += bp[j * b.ld + i]
 
 proc `+`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
-  result.initLike(a)
-  copy(a.len, a.fp, 1, result.fp, 1)
+  if a.isFull:
+    result.initLike(a)
+    copy(a.len, a.fp, 1, result.fp, 1)
+  else:
+    result = a.clone()
   result += b
 
 proc `-=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  if a.order == b.order:
+  if a.isFull and b.isFull and a.order == b.order:
     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
   elif a.order == colMajor and b.order == rowMajor:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
     for i in 0 ..< a.M:
       for j in 0 ..< a.N:
-        a.data[j * a.M + i] -= b.data[i * b.N + j]
+        ap[j * a.ld + i] -= bp[i * b.ld + j]
   else:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
     for i in 0 ..< a.M:
       for j in 0 ..< a.N:
-        a.data[i * a.N + j] -= b.data[j * b.M + i]
+        ap[i * a.ld + j] -= bp[j * b.ld + i]
 
 proc `-`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
-  result.initLike(a)
-  copy(a.len, a.fp, 1, result.fp, 1)
+  if a.isFull:
+    result.initLike(a)
+    copy(a.len, a.fp, 1, result.fp, 1)
+  else:
+    result = a.clone()
   result -= b
 
-proc l_2*[A: SomeReal](m: Matrix[A]): A {. inline .} = nrm2(m.len, m.fp, 1)
+proc l_2*[A: SomeReal](m: Matrix[A]): A {. inline .} =
+  if m.isFull:
+    result = nrm2(m.len, m.fp, 1)
+  else:
+    result = sqrt(result)
+    for x in m:
+      result += x * x
 
-proc l_1*[A: SomeReal](m: Matrix[A]): A {. inline .} = asum(m.len, m.fp, 1)
+proc l_1*[A: SomeReal](m: Matrix[A]): A {. inline .} =
+  if m.isFull:
+    result = asum(m.len, m.fp, 1)
+  else:
+    for x in m:
+      result += x.abs
 
-template max*[A](m: Matrix[A]): A = max(m.data)
+proc max*[A](m: Matrix[A]): A =
+  var first = true
+  for x in m:
+    if x > result or first:
+      result = x
+    first = false
 
-template min*[A](m: Matrix[A]): A = min(m.data)
+proc min*[A](m: Matrix[A]): A =
+  var first = true
+  for x in m:
+    if x < result or first:
+      result = x
+    first = false
 
 # BLAS level 2 operations
 
