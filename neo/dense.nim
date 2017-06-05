@@ -580,8 +580,7 @@ proc min*[A](m: Matrix[A]): A =
 proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =
   checkDim(a.N == v.len)
   result = vector(newSeq[A](a.M))
-  let lda = if a.order == colMajor: a.M.int else: a.N.int
-  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+  gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, a.ld, v.fp, v.step, 0, result.fp, result.step)
 
 # BLAS level 3 operations
 
