@@ -296,13 +296,13 @@ proc clone*[A](m: Matrix[A]): Matrix[A] =
       let (i, j) = t
       result[i, j] = v
 
-proc map*[A](v: Vector[A], f: proc(x: A): A): Vector[A] =
-  result = zeros(v.len, A)
+proc map*[A, B](v: Vector[A], f: proc(x: A): B): Vector[B] =
+  result = zeros(v.len, B)
   for i, x in v:
     result.data[i] = f(x) # `result` is full here, we can assign `data` directly
 
-proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
-  result = zeros(m.M, m.N, A, m.order)
+proc map*[A, B](m: Matrix[A], f: proc(x: A): B): Matrix[B] =
+  result = zeros(m.M, m.N, B, m.order)
   if m.isFull:
     for i in 0 ..< (m.M * m.N):
       result.data[i] = f(m.data[i])
@@ -313,16 +313,28 @@ proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
       result[i, j] = f(v)
 
 proc to32*(v: Vector[float64]): Vector[float32] =
-  vector(v.data.mapIt(it.float32))
+  if v.isFull:
+    vector(v.data.mapIt(it.float32))
+  else:
+    vector(v.mapIt(it.float32))
 
 proc to64*(v: Vector[float32]): Vector[float64] =
-  vector(v.data.mapIt(it.float64))
+  if v.isFull:
+    vector(v.data.mapIt(it.float64))
+  else:
+    vector(v.mapIt(it.float64))
 
 proc to32*(m: Matrix[float64]): Matrix[float32] =
-  matrix(data = m.data.mapIt(it.float32), order = m.order, M = m.M, N = m.N)
+  if m.isFull:
+    matrix(data = m.data.mapIt(it.float32), order = m.order, M = m.M, N = m.N)
+  else:
+    m.map(proc(x: float64): float32 = x.float32)
 
 proc to64*(m: Matrix[float32]): Matrix[float64] =
-  matrix(data = m.data.mapIt(it.float64), order = m.order, M = m.M, N = m.N)
+  if m.isFull:
+    matrix(data = m.data.mapIt(it.float64), order = m.order, M = m.M, N = m.N)
+  else:
+    m.map(proc(x: float32): float64 = x.float64)
 
 # Pretty printing
 
