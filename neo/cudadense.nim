@@ -25,10 +25,6 @@ type
 
 template fp[A](c: CudaVector[A] or CudaMatrix[A]): ptr A = c.data[]
 
-template fp[A](v: Vector[A]): ptr A = cast[ptr A](unsafeAddr(v[0]))
-
-template fp[A](m: Matrix[A]): ptr A = cast[ptr A](unsafeAddr(m.data[0]))
-
 proc cudaMalloc[A](size: int): ptr A =
   let s = size * sizeof(A)
   check cudaMalloc(cast[ptr pointer](addr result), s)
@@ -58,14 +54,20 @@ proc newCudaMatrix*[A](m, n: int): CudaMatrix[A] {.inline.} =
 # Copying between host and device
 
 proc gpu*[A: SomeReal](v: Vector[A]): CudaVector[A] =
-  init(result, v.len)
-  check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, 1, result.fp, 1)
+  if v.isFull:
+    init(result, v.len)
+    check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, 1, result.fp, 1)
+  else:
+    result = v.clone().gpu()
 
 proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
-  if m.order == rowMajor:
-    raise newException(ValueError, "m must be column major")
-  init(result, m.M, m.N)
-  check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.M.int32, result.fp, m.M.int32)
+  if m.isFull:
+    if m.order == rowMajor:
+      raise newException(ValueError, "m must be column major")
+    init(result, m.M, m.N)
+    check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.M.int32, result.fp, m.M.int32)
+  else:
+    result = m.clone().gpu()
 
 proc cpu*[A: SomeReal](v: CudaVector[A]): Vector[A] =
   result = zeros(v.N, A)
