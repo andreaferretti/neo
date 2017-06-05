@@ -70,12 +70,12 @@ suite "matrix accessors":
     let
       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
       r = m.row(1)
-    check r == @[3.0, 1.0]
+    check r == vector([3.0, 1.0])
   test "reading matrix columns":
     let
       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
       c = m.column(1)
-    check c == @[-2.0, 1.0]
+    check c == vector([-2.0, 1.0])
   test "cloning matrices":
     var m = randomMatrix(5, 5)
     let
@@ -111,12 +111,12 @@ suite "32-bit matrix accessors":
     let
       m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
       r = m.row(1)
-    check r == @[3'f32, 1'f32]
+    check r == vector([3'f32, 1'f32])
   test "reading matrix columns":
     let
       m = makeMatrix(2, 2, proc(i, j: int): float32 = (3 * i - 2 * j).float32)
       c = m.column(1)
-    check c == @[-2'f32, 1'f32]
+    check c == vector([-2'f32, 1'f32])
   test "cloning matrices":
     var m = randomMatrix(5, 5, max = 1'f32)
     let

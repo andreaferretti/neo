@@ -31,7 +31,7 @@ suite "trivial operations on 32-bit matrices":
     check m1.reshape(4, 3) == m2
   test "turn vectors into matrices":
     let
-      v = @[1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32]
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32])
       m = matrix(@[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
@@ -40,7 +40,7 @@ suite "trivial operations on 32-bit matrices":
     check v.asMatrix(3, 4) == m
   test "turn matrices into vectors":
     let
-      v = @[1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32]
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32])
       m = matrix(@[
         @[1'f32, 0'f32, 2'f32, -1'f32],
         @[-1'f32, 1'f32, 3'f32, 1'f32],
@@ -76,7 +76,7 @@ suite "trivial operations should share storage":
     check m1[0, 2] == 0.0
   test "turn vectors into matrices":
     var
-      v = @[1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0]
+      v = vector([1.0, -1.0, 3.0, 0.0, 1.0, 2.0, 2.0, 3.0, 2.0, -1.0, 1.0, 4.0])
       m = v.asMatrix(3, 4)
     m[2, 1] = 0.0
     check v[5] == 0.0
@@ -114,7 +114,7 @@ suite "trivial operations on 32-bit matrices should share storage":
     check m1[0, 2] == 0'f32
   test "turn vectors into matrices":
     var
-      v = @[1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32]
+      v = vector([1'f32, -1'f32, 3'f32, 0'f32, 1'f32, 2'f32, 2'f32, 3'f32, 2'f32, -1'f32, 1'f32, 4'f32])
       m = v.asMatrix(3, 4)
     m[2, 1] = 0'f32
     check v[5] == 0'f32

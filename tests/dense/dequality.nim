@@ -17,16 +17,16 @@ import unittest, neo/dense
 suite "vector and matrix equality":
   test "strict vector equality":
     let
-      u = @[1.0, 2.0, 3.0, 4.0]
-      v = @[1.0, 2.0, 3.0, 4.0]
-      w = @[1.0, 3.0, 3.0, 4.0]
+      u = vector([1.0, 2.0, 3.0, 4.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      w = vector([1.0, 3.0, 3.0, 4.0])
     check u == v
     check v != w
   test "strict 32-bit vector equality":
     let
-      u = @[1'f32, 2'f32, 3'f32, 4'f32]
-      v = @[1'f32, 2'f32, 3'f32, 4'f32]
-      w = @[1'f32, 3'f32, 3'f32, 4'f32]
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32])
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32])
+      w = vector([1'f32, 3'f32, 3'f32, 4'f32])
     check u == v
     check v != w
   test "strict matrix equality":
@@ -49,20 +49,20 @@ suite "vector and matrix equality":
     check n != p
   test "approximate vector equality":
     let
-      u = @[1.0, 2.0, 3.0, 4.0]
-      v = @[1.0, 2.0, 3.0, 4.0]
-      w = @[1.0, 2.0, 2.999999999, 4.00000001]
-      z = @[1.0, 3.0, 3.0, 4.0]
+      u = vector([1.0, 2.0, 3.0, 4.0])
+      v = vector([1.0, 2.0, 3.0, 4.0])
+      w = vector([1.0, 2.0, 2.999999999, 4.00000001])
+      z = vector([1.0, 3.0, 3.0, 4.0])
     check u =~ v
     check v =~ w
     check v != w
     check w !=~ z
   test "approximate 32-bit vector equality":
     let
-      u = @[1'f32, 2'f32, 3'f32, 4'f32]
-      v = @[1'f32, 2'f32, 3'f32, 4'f32]
-      w = @[1'f32, 2'f32, 2.999999'f32, 4.000001'f32]
-      z = @[1'f32, 3'f32, 3'f32, 4'f32]
+      u = vector([1'f32, 2'f32, 3'f32, 4'f32])
+      v = vector([1'f32, 2'f32, 3'f32, 4'f32])
+      w = vector([1'f32, 2'f32, 2.999999'f32, 4.000001'f32])
+      z = vector([1'f32, 3'f32, 3'f32, 4'f32])
     check u =~ v
     check v =~ w
     check v != w

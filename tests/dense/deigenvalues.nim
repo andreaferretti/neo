@@ -60,7 +60,7 @@ suite "computing eigenvalues":
       ])
       e = eigenvalues(a)
 
-    check(e.real =~ @[3.0, 1.0, 2.0])
+    check(e.real == @[3.0, 1.0, 2.0])
     check(e.img == @[0.0, 0.0, 0.0])
 
   test "computing the Schur factorization":
@@ -73,5 +73,5 @@ suite "computing eigenvalues":
       s = schur(a)
 
     check(s.factorization == diag(3.0, 1.0, 2.0))
-    check(s.eigenvalues.real =~ @[3.0, 1.0, 2.0])
+    check(s.eigenvalues.real == @[3.0, 1.0, 2.0])
     check(s.eigenvalues.img == @[0.0, 0.0, 0.0])

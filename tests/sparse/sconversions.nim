@@ -39,7 +39,7 @@ suite "conversions to dense":
 
   test "sparse vector conversion":
     let v = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
-    check v.dense == @[0.0, 0, 0, 2, 0, 3, 0, -1, 0, 0]
+    check v.dense == vector([0.0, 0, 0, 2, 0, 3, 0, -1, 0, 0])
   test "csr matrix conversion":
     let m = csr(
       rows = @[0'i32, 3, 4, 7, 9],

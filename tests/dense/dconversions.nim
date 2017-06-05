@@ -17,11 +17,11 @@ import unittest, neo/dense
 
 suite "precision conversions":
   test "vectors: 64 to 32 bits":
-    let v = @[1.0, 3.5, 2.0, 4.5]
-    check v.to32 == @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
+    let v = vector([1.0, 3.5, 2.0, 4.5])
+    check v.to32 == vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
   test "vectors: 32 to 64 bits":
-    let v = @[1'f32, 3.5'f32, 2'f32, 4.5'f32]
-    check v.to64 == @[1.0, 3.5, 2.0, 4.5]
+    let v = vector([1'f32, 3.5'f32, 2'f32, 4.5'f32])
+    check v.to64 == vector([1.0, 3.5, 2.0, 4.5])
   test "matrices: 64 to 32 bits":
     let
       m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + j).float64)

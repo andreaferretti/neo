@@ -21,18 +21,16 @@ type
   Number* = float32 or float64 or Complex[float32] or Complex[float64]
   MatrixShape* = enum
     Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
-  Vector*[A] = seq[A]
+  Vector*[A] = ref object
+    data*: seq[A]
+    fp*: ptr A # float pointer
+    len*, step*: int
   Matrix*[A] = ref object
     order*: OrderType
-    M*, N*, ld*: int
-    fp*: ptr A
+    M*, N*, ld*: int # ld = leading dimension
+    fp*: ptr A # float pointer
     data*: seq[A]
     shape*: set[MatrixShape]
-
-# Float pointers
-template fp[A](v: Vector[A]): ptr A = cast[ptr A](unsafeAddr(v[0]))
-
-template fp[A](m: Matrix[A]): ptr A = cast[ptr A](unsafeAddr(m.data[0]))
 
 # Equality
 
@@ -49,34 +47,33 @@ proc slowEq(m, n: Matrix): bool =
         return false
   return true
 
+proc `==`*[A](v, w: Vector[A]): bool =
+  v.data == w.data
+
 proc `==`*[A](m, n: Matrix[A]): bool =
   if m.order == n.order: m.data == n.data
   elif m.order == colMajor: slowEq(m, n)
   else: slowEq(m, n)
 
-# Conversion
-
-proc to32*(v: Vector[float64]): Vector[float32] = v.mapIt(it.float32)
-
-proc to64*(v: Vector[float32]): Vector[float64] = v.mapIt(it.float64)
-
-proc to32*(m: Matrix[float64]): Matrix[float32] =
-  result = Matrix[float32](data:m.data.mapIt(it.float32), order:m.order, M:m.M, N:m.N)
-
-proc to64*(m: Matrix[float32]): Matrix[float64] =
-  result = Matrix[float64](data:m.data.mapIt(it.float64), order:m.order, M:m.M, N:m.N)
-
 # Initializers
 
+proc vector*[A](data: seq[A]): Vector[A] =
+  result = Vector[A](step: 1, len: data.len)
+  shallowCopy(result.data, data)
+  result.fp = addr(result.data[0])
+
+proc vector*[A](data: varargs[A]): Vector[A] =
+  vector[A](@data)
+
 proc makeVector*[A](N: int, f: proc (i: int): A): Vector[A] =
-  result = newSeq[A](N)
+  result = vector(newSeq[A](N))
   for i in 0 ..< N:
-    result[i] = f(i)
+    result.data[i] = f(i)
 
 template makeVectorI*[A](N: int, f: untyped): Vector[A] =
-  var result = newSeq[A](N)
+  var result = vector(newSeq[A](N))
   for i {.inject.} in 0 ..< N:
-    result[i] = f
+    result.data[i] = f
   result
 
 proc randomVector*(N: int, max: float64 = 1): Vector[float64] =
@@ -87,11 +84,9 @@ proc randomVector*(N: int, max: float32): Vector[float32] =
 
 proc constantVector*[A](N: int, a: A): Vector[A] = makeVectorI[A](N, a)
 
-proc zeros*(N: int): auto = newSeq[float64](N)
+proc zeros*(N: int): auto = vector(newSeq[float64](N))
 
-proc zeros*(N: int, A: typedesc[float32]): auto = newSeq[float32](N)
-
-proc zeros*(N: int, A: typedesc[float64]): auto = newSeq[float64](N)
+proc zeros*(N: int, A: typedesc): auto = vector(newSeq[A](N))
 
 proc ones*(N: int): auto = constantVector(N, 1'f64)
 
@@ -173,7 +168,27 @@ proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
   for i in 0 ..< n:
     result.data[i * (n + 1)] = xs[i]
 
+# Conversion
+
+proc to32*(v: Vector[float64]): Vector[float32] =
+  vector(v.data.mapIt(it.float32))
+
+proc to64*(v: Vector[float32]): Vector[float64] =
+  vector(v.data.mapIt(it.float64))
+
+proc to32*(m: Matrix[float64]): Matrix[float32] =
+  matrix(data = m.data.mapIt(it.float32), order = m.order, M = m.M, N = m.N)
+
+proc to64*(m: Matrix[float32]): Matrix[float64] =
+  matrix(data = m.data.mapIt(it.float64), order = m.order, M = m.M, N = m.N)
+
 # Accessors
+
+proc `[]`*[A](v: Vector[A], i: int): A {. inline .} =
+  v.data[i]
+
+proc `[]=`*[A](v: Vector[A], i: int, val: A) {. inline .} =
+  v.data[i] = val
 
 proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
   if m.order == colMajor: m.data[j * m.M + i]
@@ -186,20 +201,29 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
     m.data[i * m.N + j] = val
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
-  result = newSeq[A](m.M)
+  result = zeros(m.M, A)
   for i in 0 ..< m.M:
-    result[i] = m[i, j]
+    result.data[i] = m[i, j]
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
-  result = newSeq[A](m.N)
+  result = zeros(m.N, A)
   for j in 0 ..< m.N:
-    result[j] = m[i, j]
+    result.data[j] = m[i, j]
 
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
 
+proc clone*[A](v: Vector[A]): Vector[A] =
+  var dataCopy = v.data
+  return vector(dataCopy)
+
 proc clone*[A](m: Matrix[A]): Matrix[A] =
   var dataCopy = m.data
-  matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
+  return matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
+
+proc map*[A](v: Vector[A], f: proc(x: A): A): Vector[A] =
+  result = zeros(v.len, A)
+  for i in 0 ..< v.len:
+    result.data[i] = f(v.data[i])
 
 proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
   result = zeros(m.M, m.N, A, m.order)
@@ -207,6 +231,14 @@ proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
     result.data[i] = f(m.data[i])
 
 # Iterators
+
+iterator items*[A](v: Vector[A]): auto {. inline .} =
+  for x in v.data:
+    yield x
+
+iterator pairs*[A](v: Vector[A]): auto {. inline .} =
+  for i, x in v.data:
+    yield (i, x)
 
 iterator columns*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.N:
@@ -227,6 +259,12 @@ iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
       yield ((i, j), m[i, j])
 
 # Pretty printing
+
+proc `$`*[A](v: Vector[A]): string =
+  result = "[ "
+  for i in 0 ..< (v.len - 1):
+    result &= $(v[i]) & "\t"
+  result &= $(v[v.len - 1]) & " ]"
 
 proc toStringHorizontal[A](v: Vector[A]): string =
   result = "[ "
@@ -261,12 +299,12 @@ proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
   checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
   new result
   result.order = order
-  shallowCopy(result.data, v)
+  shallowCopy(result.data, v.data)
   result.M = a
   result.N = b
 
 proc asVector*[A](m: Matrix[A]): Vector[A] =
-  shallowCopy(result, m.data)
+  vector(m.data)
 
 # BLAS level 1 operations
 
@@ -274,7 +312,7 @@ proc `*=`*[A: SomeReal](v: var Vector[A], k: A) {. inline .} = scal(v.len, k, v.
 
 proc `*`*[A: SomeReal](v: Vector[A], k: A): Vector[A] {. inline .} =
   let N = v.len
-  result = newSeq[A](N)
+  result = vector(newSeq[A](N))
   copy(N, v.fp, 1, result.fp, 1)
   scal(N, k, result.fp, 1)
 
@@ -286,7 +324,7 @@ proc `+=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
 proc `+`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
-  result = newSeq[A](N)
+  result = vector(newSeq[A](N))
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, 1, w.fp, 1, result.fp, 1)
 
@@ -298,7 +336,7 @@ proc `-=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
 proc `-`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
-  result = newSeq[A](N)
+  result = vector(newSeq[A](N))
   copy(N, v.fp, 1, result.fp, 1)
   axpy(N, -1, w.fp, 1, result.fp, 1)
 
@@ -401,7 +439,7 @@ template min*[A](m: Matrix[A]): A = min(m.data)
 
 proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =
   checkDim(a.N == v.len)
-  result = newSeq[A](a.M)
+  result = vector(newSeq[A](a.M))
   let lda = if a.order == colMajor: a.M.int else: a.N.int
   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
 
@@ -446,7 +484,7 @@ template `!=~`*(a, b: Vector or Matrix): bool =
 # Hadamard (component-wise) product
 proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
   checkDim(a.len == b.len)
-  result = newSeq[A](a.len)
+  result = vector(newSeq[A](a.len))
   for i in 0 ..< a.len:
     result[i] = a[i] * b[i]
 
@@ -469,7 +507,7 @@ template makeUniversal*(fname: untyped) =
     proc fname*(x: float32): float32 = fname(x.float64).float32
 
   proc fname*[A: SomeReal](v: Vector[A]): Vector[A] =
-    result = newSeq[A](v.len)
+    result = vector(newSeq[A](v.len))
     for i in 0 ..< (v.len):
       result[i] = fname(v[i])
 
@@ -486,7 +524,7 @@ template makeUniversalLocal*(fname: untyped) =
     proc fname(x: float32): float32 = fname(x.float64).float32
 
   proc fname[A: SomeReal](v: Vector[A]): Vector[A] =
-    result = newSeq[A](v.len)
+    result = vector(newSeq[A](v.len))
     for i in 0 ..< (v.len):
       result[i] = fname(v[i])
 
@@ -523,7 +561,7 @@ makeUniversal(radToDeg)
 # Functional API
 
 proc cumsum*[A](v: Vector[A]): Vector[A] =
-  result = newSeq[A](v.len)
+  result = vector(newSeq[A](v.len))
   result[0] = v[0]
   for i in 1 ..< v.len:
     result[i] = result[i - 1] + v[i]
@@ -556,7 +594,7 @@ template stddev*(m: Matrix): auto = m.asVector.stddev
 # Rewrites
 
 proc linearCombination[A: SomeReal](a: A, v, w: Vector[A]): Vector[A]  {. inline .} =
-  new result
+  result = vector(newSeq[A](v.N))
   copy(v.len, v.fp, 1, result.fp, 1)
   axpy(v.len, a, w.fp, 1, result.fp, 1)
 
@@ -640,7 +678,7 @@ type
     ihi*, ilo*: cint
     scale*: seq[A]
   EigenValues*[A] = ref object
-    real*, img*: Vector[A]
+    real*, img*: seq[A]
   SchurResult*[A] = object
     factorization*: Matrix[A]
     eigenvalues*: EigenValues[A]

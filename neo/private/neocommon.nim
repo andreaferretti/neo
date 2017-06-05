@@ -55,6 +55,9 @@ proc getAddress(n: NimNode): NimNode =
   if t.kind == nnkBracketExpr and $(t[0]) == "seq":
     result = quote do:
       addr `n`[0]
+  elif t.kind == nnkRefTy and $(t[0]) == "Vector:ObjectType":
+    result = quote do:
+      `n`.fp
   elif t.kind == nnkRefTy and $(t[0]) == "Matrix:ObjectType":
     result = quote do:
       `n`.fp

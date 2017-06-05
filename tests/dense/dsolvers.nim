@@ -112,9 +112,9 @@ suite "linear system solving":
         @[3.0, 1.0],
         @[1.0, -2.0]
       ])
-      b = @[1.0, 0.0]
+      b = vector([1.0, 0.0])
       x = solve(a, b)
-      expected = @[2.0/7.0, 1.0/7.0]
+      expected = vector([2.0/7.0, 1.0/7.0])
     check expected =~ x
 
   test "matrix-vector solve operator":
@@ -123,9 +123,9 @@ suite "linear system solving":
         @[3.0, 1.0],
         @[1.0, -2.0]
       ])
-      b = @[1.0, 0.0]
+      b = vector([1.0, 0.0])
       x = a \ b
-      expected = @[2.0/7.0, 1.0/7.0]
+      expected = vector([2.0/7.0, 1.0/7.0])
     check expected =~ x
 
   test "matrix-vector singular matrix error":
@@ -134,7 +134,7 @@ suite "linear system solving":
         @[0.0, 0.0],
         @[0.0, 0.0]
       ])
-      b = @[1.0, 0.0]
+      b = vector([1.0, 0.0])
     expect FloatingPointError:
       discard solve(a, b)
 
@@ -144,7 +144,7 @@ suite "linear system solving":
         @[3.0'f32, 1.0'f32],
         @[1.0'f32, -2.0'f32]
       ])
-      b = @[1.0'f32, 0.0'f32]
+      b = vector([1.0'f32, 0.0'f32])
       x = solve(a, b)
-      expected = @[2.0'f32/7.0'f32, 1.0'f32/7.0'f32]
+      expected = vector([2.0'f32/7.0'f32, 1.0'f32/7.0'f32])
     check expected =~ x

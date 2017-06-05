@@ -22,8 +22,8 @@ suite "row-major matrix/vector operations":
         @[-1.0, 1.0, 3.0, 1.0],
         @[3.0, 2.0, 2.0, 4.0]
       ], order = rowMajor)
-      v = @[1.0, 3.0, 2.0, -2.0]
-    check((m * v) == @[7.0, 6.0, 5.0])
+      v = vector([1.0, 3.0, 2.0, -2.0])
+    check((m * v) == vector([7.0, 6.0, 5.0]))
 
 suite "row-major matrix operations":
   test "scalar matrix multiplication":
