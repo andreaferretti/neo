@@ -219,14 +219,38 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
     mp[i * m.ld + j] = val
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
-  result = zeros(m.M, A)
-  for i in 0 ..< m.M:
-    result[i] = m[i, j]
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    result = Vector[A](
+      data: m.data,
+      fp: addr(mp[j * m.M]),
+      len: m.M,
+      step: 1
+    )
+  else:
+    result = Vector[A](
+      data: m.data,
+      fp: addr(mp[j]),
+      len: m.M,
+      step: m.N
+    )
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
-  result = zeros(m.N, A)
-  for j in 0 ..< m.N:
-    result[j] = m[i, j]
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    result = Vector[A](
+      data: m.data,
+      fp: addr(mp[i]),
+      len: m.N,
+      step: m.M
+    )
+  else:
+    result = Vector[A](
+      data: m.data,
+      fp: addr(mp[i * m.N]),
+      len: m.N,
+      step: 1
+    )
 
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
 

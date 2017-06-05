@@ -76,6 +76,18 @@ suite "matrix accessors":
       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
       c = m.column(1)
     check c == vector([-2.0, 1.0])
+  test "matrix rows should share storage":
+    var
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      r = m.row(1)
+    r[0] = 12
+    check m[1, 0] == 12
+  test "matrix columns should share storage":
+    var
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      r = m.column(1)
+    r[0] = 12
+    check m[0, 1] == 12
   test "cloning matrices":
     var m = randomMatrix(5, 5)
     let
