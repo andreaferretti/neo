@@ -190,47 +190,43 @@ proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
   for i in 0 ..< n:
     result.data[i * (n + 1)] = xs[i]
 
-# Conversion
-
-proc to32*(v: Vector[float64]): Vector[float32] =
-  vector(v.data.mapIt(it.float32))
-
-proc to64*(v: Vector[float32]): Vector[float64] =
-  vector(v.data.mapIt(it.float64))
-
-proc to32*(m: Matrix[float64]): Matrix[float32] =
-  matrix(data = m.data.mapIt(it.float32), order = m.order, M = m.M, N = m.N)
-
-proc to64*(m: Matrix[float32]): Matrix[float64] =
-  matrix(data = m.data.mapIt(it.float64), order = m.order, M = m.M, N = m.N)
-
 # Accessors
 
 proc `[]`*[A](v: Vector[A], i: int): A {. inline .} =
-  v.data[i]
+  checkBounds(i >= 0 and i < v.len)
+  return cast[CPointer[A]](v.fp)[v.step * i]
 
 proc `[]=`*[A](v: Vector[A], i: int, val: A) {. inline .} =
-  v.data[i] = val
+  checkBounds(i >= 0 and i < v.len)
+  cast[CPointer[A]](v.fp)[v.step * i] = val
 
 proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
-  if m.order == colMajor: m.data[j * m.M + i]
-  else: m.data[i * m.N + j]
+  checkBounds(i >= 0 and i < m.M)
+  checkBounds(j >= 0 and j < m.N)
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    return mp[j * m.ld + i]
+  else:
+    return mp[i * m.ld + j]
 
 proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
+  checkBounds(i >= 0 and i < m.M)
+  checkBounds(j >= 0 and j < m.N)
+  let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
-    m.data[j * m.M + i] = val
+    mp[j * m.ld + i] = val
   else:
-    m.data[i * m.N + j] = val
+    mp[i * m.ld + j] = val
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
   result = zeros(m.M, A)
   for i in 0 ..< m.M:
-    result.data[i] = m[i, j]
+    result[i] = m[i, j]
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
   result = zeros(m.N, A)
   for j in 0 ..< m.N:
-    result.data[j] = m[i, j]
+    result[j] = m[i, j]
 
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
 
@@ -279,6 +275,20 @@ iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.M:
     for j in 0 ..< m.N:
       yield ((i, j), m[i, j])
+
+# Conversion
+
+proc to32*(v: Vector[float64]): Vector[float32] =
+  vector(v.data.mapIt(it.float32))
+
+proc to64*(v: Vector[float32]): Vector[float64] =
+  vector(v.data.mapIt(it.float64))
+
+proc to32*(m: Matrix[float64]): Matrix[float32] =
+  matrix(data = m.data.mapIt(it.float32), order = m.order, M = m.M, N = m.N)
+
+proc to64*(m: Matrix[float32]): Matrix[float64] =
+  matrix(data = m.data.mapIt(it.float64), order = m.order, M = m.M, N = m.N)
 
 # Pretty printing
 

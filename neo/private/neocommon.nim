@@ -19,6 +19,7 @@ proc first*[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
 
 type
   DimensionError* = object of ValueError
+  OutOfBoundsError* = object of ValueError
   LinearAlgebraError* = object of FloatingPointError
 
 template checkDim*(cond: untyped, msg = "") =
@@ -26,6 +27,12 @@ template checkDim*(cond: untyped, msg = "") =
     {.line.}:
       if not cond:
         raise newException(DimensionError, msg)
+
+template checkBounds*(cond: untyped, msg = "") =
+  when compileOption("assertions"):
+    {.line.}:
+      if not cond:
+        raise newException(OutOfBoundsError, msg)
 
 macro overload*(s: untyped, p: typed): auto =
   let args = p.getTypeImpl[0]
