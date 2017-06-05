@@ -441,14 +441,9 @@ For more information, look at the tests in `tests/cudadense`.
 ## TODO
 
 * Add support for matrices and vector on the stack
-* Add more functional interfaces (foldl, scanl)
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * More specialized BLAS operations
-* Add operations from LAPACK
 * Support slicing/nonconstant steps
-* Make `row` and `column` operations non-copying
-* Better types to avoid out of bounds exceptions when statically checkable
-* Add a fallback Nim implementation, that is valid over other rings
 * Try on more platforms/configurations
 * Make a proper benchmark
 * Improve documentation
