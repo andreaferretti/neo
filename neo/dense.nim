@@ -223,7 +223,7 @@ proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
   if m.order == colMajor:
     result = Vector[A](
       data: m.data,
-      fp: addr(mp[j * m.M]),
+      fp: addr(mp[j * m.ld]),
       len: m.M,
       step: 1
     )
@@ -232,7 +232,7 @@ proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
       data: m.data,
       fp: addr(mp[j]),
       len: m.M,
-      step: m.N
+      step: m.ld
     )
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
@@ -242,12 +242,12 @@ proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
       data: m.data,
       fp: addr(mp[i]),
       len: m.N,
-      step: m.M
+      step: m.ld
     )
   else:
     result = Vector[A](
       data: m.data,
-      fp: addr(mp[i * m.N]),
+      fp: addr(mp[i * m.ld]),
       len: m.N,
       step: 1
     )
