@@ -592,14 +592,15 @@ proc `*`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
   checkDim(b.M == K)
   result = matrix[A](a.order, M, N, newSeq[A](M * N))
   if a.order == colMajor and b.order == colMajor:
-    gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
+    gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, a.ld, b.fp, b.ld, 0, result.fp, result.ld)
   elif a.order == rowMajor and b.order == rowMajor:
-    gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
+    gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, a.ld, b.fp, b.ld, 0, result.fp, result.ld)
   elif a.order == colMajor and b.order == rowMajor:
-    gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
+    gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, a.ld, b.fp, b.ld, 0, result.fp, result.ld)
   else:
     result.order = colMajor
-    gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+    result.ld = M
+    gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, a.ld, b.fp, b.ld, 0, result.fp, result.ld)
 
 # Comparison
 
