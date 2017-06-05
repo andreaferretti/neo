@@ -230,33 +230,21 @@ proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
 
 proc dim*(m: Matrix): tuple[rows, columns: int] = (m.M, m.N)
 
-proc clone*[A](v: Vector[A]): Vector[A] =
-  var dataCopy = v.data
-  return vector(dataCopy)
-
-proc clone*[A](m: Matrix[A]): Matrix[A] =
-  var dataCopy = m.data
-  return matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
-
-proc map*[A](v: Vector[A], f: proc(x: A): A): Vector[A] =
-  result = zeros(v.len, A)
-  for i in 0 ..< v.len:
-    result.data[i] = f(v.data[i])
-
-proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
-  result = zeros(m.M, m.N, A, m.order)
-  for i in 0 ..< (m.M * m.N):
-    result.data[i] = f(m.data[i])
-
 # Iterators
 
 iterator items*[A](v: Vector[A]): auto {. inline .} =
-  for x in v.data:
-    yield x
+  let vp = cast[CPointer[A]](v.fp)
+  var pos = 0
+  for i in 0 ..< v.len:
+    yield vp[pos]
+    pos += v.step
 
 iterator pairs*[A](v: Vector[A]): auto {. inline .} =
-  for i, x in v.data:
-    yield (i, x)
+  let vp = cast[CPointer[A]](v.fp)
+  var pos = 0
+  for i in 0 ..< v.len:
+    yield (i, vp[pos])
+    pos += v.step
 
 iterator columns*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.N:
@@ -277,6 +265,24 @@ iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
       yield ((i, j), m[i, j])
 
 # Conversion
+
+proc clone*[A](v: Vector[A]): Vector[A] =
+  var dataCopy = v.data
+  return vector(dataCopy)
+
+proc clone*[A](m: Matrix[A]): Matrix[A] =
+  var dataCopy = m.data
+  return matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
+
+proc map*[A](v: Vector[A], f: proc(x: A): A): Vector[A] =
+  result = zeros(v.len, A)
+  for i in 0 ..< v.len:
+    result.data[i] = f(v.data[i])
+
+proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
+  result = zeros(m.M, m.N, A, m.order)
+  for i in 0 ..< (m.M * m.N):
+    result.data[i] = f(m.data[i])
 
 proc to32*(v: Vector[float64]): Vector[float32] =
   vector(v.data.mapIt(it.float32))
