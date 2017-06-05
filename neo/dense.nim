@@ -279,22 +279,38 @@ iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
 # Conversion
 
 proc clone*[A](v: Vector[A]): Vector[A] =
-  var dataCopy = v.data
-  return vector(dataCopy)
+  if v.isFull:
+    var dataCopy = v.data
+    return vector(dataCopy)
+  else:
+    return vector(toSeq(v.items))
 
 proc clone*[A](m: Matrix[A]): Matrix[A] =
-  var dataCopy = m.data
-  return matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
+  if m.isFull:
+    var dataCopy = m.data
+    result = matrix[A](data = dataCopy, order = m.order, M = m.M, N = m.N)
+  else:
+    result = matrix(m.order, m.M, m.N, newSeq[A](m.M * m.N))
+    # TODO: copy one row or column at a time
+    for t, v in m:
+      let (i, j) = t
+      result[i, j] = v
 
 proc map*[A](v: Vector[A], f: proc(x: A): A): Vector[A] =
   result = zeros(v.len, A)
-  for i in 0 ..< v.len:
-    result.data[i] = f(v.data[i])
+  for i, x in v:
+    result.data[i] = f(x) # `result` is full here, we can assign `data` directly
 
 proc map*[A](m: Matrix[A], f: proc(x: A): A): Matrix[A] =
   result = zeros(m.M, m.N, A, m.order)
-  for i in 0 ..< (m.M * m.N):
-    result.data[i] = f(m.data[i])
+  if m.isFull:
+    for i in 0 ..< (m.M * m.N):
+      result.data[i] = f(m.data[i])
+  else:
+    for t, v in m:
+      let (i, j) = t
+      # TODO: make things faster here
+      result[i, j] = f(v)
 
 proc to32*(v: Vector[float64]): Vector[float32] =
   vector(v.data.mapIt(it.float32))
