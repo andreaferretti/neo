@@ -475,7 +475,18 @@ template initLike[A](r, m: Matrix[A]) =
 
 # TODO: fix this when , is not full
 proc `*=`*[A: SomeReal](m: var Matrix[A], k: A) {. inline .} =
-  scal(m.M * m.N, k, m.fp, 1)
+  if m.isFull:
+    scal(m.M * m.N, k, m.fp, 1)
+  else:
+    let mp = cast[CPointer[A]](m.fp)
+    if m.order == colMajor:
+      for i in 0 ..< m.M:
+        for j in 0 ..< m.N:
+          mp[j * m.ld + i] *= k
+    else:
+      for i in 0 ..< m.M:
+        for j in 0 ..< m.N:
+          mp[i * m.ld + j] *= k
 
 proc `*`*[A: SomeReal](m: Matrix[A], k: A): Matrix[A]  {. inline .} =
   if m.isFull:
