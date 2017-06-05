@@ -359,33 +359,45 @@ proc `$`*[A](m: Matrix[A]): string =
 # Trivial operations
 
 proc t*[A](m: Matrix[A]): Matrix[A] =
-  matrix(
-    order = (if m.order == rowMajor: colMajor else: rowMajor),
-    M = m.N,
-    N = m.M,
-    data = m.data
-  )
+  if m.isFull:
+    matrix(
+      order = (if m.order == rowMajor: colMajor else: rowMajor),
+      M = m.N,
+      N = m.M,
+      data = m.data
+    )
+  else:
+    m.clone().t
 
 proc reshape*[A](m: Matrix[A], a, b: int): Matrix[A] =
-  checkDim(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
-  result = matrix(
-    order = m.order,
-    M = a,
-    N = b,
-    data = m.data
-  )
+  if m.isFull:
+    checkDim(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
+    result = matrix(
+      order = m.order,
+      M = a,
+      N = b,
+      data = m.data
+    )
+  else:
+    result = m.clone().reshape(a, b)
 
 proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
-  checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
-  result = matrix(
-    order = order,
-    M = a,
-    N = b,
-    data = v.data
-  )
+  if v.isFull:
+    checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
+    result = matrix(
+      order = order,
+      M = a,
+      N = b,
+      data = v.data
+    )
+  else:
+    result = v.clone().asMatrix(a, b, order)
 
 proc asVector*[A](m: Matrix[A]): Vector[A] =
-  vector(m.data)
+  if m.isFull:
+    vector(m.data)
+  else:
+    vector(toSeq(m.items))
 
 # BLAS level 1 operations
 
