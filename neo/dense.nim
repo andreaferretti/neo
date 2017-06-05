@@ -857,9 +857,10 @@ proc balance*[A: SomeReal](a: Matrix[A], op = BalanceOp.Both): BalanceResult[A] 
   var
     job = ch(op)
     n = a.N.cint
+    lda = a.ld.cint
     info: cint
   # gebal(addr job, addr n, result.matrix.fp, addr n, addr result.ilo, addr result.ihi, result.scale.first, addr info)
-  fortran(gebal, job, n, result.matrix, n, result.ilo, result.ihi, result.scale, info)
+  fortran(gebal, job, n, result.matrix, lda, result.ilo, result.ihi, result.scale, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to balance matrix")
 
@@ -869,6 +870,7 @@ proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
   result = a.clone()
   var
     n = a.N.cint
+    ldr = result.ld.cint
     ilo = 1.cint
     ihi = a.N.cint
     info: cint
@@ -877,13 +879,13 @@ proc hessenberg*[A: SomeReal](a: Matrix[A]): Matrix[A] =
     work = newSeq[A](1)
   # First, we call gehrd to compute the optimal work size
   # gehrd(addr n, addr ilo, addr ihi, result.fp, addr n, tau.first, work.first, addr workSize, addr info)
-  fortran(gehrd, n, ilo, ihi, result, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, result, ldr, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
-  fortran(gehrd, n, ilo, ihi, result, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, result, ldr, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
 
@@ -893,6 +895,7 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
   var
     h = a.clone()
     n = a.N.cint
+    ldh = h.ld.cint
     ilo = 1.cint
     ihi = a.N.cint
     info: cint
@@ -900,18 +903,18 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
     workSize = (-1).cint
     work = newSeq[A](1)
   # First, we call gehrd to compute the optimal work size
-  fortran(gehrd, n, ilo, ihi, h, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, h, ldh, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
-  fortran(gehrd, n, ilo, ihi, h, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, h, ldh, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   # Next, we need to find the matrix Q that transforms A into H
   var q = h.clone()
-  fortran(orghr, n, ilo, ihi, q, n, tau, work, workSize, info)
+  fortran(orghr, n, ilo, ihi, q, ldh, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
   var
@@ -921,7 +924,7 @@ proc eigenvalues*[A: SomeReal](a: Matrix[A]): EigenValues[A] =
     real: newSeq[A](a.N),
     img: newSeq[A](a.N)
   )
-  fortran(hseqr, job, compz, n, ilo, ihi, h, n, result.real, result.img, q, n, work, workSize, info)
+  fortran(hseqr, job, compz, n, ilo, ihi, h, ldh, result.real, result.img, q, ldh, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find eigenvalues")
 
@@ -931,6 +934,7 @@ proc schur*[A: SomeReal](a: Matrix[A]): SchurResult[A] =
   result.factorization = a.clone()
   var
     n = a.N.cint
+    ldr = result.factorization.ld.cint
     ilo = 1.cint
     ihi = a.N.cint
     info: cint
@@ -938,18 +942,20 @@ proc schur*[A: SomeReal](a: Matrix[A]): SchurResult[A] =
     workSize = (-1).cint
     work = newSeq[A](1)
   # First, we call gehrd to compute the optimal work size
-  fortran(gehrd, n, ilo, ihi, result.factorization, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, result.factorization, ldr, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
   # Then, we allocate suitable space and call gehrd again
   workSize = work[0].cint
   work = newSeq[A](workSize)
-  fortran(gehrd, n, ilo, ihi, result.factorization, n, tau, work, workSize, info)
+  fortran(gehrd, n, ilo, ihi, result.factorization, ldr, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
   # Next, we need to find the matrix Q that transforms A into H
-  var q = result.factorization.clone()
-  fortran(orghr, n, ilo, ihi, q, n, tau, work, workSize, info)
+  var
+    q = result.factorization.clone()
+    ldq = q.ld.cint
+  fortran(orghr, n, ilo, ihi, q, ldq, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
   var
@@ -959,7 +965,7 @@ proc schur*[A: SomeReal](a: Matrix[A]): SchurResult[A] =
     real: newSeq[A](a.N),
     img: newSeq[A](a.N)
   )
-  fortran(hseqr, job, compz, n, ilo, ihi, result.factorization, n,
-    result.eigenvalues.real, result.eigenvalues.img, q, n, work, workSize, info)
+  fortran(hseqr, job, compz, n, ilo, ihi, result.factorization, ldr,
+    result.eigenvalues.real, result.eigenvalues.img, q, ldq, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
