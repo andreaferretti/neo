@@ -754,6 +754,7 @@ overload(hseqr, shseqr, dhseqr)
 # Solvers
 
 template solveMatrix(M, N, a, b: untyped): auto =
+  # TODO: remove this requirement
   assert(a.order == colMajor, "`solve` requires a column-major matrix")
   assert(b.order == colMajor, "`solve` requires a column-major matrix")
 
@@ -762,34 +763,42 @@ template solveMatrix(M, N, a, b: untyped): auto =
     info: cint
     m = M.cint
     n = N.cint
-  fortran(gesv, m, n, a, m, ipvt, b, m, info)
+    lda = a.ld.cint
+    ldb = b.ld.cint
+  fortran(gesv, m, n, a, lda, ipvt, b, ldb, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
 template solveVector(M, a, b: untyped): auto =
+  # TODO: remove this requirement
   assert(a.order == colMajor, "`solve` requires a column-major matrix")
   var
     ipvt = newSeq[int32](M)
     info: cint
     m = M.cint
     n = 1.cint
-  fortran(gesv, m, n, a, m, ipvt, b, m, info)
+    lda = a.ld.cint
+  fortran(gesv, m, n, a, lda, ipvt, b, lda, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Left hand matrix is singular or factorization failed")
 
 proc solve*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {.inline.} =
   checkDim(a.M == a.N, "Need a square matrix to solve the system")
   checkDim(a.M == b.M, "The dimensions are incompatible")
-  result = zeros(b.M, b.N, A, b.order)
   var acopy = a.clone
-  copy(b.M * b.N, b.fp, 1, result.fp, 1)
+  if b.isFull:
+    result = zeros(b.M, b.N, A, b.order)
+    copy(b.M * b.N, b.fp, 1, result.fp, 1)
+  else:
+    result = b.clone()
   solveMatrix(b.M, b.N, acopy, result)
 
 proc solve*[A: SomeReal](a: Matrix[A], b: Vector[A]): Vector[A] {.inline.} =
   checkDim(a.M == a.N, "Need a square matrix to solve the system")
-  result = zeros(a.M, A)
+  checkDim(a.M == b.len, "The dimensions are incompatible")
   var acopy = a.clone
-  copy(a.M, b.fp, 1, result.fp, 1)
+  result = zeros(b.len, A)
+  copy(b.len, b.fp, b.step, result.fp, result.step)
   solveVector(a.M, acopy, result)
 
 template `\`*(a: Matrix, b: Matrix or Vector): auto = solve(a, b)
