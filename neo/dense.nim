@@ -32,12 +32,8 @@ type
 
 # Equality
 
-# template at[A](p: ptr A, i: int): untyped =
-#   cast[CPointer[A]](p)[i]
-
-# template elem[A](m: Matrix[A], i, j: int): untyped =
-#   if m.order == colMajor: at(m.fp, j * m.ld + i)
-#   else: at(m.fp, i * m.ld + j)
+proc isFull(m: Matrix): bool =
+  m.data.len == m.M * m.N
 
 proc slowEq[A](m, n: Matrix[A]): bool =
   if m.M != n.M or m.N != n.N:
@@ -58,9 +54,10 @@ proc `==`*[A](v, w: Vector[A]): bool =
   v.data == w.data
 
 proc `==`*[A](m, n: Matrix[A]): bool =
-  if m.order == n.order: m.data == n.data
-  elif m.order == colMajor: slowEq(m, n)
-  else: slowEq(m, n)
+  if m.isFull and n.isFull and m.order == n.order:
+    m.data == n.data
+  else:
+    slowEq(m, n)
 
 # Initializers
 
