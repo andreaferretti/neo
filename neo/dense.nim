@@ -255,14 +255,26 @@ iterator rows*[A](m: Matrix[A]): auto {. inline .} =
     yield m.row(i)
 
 iterator items*[A](m: Matrix[A]): auto {. inline .} =
-  for i in 0 ..< m.M:
-    for j in 0 ..< m.N:
-      yield m[i, j]
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        yield mp[j * m.ld + i]
+  else:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        yield mp[i * m.ld + j]
 
 iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
-  for i in 0 ..< m.M:
-    for j in 0 ..< m.N:
-      yield ((i, j), m[i, j])
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        yield ((i, j), mp[j * m.ld + i])
+  else:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        yield ((i, j), mp[i * m.ld + j])
 
 # Conversion
 
