@@ -626,12 +626,12 @@ proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
   checkDim(a.len == b.len)
   result = vector(newSeq[A](a.len))
   for i in 0 ..< a.len:
-    result[i] = a[i] * b[i]
+    result.data[i] = a[i] * b[i]
 
 proc `|*|`*[A](a, b: Matrix[A]): Matrix[A] =
   checkDim(a.dim == b.dim)
   result.initLike(a)
-  if a.order == b.order:
+  if a.isFull and b.isFull and a.order == b.order:
     result.order = a.order
     for i in 0 ..< a.len:
       result.data[i] = a.data[i] * b.data[i]
@@ -648,13 +648,11 @@ template makeUniversal*(fname: untyped) =
 
   proc fname*[A: SomeReal](v: Vector[A]): Vector[A] =
     result = vector(newSeq[A](v.len))
-    for i in 0 ..< (v.len):
-      result[i] = fname(v[i])
+    for i, x in v:
+      result.data[i] = fname(x)
 
   proc fname*[A: SomeReal](m: Matrix[A]): Matrix[A] =
-    result.initLike(m)
-    for i in 0 ..< m.len:
-      result.data[i] = fname(m.data[i])
+    m.map(fname)
 
   export fname
 
@@ -665,13 +663,11 @@ template makeUniversalLocal*(fname: untyped) =
 
   proc fname[A: SomeReal](v: Vector[A]): Vector[A] =
     result = vector(newSeq[A](v.len))
-    for i in 0 ..< (v.len):
-      result[i] = fname(v[i])
+    for i, x in v:
+      result.data[i] = fname(x)
 
   proc fname[A: SomeReal](m: Matrix[A]): Matrix[A] =
-    result.initLike(m)
-    for i in 0 ..< m.len:
-      result.data[i] = fname(m.data[i])
+    m.map(fname)
 
 makeUniversal(sqrt)
 makeUniversal(cbrt)
