@@ -731,11 +731,11 @@ template stddev*(m: Matrix): auto = m.asVector.stddev
 
 proc linearCombination[A: SomeReal](a: A, v, w: Vector[A]): Vector[A]  {. inline .} =
   result = vector(newSeq[A](v.N))
-  copy(v.len, v.fp, 1, result.fp, 1)
-  axpy(v.len, a, w.fp, 1, result.fp, 1)
+  copy(v.len, v.fp, v.step, result.fp, result.step)
+  axpy(v.len, a, w.fp, w.step, result.fp, result.step)
 
 proc linearCombinationMut[A: SomeReal](a: A, v: var Vector[A], w: Vector[A])  {. inline .} =
-  axpy(v.len, a, w.fp, 1, v.fp, 1)
+  axpy(v.len, a, w.fp, w.step, v.fp, v.step)
 
 template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeReal](a: A, v, w: Vector[A]): auto =
   linearCombination(a, v, w)
