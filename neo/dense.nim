@@ -12,13 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import nimblas, nimlapack, sequtils, random, math
-import ./private/neocommon
+import ./core, ./private/neocommon
 
 export nimblas.OrderType
 
 type
-  Complex*[A] = tuple[re, im: A]
-  Scalar* = float32 or float64 or Complex[float32] or Complex[float64]
   MatrixShape* = enum
     Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
   Vector*[A] = ref object
@@ -34,16 +32,25 @@ type
 
 # Equality
 
-template elem(m, i, j: untyped): auto =
-  if m.order == colMajor: m.data[j * m.M + i]
-  else: m.data[i * m.N + j]
+# template at[A](p: ptr A, i: int): untyped =
+#   cast[CPointer[A]](p)[i]
 
-proc slowEq(m, n: Matrix): bool =
+# template elem[A](m: Matrix[A], i, j: int): untyped =
+#   if m.order == colMajor: at(m.fp, j * m.ld + i)
+#   else: at(m.fp, i * m.ld + j)
+
+proc slowEq[A](m, n: Matrix[A]): bool =
   if m.M != n.M or m.N != n.N:
     return false
+  let
+    mp = cast[CPointer[A]](m.fp)
+    np = cast[CPointer[A]](n.fp)
   for i in 0 ..< m.M:
     for j in 0 ..< m.N:
-      if elem(m, i, j) != elem(n, i, j):
+      let
+        mel = if m.order == colMajor: mp[j * m.ld + i] else: mp[i * m.ld + j]
+        nel = if n.order == colMajor: np[j * n.ld + i] else: np[i * n.ld + j]
+      if mel != nel:
         return false
   return true
 
@@ -281,27 +288,30 @@ proc `$`*[A](m: Matrix[A]): string =
 # Trivial operations
 
 proc t*[A](m: Matrix[A]): Matrix[A] =
-  new result
-  result.M = m.N
-  result.N = m.M
-  result.order = if m.order == rowMajor: colMajor else: rowMajor
-  shallowCopy(result.data, m.data)
+  matrix(
+    order = (if m.order == rowMajor: colMajor else: rowMajor),
+    M = m.N,
+    N = m.M,
+    data = m.data
+  )
 
 proc reshape*[A](m: Matrix[A], a, b: int): Matrix[A] =
   checkDim(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
-  new result
-  result.M = a
-  result.N = b
-  result.order = m.order
-  shallowCopy(result.data, m.data)
+  result = matrix(
+    order = m.order,
+    M = a,
+    N = b,
+    data = m.data
+  )
 
 proc asMatrix*[A](v: Vector[A], a, b: int, order = colMajor): Matrix[A] =
   checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
-  new result
-  result.order = order
-  shallowCopy(result.data, v.data)
-  result.M = a
-  result.N = b
+  result = matrix(
+    order = order,
+    M = a,
+    N = b,
+    data = v.data
+  )
 
 proc asVector*[A](m: Matrix[A]): Vector[A] =
   vector(m.data)
