@@ -186,6 +186,7 @@ proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
 proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
   let n = xs.len
   result = zeros(n, n, A)
+  result.shape.incl(Symmetric)
   for i in 0 ..< n:
     result.data[i * (n + 1)] = xs[i]
 
