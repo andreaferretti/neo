@@ -32,8 +32,22 @@ type
 
 # Equality
 
-proc isFull(m: Matrix): bool =
+proc isFull*(v: Vector): bool {.inline.} =
+  v.len == v.data.len
+
+proc isFull*(m: Matrix): bool {.inline.} =
   m.data.len == m.M * m.N
+
+proc slowEq[A](v, w: Vector[A]): bool =
+  if v.len != w.len:
+    return false
+  let
+    vp = cast[CPointer[A]](v.fp)
+    wp = cast[CPointer[A]](w.fp)
+  for i in 0 ..< v.len:
+    if vp[i * v.step] != wp[i * w.step]:
+      return false
+  return true
 
 proc slowEq[A](m, n: Matrix[A]): bool =
   if m.M != n.M or m.N != n.N:
@@ -51,7 +65,10 @@ proc slowEq[A](m, n: Matrix[A]): bool =
   return true
 
 proc `==`*[A](v, w: Vector[A]): bool =
-  v.data == w.data
+  if v.isFull and w.isFull:
+    v.data == w.data
+  else:
+    slowEq(v, w)
 
 proc `==`*[A](m, n: Matrix[A]): bool =
   if m.isFull and n.isFull and m.order == n.order:
