@@ -401,45 +401,48 @@ proc asVector*[A](m: Matrix[A]): Vector[A] =
 
 # BLAS level 1 operations
 
-proc `*=`*[A: SomeReal](v: var Vector[A], k: A) {. inline .} = scal(v.len, k, v.fp, 1)
+proc `*=`*[A: SomeReal](v: var Vector[A], k: A) {. inline .} =
+  scal(v.len, k, v.fp, v.step)
 
 proc `*`*[A: SomeReal](v: Vector[A], k: A): Vector[A] {. inline .} =
   let N = v.len
   result = vector(newSeq[A](N))
-  copy(N, v.fp, 1, result.fp, 1)
-  scal(N, k, result.fp, 1)
+  copy(N, v.fp, v.step, result.fp, result.step)
+  scal(N, k, result.fp, result.step)
 
 proc `+=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
-  axpy(N, 1, w.fp, 1, v.fp, 1)
+  axpy(N, 1, w.fp, w.step, v.fp, v.step)
 
 proc `+`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
   result = vector(newSeq[A](N))
-  copy(N, v.fp, 1, result.fp, 1)
-  axpy(N, 1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, v.step, result.fp, result.step)
+  axpy(N, 1, w.fp, w.step, result.fp, result.step)
 
 proc `-=`*[A: SomeReal](v: var Vector[A], w: Vector[A]) {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
-  axpy(N, -1, w.fp, 1, v.fp, 1)
+  axpy(N, -1, w.fp, w.step, v.fp, v.step)
 
 proc `-`*[A: SomeReal](v, w: Vector[A]): Vector[A]  {. inline .} =
   checkDim(v.len == w.len)
   let N = v.len
   result = vector(newSeq[A](N))
-  copy(N, v.fp, 1, result.fp, 1)
-  axpy(N, -1, w.fp, 1, result.fp, 1)
+  copy(N, v.fp, v.step, result.fp, result.step)
+  axpy(N, -1, w.fp, w.step, result.fp, result.step)
 
 proc `*`*[A: SomeReal](v, w: Vector[A]): A {. inline .} =
   checkDim(v.len == w.len)
-  return dot(v.len, v.fp, 1, w.fp, 1)
+  return dot(v.len, v.fp, v.step, w.fp, w.step)
 
-proc l_2*[A: SomeReal](v: Vector[A]): auto {. inline .} = nrm2(v.len, v.fp, 1)
+proc l_2*[A: SomeReal](v: Vector[A]): auto {. inline .} =
+  nrm2(v.len, v.fp, v.step)
 
-proc l_1*[A: SomeReal](v: Vector[A]): auto {. inline .} = asum(v.len, v.fp, 1)
+proc l_1*[A: SomeReal](v: Vector[A]): auto {. inline .} =
+  asum(v.len, v.fp, v.step)
 
 proc maxIndex*[A](v: Vector[A]): tuple[i: int, val: A] =
   var
