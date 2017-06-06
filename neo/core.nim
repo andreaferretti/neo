@@ -17,3 +17,20 @@ type
   Scalar* = float32 or float64 or Complex[float32] or Complex[float64]
   UncheckedArray*{.unchecked.}[A] = array[1, A]
   CPointer*[A] = ptr UncheckedArray[A]
+
+type
+  DimensionError* = object of ValueError
+  OutOfBoundsError* = object of ValueError
+  LinearAlgebraError* = object of FloatingPointError
+
+template checkDim*(cond: untyped, msg = "") =
+  when compileOption("assertions"):
+    {.line.}:
+      if not cond:
+        raise newException(DimensionError, msg)
+
+template checkBounds*(cond: untyped, msg = "") =
+  when compileOption("assertions"):
+    {.line.}:
+      if not cond:
+        raise newException(OutOfBoundsError, msg)

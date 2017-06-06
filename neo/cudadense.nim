@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import nimcuda/[cuda_runtime_api, driver_types, cublas_api, cublas_v2, nimcuda]
-import ./dense, ./private/neocommon
+import ./core, ./dense
 
 type
   CudaVector*[A] = object
