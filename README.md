@@ -12,35 +12,45 @@ GPU support has been tested using NVIDIA CUDA 8.0.
 
 The library is currently aligned with latest Nim devel.
 
-API documentation is [here](http://unicredit.github.io/neo/api.html)
+API documentation is [here](https://cdn.rawgit.com/unicredit/neo/master/htmldocs/neo.html)
 
 A lot of examples are available in the tests.
 
 Table of contents
 -----------------
-<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+<!-- TOC depthFrom:2 depthTo:6 orderedList:false updateOnSave:true withLinks:false -->
 
-- [Introduction](#introduction)
-- [Initialization](#initialization)
-- [Working with 32-bit](#working-with-32-bit)
-- [Accessors](#accessors)
-- [Iterators](#iterators)
-- [Equality](#equality)
-- [Pretty-print](#pretty-print)
-- [Operations](#operations)
-- [Trivial operations](#trivial-operations)
-- [Universal functions](#universal-functions)
-- [Linear Algebra functions](#linear-algebra-functions)
-- [Rewrite rules](#rewrite-rules)
-- [Type safety guarantees](#type-safety-guarantees)
-- [Linking BLAS implementations](#linking-blas-implementations)
-- [GPU support](#gpu-support)
-- [TODO](#todo)
-- [Contributing](#contributing)
+- Working on the CPU
+  - Dense linear algebra
+    - Introduction
+    - Initialization
+    - Working with 32-bit
+    - Accessors
+    - Slicing
+    - Iterators
+    - Equality
+    - Pretty-print
+    - Reshape operations
+    - BLAS Operations
+    - Universal functions
+    - Rewrite rules
+    - Solving linear systems
+    - Computing eigenvalues and eigenvectors
+    - Linking BLAS and LAPACK implementations
+  - Sparse linear algebra
+- Working on the GPU
+  - Dense linear algebra
+  - Sparse linear algebra
+- TODO
+- Contributing
 
 <!-- /TOC -->
 
-## Introduction
+## Working on the CPU
+
+### Dense linear algebra
+
+#### Introduction
 
 The library revolves around operations on vectors and matrices of floating
 point numbers. It allows to compute operations either on the CPU or on the
@@ -48,10 +58,11 @@ GPU offering identical APIs.
 
 The library defines types `Matrix[A]` and `Vector[A]`, where `A` is sometimes
 restricted to be `float32` or `float64` (usually to use BLAS and LAPACK
-routines). Actually, `Vector[A]` is just an alias for `seq[A]`, which allows to
-perform linear algebra operations on standard Nim sequences.
+routines). Actually, `Vector[A]` is just a small wrapper around `seq[A]`, which
+allows to perform linear algebra operations on standard Nim sequences without
+copying.
 
-## Initialization
+#### Initialization
 
 Here we show a few ways to create matrices and vectors. All matrices methods
 accept a parameter to define whether to store the matrix in row-major (that is,
@@ -74,7 +85,7 @@ let
   v3 = constantVector(5, 3.5)
   v4 = zeros(8)
   v5 = ones(9)
-  v6 = @[1.0, 2.0, 3.0, 4.0, 5.0] # a vector is just a seq
+  v6 = vector(1.0, 2.0, 3.0, 4.0, 5.0) # `vector` also accepts a seq
   m1 = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
   m2 = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
   m3 = constantMatrix(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
@@ -90,7 +101,7 @@ let
 All constructors that take as input an existing array or seq perform a copy of
 the data for memory safety.
 
-## Working with 32-bit
+#### Working with 32-bit
 
 Some constructors (such as `zeros`) allow a type specifier if one wants to
 create a 32-bit vector or matrix. The following example all return 32-bit
@@ -105,7 +116,7 @@ let
   v3 = constantVector(5, 3.5'f32)
   v4 = zeros(8, float32)
   v5 = ones(9, float32)
-  v6 = @[1'f32, 2'f32, 3'f32, 4'f32, 5'f32]
+  v6 = vector(@[1'f32, 2'f32, 3'f32, 4'f32, 5'f32]) # this `seq` shares data with the vector
   m1 = makeMatrix(6, 3, proc(i, j: int): float32 = (i + j).float32)
   m2 = randomMatrix(2, 8, max = 1.6'f32)
   m3 = constantMatrix(3, 5, 1.8'f32, order = rowMajor) # order is optional, default colMajor
@@ -132,7 +143,7 @@ Once vectors and matrices are created, everything is inferred, so there are no
 differences in working with 32-bit or 64-bit. All examples that follow are for
 64-bit, but they would work as well for 32-bit.
 
-## Accessors
+#### Accessors
 
 Vectors can be accessed as expected:
 
@@ -151,16 +162,7 @@ m[1, 3] = 0.8
 echo m[2, 2]
 ```
 
-Also one can see rows and columns as vectors
-
-```nim
-let
-  r2: Vector64[7] = m.row(2)
-  c5: Vector64[3] = m.column(5)
-```
-
-For memory safety, this performs a **copy** of the row or column values, at
-least for now. One can also map vectors and matrices via a proc:
+One can also map vectors and matrices via a proc:
 
 ```nim
 let
@@ -168,7 +170,43 @@ let
   m1 = m.map(proc(x: float64): float64 = 1 / x)
 ```
 
-## Iterators
+#### Slicing
+
+The `row` and `column` procs will return vectors that share memory with their
+parent matrix:
+
+```nim
+let
+  m = randomMatrix(10, 10)
+  r2 = m.row(2)
+  c5 = m.column(5)
+```
+
+Similarly, one can slice a matrix with the familiar notation:
+
+```nim
+let
+  m = randomMatrix(10, 10)
+  m1 = m[2 .. 4, 3 .. 8]
+  m2 = m[All, 1 .. 5]
+```
+
+where `All` is a placeholder that denotes that no slicing occurs on that
+dimension.
+
+In general it is convenient to have slicing, rows and columns that do not
+copy data but share the underlying data sequence. This can have two possible
+drawbacks:
+
+* the result may need to be modified while the original matrix stays unchanged,
+  or viceversa;
+* a small matrix or vector may hold a reference to a large data sequence,
+  preventing it to be garbage collected.
+
+In this case, it is enough to call the `.clone()` proc to obtain a copy
+of the matrix or vector with its own storage.
+
+#### Iterators
 
 One can iterate over vector or matrix elements, as well as over rows and columns
 
@@ -188,16 +226,16 @@ for column in m.columns:
   echo column[1]
 ```
 
-## Equality
+#### Equality
 
 There are two kinds of equality. The usual `==` operator will compare the
 contents of vector and matrices exactly
 
 ```nim
 let
-  u = @[1.0, 2.0, 3.0, 4.0]
-  v = @[1.0, 2.0, 3.0, 4.0]
-  w = @[1.0, 3.0, 3.0, 4.0]
+  u = vector(1.0, 2.0, 3.0, 4.0)
+  v = vector(1.0, 2.0, 3.0, 4.0)
+  w = vector(1.0, 3.0, 3.0, 4.0)
 u == v # true
 u == w # false
 ```
@@ -208,13 +246,13 @@ negation `!=~`:
 
 ```nim
 let
-  u = @[1.0, 2.0, 3.0, 4.0]
-  v = @[1.0, 2.000000001, 2.99999999, 4.0]
+  u = vector(1.0, 2.0, 3.0, 4.0)
+  v = vector(1.0, 2.000000001, 2.99999999, 4.0)
 u == v # false
 u =~ v # true
 ```
 
-## Pretty-print
+#### Pretty-print
 
 Both vectors and matrix have a pretty-print operation, so one can do
 
@@ -229,32 +267,7 @@ and get something like
       [ 0.8225964245706265  0.01608615513584155 0.1442007939324697  0.7623388321096165  0.8419745686508193  0.08792951865247645 0.2902529012579151 ]
       [ 0.8488187232786935  0.422866666087792 0.1057975175658363  0.07968277822379832 0.7526946339452074  0.7698915909784674  0.02831893268471575 ] ]
 
-## Operations
-
-A few linear algebra operations are available, wrapping BLAS libraries:
-
-```nim
-var v1 = randomVector(7)
-let
-  v2 = randomVector(7)
-  m1 = randomMatrix(6, 9)
-  m2 = randomMatrix(9, 7)
-echo 3.5 * v1
-v1 *= 2.3
-echo v1 + v2
-echo v1 - v2
-echo v1 * v2 # dot product
-echo v1 |*| v2 # Hadamard (component-wise) product
-echo l_1(v1) # l_1 norm
-echo l_2(v1) # l_2 norm
-echo m2 * v1 # matrix-vector product
-echo m1 * m2 # matrix-matrix product
-echo m1 |*| m2 # Hadamard (component-wise) product
-echo max(m1)
-echo min(v2)
-```
-
-## Trivial operations
+#### Reshape operations
 
 The following operations do not change the underlying memory layout of matrices
 and vectors. This means they run in very little time even on big matrices, but
@@ -281,7 +294,36 @@ matrix, a `clone` operation is available:
 let m5 = m1.clone
 ```
 
-## Universal functions
+Notice that `clone()` will be called internally anyway when using one of the
+reshape operations with a matrix that is not contiguous (that is, a matrix
+obtained by slicing).
+
+#### BLAS Operations
+
+A few linear algebra operations are available, wrapping BLAS libraries:
+
+```nim
+var v1 = randomVector(7)
+let
+  v2 = randomVector(7)
+  m1 = randomMatrix(6, 9)
+  m2 = randomMatrix(9, 7)
+echo 3.5 * v1
+v1 *= 2.3
+echo v1 + v2
+echo v1 - v2
+echo v1 * v2 # dot product
+echo v1 |*| v2 # Hadamard (component-wise) product
+echo l_1(v1) # l_1 norm
+echo l_2(v1) # l_2 norm
+echo m2 * v1 # matrix-vector product
+echo m1 * m2 # matrix-matrix product
+echo m1 |*| m2 # Hadamard (component-wise) product
+echo max(m1)
+echo min(v2)
+```
+
+#### Universal functions
 
 Universal functions are real-valued functions that are extended to vectors
 and matrices by working element-wise. There are many common functions that are
@@ -318,7 +360,7 @@ This means that, for instance, the following check passes:
 
 ```nim
   let
-    v1 = @[1.0, 2.3, 4.5, 3.2, 5.4]
+    v1 = vector(1.0, 2.3, 4.5, 3.2, 5.4)
     v2 = log(v1)
     v3 = v1.map(log)
 
@@ -337,14 +379,7 @@ makeUniversal(f)
 to turn `f` into a (public) universal function. If you do not want to export
 `f`, there is the equivalent template `makeUniversalLocal`.
 
-## Linear systems
-
-Some linear algebraic functions are included, currently for solving systems of
-linear equations of the form `Ax = b`, for square matrices `A`. Functions to invert
-square invertible matrices are also provided. These throw floating-point errors
-in the case of non-invertible matrices.
-
-## Rewrite rules
+#### Rewrite rules
 
 A few rewrite rules allow to optimize a chain of linear algebra operations
 into a single BLAS call. For instance, if you try
@@ -356,7 +391,32 @@ echo v1 + 5.3 * v2
 this is not implemented as a scalar multiplication followed by a sum, but it
 is turned into a single function call.
 
-## Linking BLAS implementations
+#### Solving linear systems
+
+Some linear algebraic functions are included, currently for solving systems of
+linear equations of the form `Ax = b`, for square matrices `A`. Functions to invert
+square invertible matrices are also provided. These throw floating-point errors
+in the case of non-invertible matrices.
+
+These functions require a LAPACK implementation.
+
+```nim
+let
+  a = randomMatrix(5, 5)
+  b = randomVector(5)
+
+echo solve(a, b)
+echo a \ b # equivalent
+echo a.inv()
+```
+
+#### Computing eigenvalues and eigenvectors
+
+These functions require a LAPACK implementation.
+
+To be documented.
+
+#### Linking BLAS and LAPACK implementations
 
 The library requires to link some BLAS implementation to perform the actual
 linear algebra operations. By default, it tries to link whatever is the default
@@ -392,7 +452,11 @@ the options
 
 to enable static linking.
 
-## GPU support
+### Sparse linear algebra
+
+To be documented.
+
+## Working on the GPU
 
 It is possible to delegate work to the GPU using CUDA. The library has been
 tested to work with NVIDIA CUDA 8.0, but it is possible that earlier
@@ -400,11 +464,15 @@ versions will work as well. In order to compile and link against CUDA, you
 should make the appropriate headers and libraries available. If they are not
 globally set, you can pass suitable options to the Nim compiler, such as
 
-    --cincludes:"/usr/local/cuda/include" \
-    --clibdir:"/usr/local/cuda/lib64"
+```
+--cincludes:"/usr/local/cuda/include"
+--clibdir:"/usr/local/cuda/lib64"
+```
 
 Support for CUDA is under the package `neo/cuda`, that needs to be imported
 explicitly.
+
+### Dense linear algebra
 
 If you have a matrix or vector, you can move it on the GPU, and back
 like this:
@@ -438,12 +506,16 @@ m * n
 
 For more information, look at the tests in `tests/cudadense`.
 
+### Sparse linear algebra
+
+To be documented.
+
+
 ## TODO
 
 * Add support for matrices and vector on the stack
 * Use rewrite rules to optimize complex operations into a single BLAS call
 * More specialized BLAS operations
-* Support slicing/nonconstant steps
 * Try on more platforms/configurations
 * Make a proper benchmark
 * Improve documentation
