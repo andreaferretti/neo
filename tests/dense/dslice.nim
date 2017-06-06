@@ -83,3 +83,25 @@ suite "slicing matrices":
     s[1, 1] = 0
 
     check m[2, 3] == 0
+  test "rows of a slice of a matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s = m[1 .. 3, 2 .. 4]
+      r = s.row(1)
+
+    check r == vector(8, 9, 10)
+  test "columns of a slice of a matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s = m[1 .. 3, 2 .. 4]
+      r = s.column(1)
+
+    check r == vector(6, 9, 12)
+  test "rows of a slice of a sliced matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, 1 .. 3]
+      r = s2.row(1)
+
+    check r == vector(8, 9, 10)
