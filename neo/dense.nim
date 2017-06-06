@@ -192,6 +192,12 @@ proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
 
 # Accessors
 
+template elColMajor(ap, a, i, j: untyped): untyped =
+  ap[j * a.ld + i]
+
+template elRowMajor(ap, a, i, j: untyped): untyped =
+  ap[i * a.ld + j]
+
 proc `[]`*[A](v: Vector[A], i: int): A {. inline .} =
   checkBounds(i >= 0 and i < v.len)
   return cast[CPointer[A]](v.fp)[v.step * i]
@@ -205,9 +211,9 @@ proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
   checkBounds(j >= 0 and j < m.N)
   let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
-    return mp[j * m.ld + i]
+    return elColMajor(mp, m, i, j)
   else:
-    return mp[i * m.ld + j]
+    return elRowMajor(mp, m, i, j)
 
 type All* = object
 
@@ -218,9 +224,9 @@ proc `[]`*[A](m: Matrix[A], rows, cols: Slice[int]): Matrix[A] =
     mp = cast[CPointer[A]](m.fp)
     fp =
       if m.order == colMajor:
-        addr(mp[cols.a * m.ld + rows.a])
+        addr(elColMajor(mp, m, rows.a, cols.a))
       else:
-        addr(mp[rows.a * m.ld + cols.a])
+        addr(elRowMajor(mp, m, rows.a, cols.a))
   result = Matrix[A](
     order: m.order,
     M: (rows.b - rows.a + 1),
@@ -560,20 +566,16 @@ proc `+=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   if a.isFull and b.isFull and a.order == b.order:
     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
-  elif a.order == colMajor and b.order == rowMajor:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for i in 0 ..< a.M:
-      for j in 0 ..< a.N:
-        ap[j * a.ld + i] += bp[i * b.ld + j]
   else:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for i in 0 ..< a.M:
-      for j in 0 ..< a.N:
-        ap[i * a.ld + j] += bp[j * b.ld + i]
+    let ap = cast[CPointer[A]](a.fp)
+    if a.order == colMajor:
+      for t, x in b:
+        let (i, j) = t
+        elColMajor(ap, a, i, j) += x
+    else:
+      for t, x in b:
+        let (i, j) = t
+        elRowMajor(ap, a, i, j) += x
 
 proc `+`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
   if a.isFull:

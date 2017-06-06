@@ -128,7 +128,17 @@ suite "slicing column major matrices":
       ])
 
     check(s * s == n * n)
+  test "matrix addition on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ])
 
+    check(s + s == n + n)
 
 suite "slicing row major matrices":
   test "slice of a full matrix":
@@ -243,3 +253,14 @@ suite "slicing row major matrices":
       ])
 
     check(s * s == n * n)
+  test "matrix addition on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ])
+
+    check(s + s == n + n)
