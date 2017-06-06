@@ -37,11 +37,6 @@ proc configForBenchmarks() =
   --path: "."
   --run
 
-proc configForCuda() =
-  switch("cincludes", "/usr/local/cuda/targets/x86_64-linux/include")
-  switch("clibdir", "/usr/local/cuda/targets/x86_64-linux/lib")
-  --define: cublas
-
 task test, "run CPU tests":
   configForTests()
   setCommand "c", "tests/all.nim"
@@ -68,20 +63,18 @@ task testmkl, "run CPU tests on mkl":
 
 task testcuda, "run GPU tests":
   configForTests()
-  configForCuda()
   setCommand "c", "tests/allcuda.nim"
 
 task testcudadense, "run GPU dense tests":
   configForTests()
-  configForCuda()
   setCommand "c", "tests/tcudadense.nim"
 
 task testcudasparse, "run GPU sparse tests":
   configForTests()
-  configForCuda()
   setCommand "c", "tests/tcudasparse.nim"
 
-task gendoc, "generate documentation":
-  --define: cublas
-  --docSeeSrcUrl: https://github.com/unicredit/linear-algebra/blob/master
+task docs, "generate documentation":
+  exec("mkdir -p htmldocs/neo")
+  --project
+  --docSeeSrcUrl: "https://github.com/unicredit/neo/blob/master"
   setCommand "doc2", "neo.nim"
