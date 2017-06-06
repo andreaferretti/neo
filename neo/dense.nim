@@ -212,6 +212,8 @@ proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
 type All* = object
 
 proc `[]`*[A](m: Matrix[A], rows, cols: Slice[int]): Matrix[A] =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
   let
     mp = cast[CPointer[A]](m.fp)
     fp =
@@ -244,6 +246,7 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
     mp[i * m.ld + j] = val
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
+  checkBounds(j >= 0 and j < m.N)
   let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
     result = Vector[A](
@@ -261,6 +264,7 @@ proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
     )
 
 proc row*[A](m: Matrix[A], i: int): Vector[A] {. inline .} =
+  checkBounds(i >= 0 and i < m.M)
   let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
     result = Vector[A](
