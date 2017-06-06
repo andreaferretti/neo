@@ -5,8 +5,7 @@ version       = "0.1.0"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
-skipDirs      = @["tests", "bench"]
-skipFiles     = @["neo.html"]
+skipDirs      = @["tests", "bench", "htmldocs"]
 
 requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.2",
   "nimlapack >= 0.1.0"
