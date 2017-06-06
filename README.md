@@ -39,6 +39,7 @@ Table of contents
     - [Linking BLAS and LAPACK implementations](#linking-blas-and-lapack-implementations)
   - [Sparse linear algebra](#sparse-linear-algebra)
 - [Working on the GPU](#working-on-the-gpu)
+  - [Linking CUDA](#linking-cuda)
   - [Dense linear algebra](#dense-linear-algebra-1)
   - [Sparse linear algebra](#sparse-linear-algebra-1)
 - [TODO](#todo)
@@ -457,6 +458,8 @@ to enable static linking.
 To be documented.
 
 ## Working on the GPU
+
+### Linking CUDA
 
 It is possible to delegate work to the GPU using CUDA. The library has been
 tested to work with NVIDIA CUDA 8.0, but it is possible that earlier
