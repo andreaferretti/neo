@@ -15,7 +15,7 @@
 import unittest, neo/dense
 
 
-suite "slicing matrices":
+suite "slicing column major matrices":
   test "slice of a full matrix":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j)
@@ -100,6 +100,97 @@ suite "slicing matrices":
   test "rows of a slice of a sliced matrix":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, 1 .. 3]
+      r = s2.row(1)
+
+    check r == vector(8, 9, 10)
+
+suite "slicing row major matrices":
+  test "slice of a full matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+      expected = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ])
+
+    check s == expected
+  test "slice on columns only":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[All, 2 .. 4]
+      expected = matrix(@[
+        @[2, 3, 4],
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13],
+        @[14, 15, 16]
+      ])
+
+    check s == expected
+  test "slice on rows only":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, All]
+      expected = matrix(@[
+        @[3, 4, 5, 6, 7],
+        @[6, 7, 8, 9, 10],
+        @[9, 10, 11, 12, 13],
+      ])
+
+    check s == expected
+  test "slice a sliced matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, 1 .. 3]
+      expected = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ])
+
+    check s2 == expected
+  test "slice a sliced matrix on rows only":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, All]
+      expected = matrix(@[
+        @[4, 5, 6, 7],
+        @[7, 8, 9, 10],
+        @[10, 11, 12, 13]
+      ])
+
+    check s2 == expected
+  test "slice of a matrix should share storage":
+    var
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+
+    s[1, 1] = 0
+
+    check m[2, 3] == 0
+  test "rows of a slice of a matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+      r = s.row(1)
+
+    check r == vector(8, 9, 10)
+  test "columns of a slice of a matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+      r = s.column(1)
+
+    check r == vector(6, 9, 12)
+  test "rows of a slice of a sliced matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
       s1 = m[1 .. 4, 1 .. 4]
       s2 = s1[0 .. 2, 1 .. 3]
       r = s2.row(1)
