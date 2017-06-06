@@ -105,6 +105,17 @@ suite "slicing column major matrices":
       r = s2.row(1)
 
     check r == vector(8, 9, 10)
+  test "matrix multiplication on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ])
+
+    check(s * s == n * n)
 
 suite "slicing row major matrices":
   test "slice of a full matrix":
