@@ -209,6 +209,31 @@ proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
   else:
     return mp[i * m.ld + j]
 
+type All* = object
+
+proc `[]`*[A](m: Matrix[A], rows, cols: Slice[int]): Matrix[A] =
+  let
+    mp = cast[CPointer[A]](m.fp)
+    fp =
+      if m.order == colMajor:
+        addr(mp[cols.a * m.ld + rows.a])
+      else:
+        addr(mp[rows.a * m.ld + cols.a])
+  result = Matrix[A](
+    order: m.order,
+    M: (rows.b - rows.a + 1),
+    N: (cols.b - cols.a + 1),
+    ld: m.ld,
+    data: m.data,
+    fp: fp
+  )
+
+proc `[]`*[A](m: Matrix[A], rows: Slice[int], cols: typedesc[All]): Matrix[A] =
+  m[rows, 0 ..< m.N]
+
+proc `[]`*[A](m: Matrix[A], rows: typedesc[All], cols: Slice[int]): Matrix[A] =
+  m[0 ..< m.M, cols]
+
 proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
   checkBounds(i >= 0 and i < m.M)
   checkBounds(j >= 0 and j < m.N)
