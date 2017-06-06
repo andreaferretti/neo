@@ -247,9 +247,9 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
   checkBounds(j >= 0 and j < m.N)
   let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
-    mp[j * m.ld + i] = val
+    elColMajor(mp, m, i, j) = val
   else:
-    mp[i * m.ld + j] = val
+    elRowMajor(mp, m, i, j) = val
 
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
   checkBounds(j >= 0 and j < m.N)
@@ -318,22 +318,22 @@ iterator items*[A](m: Matrix[A]): auto {. inline .} =
   if m.order == colMajor:
     for i in 0 ..< m.M:
       for j in 0 ..< m.N:
-        yield mp[j * m.ld + i]
+        yield elColMajor(mp, m, i, j)
   else:
     for i in 0 ..< m.M:
       for j in 0 ..< m.N:
-        yield mp[i * m.ld + j]
+        yield elRowMajor(mp, m, i, j)
 
 iterator pairs*[A](m: Matrix[A]): auto {. inline .} =
   let mp = cast[CPointer[A]](m.fp)
   if m.order == colMajor:
     for i in 0 ..< m.M:
       for j in 0 ..< m.N:
-        yield ((i, j), mp[j * m.ld + i])
+        yield ((i, j), elColMajor(mp, m, i, j))
   else:
     for i in 0 ..< m.M:
       for j in 0 ..< m.N:
-        yield ((i, j), mp[i * m.ld + j])
+        yield ((i, j), elRowMajor(mp, m, i, j))
 
 # Conversion
 
@@ -589,20 +589,16 @@ proc `-=`*[A: SomeReal](a: var Matrix[A], b: Matrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   if a.isFull and b.isFull and a.order == b.order:
     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
-  elif a.order == colMajor and b.order == rowMajor:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for i in 0 ..< a.M:
-      for j in 0 ..< a.N:
-        ap[j * a.ld + i] -= bp[i * b.ld + j]
   else:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for i in 0 ..< a.M:
-      for j in 0 ..< a.N:
-        ap[i * a.ld + j] -= bp[j * b.ld + i]
+    let ap = cast[CPointer[A]](a.fp)
+    if a.order == colMajor:
+      for t, x in b:
+        let (i, j) = t
+        elColMajor(ap, a, i, j) -= x
+    else:
+      for t, x in b:
+        let (i, j) = t
+        elRowMajor(ap, a, i, j) -= x
 
 proc `-`*[A: SomeReal](a, b: Matrix[A]): Matrix[A] {. inline .} =
   if a.isFull:
