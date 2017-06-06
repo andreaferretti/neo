@@ -27,7 +27,7 @@ suite "slicing matrices":
       ])
 
     check s == expected
-  test "slice on a columns only":
+  test "slice on columns only":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j)
       s = m[All, 2 .. 4]
@@ -40,7 +40,7 @@ suite "slicing matrices":
       ])
 
     check s == expected
-  test "slice on a rows only":
+  test "slice on rows only":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j)
       s = m[1 .. 3, All]
@@ -51,3 +51,29 @@ suite "slicing matrices":
       ])
 
     check s == expected
+  test "slice a sliced matrix":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, 1 .. 3]
+      expected = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ])
+
+
+    check s2 == expected
+  test "slice a sliced matrix on rows only":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s1 = m[1 .. 4, 1 .. 4]
+      s2 = s1[0 .. 2, All]
+      expected = matrix(@[
+        @[4, 5, 6, 7],
+        @[7, 8, 9, 10],
+        @[10, 11, 12, 13]
+      ])
+
+
+    check s2 == expected
