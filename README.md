@@ -18,31 +18,31 @@ A lot of examples are available in the tests.
 
 Table of contents
 -----------------
-<!-- TOC depthFrom:2 depthTo:6 orderedList:false updateOnSave:true withLinks:false -->
+<!-- TOC depthFrom:2 depthTo:6 orderedList:false updateOnSave:true withLinks:true -->
 
-- Working on the CPU
-  - Dense linear algebra
-    - Introduction
-    - Initialization
-    - Working with 32-bit
-    - Accessors
-    - Slicing
-    - Iterators
-    - Equality
-    - Pretty-print
-    - Reshape operations
-    - BLAS Operations
-    - Universal functions
-    - Rewrite rules
-    - Solving linear systems
-    - Computing eigenvalues and eigenvectors
-    - Linking BLAS and LAPACK implementations
-  - Sparse linear algebra
-- Working on the GPU
-  - Dense linear algebra
-  - Sparse linear algebra
-- TODO
-- Contributing
+- [Working on the CPU](#working-on-the-cpu)
+  - [Dense linear algebra](#dense-linear-algebra)
+    - [Introduction](#introduction)
+    - [Initialization](#initialization)
+    - [Working with 32-bit](#working-with-32-bit)
+    - [Accessors](#accessors)
+    - [Slicing](#slicing)
+    - [Iterators](#iterators)
+    - [Equality](#equality)
+    - [Pretty-print](#pretty-print)
+    - [Reshape operations](#reshape-operations)
+    - [BLAS Operations](#blas-operations)
+    - [Universal functions](#universal-functions)
+    - [Rewrite rules](#rewrite-rules)
+    - [Solving linear systems](#solving-linear-systems)
+    - [Computing eigenvalues and eigenvectors](#computing-eigenvalues-and-eigenvectors)
+    - [Linking BLAS and LAPACK implementations](#linking-blas-and-lapack-implementations)
+  - [Sparse linear algebra](#sparse-linear-algebra)
+- [Working on the GPU](#working-on-the-gpu)
+  - [Dense linear algebra](#dense-linear-algebra-1)
+  - [Sparse linear algebra](#sparse-linear-algebra-1)
+- [TODO](#todo)
+- [Contributing](#contributing)
 
 <!-- /TOC -->
 
