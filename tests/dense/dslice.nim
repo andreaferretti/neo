@@ -62,7 +62,6 @@ suite "slicing matrices":
         @[11, 12, 13]
       ])
 
-
     check s2 == expected
   test "slice a sliced matrix on rows only":
     let
@@ -75,5 +74,12 @@ suite "slicing matrices":
         @[10, 11, 12, 13]
       ])
 
-
     check s2 == expected
+  test "slice of a matrix should share storage":
+    var
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s = m[1 .. 3, 2 .. 4]
+
+    s[1, 1] = 0
+
+    check m[2, 3] == 0
