@@ -1,6 +1,6 @@
 # Neo - A Matrix library
 
-[![nimble](https://raw.githubusercontent.com/yglukhov/nimble-tag/master/nimble.png)](https://github.com/yglukhov/nimble-tag)
+![logo](https://raw.githubusercontent.com/unicredit/neo/master/img/neo.png)
 
 This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
