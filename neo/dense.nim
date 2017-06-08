@@ -78,6 +78,12 @@ proc `==`*[A](m, n: Matrix[A]): bool =
 
 # Initializers
 
+type
+  Array32[N: static[int]] = array[N, float32]
+  Array64[N: static[int]] = array[N, float64]
+  DoubleArray32[M, N: static[int]] = array[M, array[N, float32]]
+  DoubleArray64[M, N: static[int]] = array[M, array[N, float64]]
+
 proc vector*[A](data: seq[A]): Vector[A] =
   result = Vector[A](step: 1, len: data.len)
   shallowCopy(result.data, data)
@@ -85,6 +91,12 @@ proc vector*[A](data: seq[A]): Vector[A] =
 
 proc vector*[A](data: varargs[A]): Vector[A] =
   vector[A](@data)
+
+proc stackVector*[N: static[int]](a: var Array32[N]): Vector[float32] =
+  Vector[float32](fp: addr a[0], len: N, step: 1)
+
+proc stackVector*[N: static[int]](a: var Array64[N]): Vector[float64] =
+  Vector[float64](fp: addr a[0], len: N, step: 1)
 
 proc makeVector*[A](N: int, f: proc (i: int): A): Vector[A] =
   result = vector(newSeq[A](N))
@@ -182,6 +194,25 @@ proc eye*(N: int, A: typedesc[float64], order = colMajor): Matrix[float64] =
 
 proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
+
+# TODO: buggy because of https://github.com/nim-lang/Nim/issues/5962
+proc stackMatrix*[M, N: static[int]](a: var DoubleArray32[M, N], order = colMajor): Matrix[float32] =
+  Matrix[float32](
+    order: order,
+    fp: addr a[0][0],
+    M: if order == colMajor: N else: M,
+    N: if order == colMajor: M else: N,
+    ld: N
+  )
+
+proc stackMatrix*[M, N: static[int]](a: var DoubleArray64[M, N], order = colMajor): Matrix[float64] =
+  Matrix[float64](
+    order: order,
+    fp: addr a[0][0],
+    M: if order == colMajor: N else: M,
+    N: if order == colMajor: M else: N,
+    ld: N
+  )
 
 proc diag*[A: SomeReal](xs: varargs[A]): Matrix[A] =
   let n = xs.len
