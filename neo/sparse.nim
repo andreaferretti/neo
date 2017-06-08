@@ -227,8 +227,8 @@ proc dense*[A](v: SparseVector[A]): Vector[A] =
   for i, x in v.nonzero:
     result[i] = x
 
-proc dense*[A](m: SparseMatrix[A]): Matrix[A] =
-  result = zeros(m.M, m.N, A)
+proc dense*[A](m: SparseMatrix[A], order = colMajor): Matrix[A] =
+  result = zeros(m.M, m.N, A, order)
   for t, x in m.nonzero:
     let (i, j) = t
     result[i, j] = x
