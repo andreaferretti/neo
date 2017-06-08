@@ -337,10 +337,30 @@ iterator pairs*[A](v: Vector[A]): auto {. inline .} =
     pos += v.step
 
 iterator columns*[A](m: Matrix[A]): auto {. inline .} =
+  let
+    mp = cast[CPointer[A]](m.fp)
+    step = if m.order == colMajor: m.ld else: 1
+  var v = m.column(0)
+  yield v
+  for j in 1 ..< m.N:
+    v.fp = addr(mp[j * step])
+    yield v
+
+iterator rows*[A](m: Matrix[A]): auto {. inline .} =
+  let
+    mp = cast[CPointer[A]](m.fp)
+    step = if m.order == rowMajor: m.ld else: 1
+  var v = m.row(0)
+  yield v
+  for i in 1 ..< m.M:
+    v.fp = addr(mp[i * step])
+    yield v
+
+iterator columnsSlow*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.N:
     yield m.column(i)
 
-iterator rows*[A](m: Matrix[A]): auto {. inline .} =
+iterator rowsSlow*[A](m: Matrix[A]): auto {. inline .} =
   for i in 0 ..< m.M:
     yield m.row(i)
 

@@ -227,6 +227,41 @@ for column in m.columns:
   echo column[1]
 ```
 
+One important point about performance. When iterating over rows or columns,
+the same `ref` is reused throughout - this entails that the loop is
+allocation-free, resulting in orders of magnitude faster loops. One should
+pay attention not to hold to these references, because they will be mutated.
+
+This means that - for instance - the following is correct:
+
+```nim
+let m = randomMatrix(1000, 1000)
+var columnSum = zeros(1000)
+for c in m.columns =
+  columnSum += c
+```
+
+but the following will give wrong results (all elements of `cols` will be
+identical at the end):
+
+```nim
+let m = randomMatrix(1000, 1000)
+var cols = newSeq[Vector[float64]]()
+for c in m.columns =
+  cols.add(c)
+```
+
+If one needs a fresh reference for each element of the iteration, the
+`rowsSlow` and `columnSlow` iterators are available, hence the
+following modification is ok:
+
+```nim
+let m = randomMatrix(1000, 1000)
+var cols = newSeq[Vector[float64]]()
+for c in m.columnsSlow =
+  cols.add(c)
+```
+
 #### Equality
 
 There are two kinds of equality. The usual `==` operator will compare the

@@ -5,7 +5,7 @@ version       = "0.1.0"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
-skipDirs      = @["tests", "bench", "htmldocs"]
+skipDirs      = @["tests", "benchmarks", "htmldocs"]
 skipFiles     = @["_config.yml"]
 
 requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.2",
@@ -72,6 +72,14 @@ task testcudadense, "run GPU dense tests":
 task testcudasparse, "run GPU sparse tests":
   configForTests()
   setCommand "c", "tests/tcudasparse.nim"
+
+task benchmark, "run CPU benchmarks":
+  configForBenchmarks()
+  setCommand "c", "benchmarks/bench_cpu.nim"
+
+task benchmarkcuda, "run GPU benchmarks":
+  configForBenchmarks()
+  setCommand "c", "benchmarks/bench_gpu.nim"
 
 task docs, "generate documentation":
   exec("mkdir -p htmldocs/neo")
