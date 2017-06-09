@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import nimcuda/[cuda_runtime_api, driver_types, cublas_api, cublas_v2, nimcuda]
-import ./core, ./dense
+import ./core, ./dense, ./private/neocommon
 
 type
   CudaVector*[A] = object
@@ -101,6 +101,7 @@ proc `==`*[A](m, n: CudaMatrix[A]): bool =
 var defaultHandle: cublasHandle_t
 check cublasCreate_v2(addr defaultHandle)
 
+
 proc cublasScal(handle: cublasHandle_t, n: int32, alpha: float32, x: ptr float32): cublasStatus_t =
   cublasSscal(handle, n, unsafeAddr(alpha), x, 1)
 
@@ -113,23 +114,9 @@ proc cublasAxpy(handle: cublasHandle_t, n: int32, alpha: float32, x, y: ptr floa
 proc cublasAxpy(handle: cublasHandle_t, n: int32, alpha: float64, x, y: ptr float64): cublasStatus_t =
   cublasDaxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
 
-proc cublasAsum(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32): cublasStatus_t =
-  cublasSasum(handle, n, x, incx, y)
-
-proc cublasAsum(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64): cublasStatus_t =
-  cublasDasum(handle, n, x, incx, y)
-
-proc cublasNrm2(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32): cublasStatus_t =
-  cublasSnrm2(handle, n, x, incx, y)
-
-proc cublasNrm2(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64): cublasStatus_t =
-  cublasDnrm2(handle, n, x, incx, y)
-
-proc cublasDot(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32, incy: int32, res: ptr float32): cublasStatus_t =
-  cublasSdot(handle, n, x, incx, y, incy, res)
-
-proc cublasDot(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64, incy: int32, res: ptr float64): cublasStatus_t =
-  cublasDdot(handle, n, x, incx, y, incy, res)
+overload(cublasAsum, cublasSasum, cublasDasum)
+overload(cublasNrm2, cublasSnrm2, cublasDnrm2)
+overload(cublasDot, cublasSdot, cublasDdot)
 
 proc cublasCopy(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32, incy: int32): cublasStatus_t =
   cublasScopy(handle, n, x, incx, y, incy)

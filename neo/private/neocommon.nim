@@ -19,6 +19,12 @@ proc first*[T](a: var seq[T]): ptr T {.inline.} = addr(a[0])
 
 macro overload*(s: untyped, p: typed): auto =
   let args = p.getTypeImpl[0]
+  var j = 0
+  for c in args.children:
+    if j > 0:
+      if $(c[0].symbol) == "result":
+        c[0] = genSym(nskParam, "res")
+    inc j
   var
     params = toSeq(args.children)
     callArgs = newSeq[NimNode]()
