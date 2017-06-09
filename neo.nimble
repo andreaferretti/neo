@@ -8,7 +8,7 @@ license       = "Apache2"
 skipDirs      = @["tests", "benchmarks", "htmldocs"]
 skipFiles     = @["_config.yml"]
 
-requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.2",
+requires "nim >= 0.17.0", "nimblas >= 0.1.3", "nimcuda >= 0.1.3",
   "nimlapack >= 0.1.0"
 
 --forceBuild
