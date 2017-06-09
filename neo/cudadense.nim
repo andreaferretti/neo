@@ -66,28 +66,22 @@ proc newCudaMatrix*[A](m, n: int): CudaMatrix[A] {.inline.} =
 # Copying between host and device
 
 proc gpu*[A: SomeReal](v: Vector[A]): CudaVector[A] =
-  if v.isFull:
-    init(result, v.len)
-    check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, 1, result.fp, 1)
-  else:
-    result = v.clone().gpu()
+  init(result, v.len)
+  check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, v.step.int32, result.fp, result.step)
 
 proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
-  if m.isFull:
-    if m.order == rowMajor:
-      raise newException(ValueError, "m must be column major")
-    init(result, m.M, m.N)
-    check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.M.int32, result.fp, m.M.int32)
-  else:
-    result = m.clone().gpu()
+  if m.order == rowMajor:
+    raise newException(ValueError, "m must be column major")
+  init(result, m.M, m.N)
+  check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.ld.int32, result.fp, result.ld)
 
 proc cpu*[A: SomeReal](v: CudaVector[A]): Vector[A] =
   result = zeros(v.len, A)
-  check cublasGetVector(v.len, sizeof(A).int32, v.fp, 1, result.fp, 1)
+  check cublasGetVector(v.len, sizeof(A).int32, v.fp, v.step, result.fp, result.step.int32)
 
 proc cpu*[A: SomeReal](m: CudaMatrix[A]): Matrix[A] =
   result = zeros(m.M, m.N, A, colMajor)
-  check cublasGetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.M, result.fp, m.M)
+  check cublasGetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.ld, result.fp, result.ld.int32)
 
 # Printing
 
