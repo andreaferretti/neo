@@ -6,5 +6,6 @@ tests/tsparse
 tests/tcudasparse
 tests/all
 tests/allcuda
+tests/rewrites
 benchmarks/bench_cpu
 benchmarks/bench_gpu

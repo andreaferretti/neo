@@ -73,6 +73,11 @@ task testcudasparse, "run GPU sparse tests":
   configForTests()
   setCommand "c", "tests/tcudasparse.nim"
 
+task testrw, "run tests for rewrite macros":
+  configForTests()
+  --define:neoCountRewrites
+  setCommand "c", "tests/rewrites.nim"
+
 task benchmark, "run CPU benchmarks":
   configForBenchmarks()
   setCommand "c", "benchmarks/bench_cpu.nim"

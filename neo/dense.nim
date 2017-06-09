@@ -842,8 +842,20 @@ template stddev*(m: Matrix): auto = m.asVector.stddev
 
 # Rewrites
 
+when defined(neoCountRewrites):
+  var numRewrites = 0
+
+  proc getRewriteCount*(): int = numRewrites
+
+  proc resetRewriteCount*() =
+    numRewrites = 0
+
+template countRw() =
+  when defined(neoCountRewrites):
+    inc numRewrites
+
 proc linearCombination[A: SomeReal](a: A, v, w: Vector[A]): Vector[A]  {. inline .} =
-  result = vector(newSeq[A](v.N))
+  result = vector(newSeq[A](v.len))
   copy(v.len, v.fp, v.step, result.fp, result.step)
   axpy(v.len, a, w.fp, w.step, result.fp, result.step)
 
@@ -851,9 +863,11 @@ proc linearCombinationMut[A: SomeReal](a: A, v: var Vector[A], w: Vector[A])  {.
   axpy(v.len, a, w.fp, w.step, v.fp, v.step)
 
 template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeReal](a: A, v, w: Vector[A]): auto =
+  countRw()
   linearCombination(a, v, w)
 
 template rewriteLinearCombinationMut*{v += `*`(w, a)}[A: SomeReal](a: A, v: var Vector[A], w: Vector[A]): auto =
+  countRw()
   linearCombinationMut(a, v, w)
 
 # LAPACK overloads
