@@ -16,12 +16,21 @@ import unittest, neo/dense
 
 
 suite "rewrite macros tests":
-  test "rewrite of a vector linear combination":
+  test "vector linear combination":
     resetRewriteCount()
     let
       a = vector(1.0, 2.0, 3.0)
       b = vector(2.0, -1.0, 3.0)
 
     discard a + 3.0 * b
+
+    check getRewriteCount() == 1
+
+  test "mutable vector linear combination":
+    resetRewriteCount()
+    var a = vector(1.0, 2.0, 3.0)
+    let b = vector(2.0, -1.0, 3.0)
+
+    a += 3.0 * b
 
     check getRewriteCount() == 1
