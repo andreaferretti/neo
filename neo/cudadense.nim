@@ -97,6 +97,16 @@ proc `==`*[A](m, n: CudaVector[A]): bool =
 proc `==`*[A](m, n: CudaMatrix[A]): bool =
   m.cpu() == n.cpu()
 
+# Conversion
+
+proc clone*[A](v: CudaVector[A]): CudaVector[A] =
+  init(result, v.len)
+  check cublasSetVector(v.len, sizeof(A).int32, v.fp, v.step, result.fp, result.step)
+
+proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
+  init(result, m.M, m.N)
+  check cublasSetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.ld, result.fp, result.ld)
+
 # CUBLAS overloads
 
 var defaultHandle: cublasHandle_t
@@ -238,15 +248,7 @@ proc `=~`*[A: SomeReal](v, w: CudaMatrix[A]): bool = compareApprox(v, w)
 
 template `!=~`*(a, b: CudaVector or CudaMatrix): bool = not (a =~ b)
 
-# Cloning and slicing
-
-proc clone*[A](v: CudaVector[A]): CudaVector[A] =
-  init(result, v.len)
-  check cudaMemcpy(result.fp, v.fp, v.len * sizeof(A), cudaMemcpyDeviceToDevice)
-
-proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
-  init(result, m.M, m.N)
-  check cudaMemcpy(result.fp, m.fp, m.M * m.N * sizeof(A), cudaMemcpyDeviceToDevice)
+# Slicing
 
 type
   CArray{.unchecked.}[T] = array[1, T]
