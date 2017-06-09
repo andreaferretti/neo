@@ -17,13 +17,14 @@ import ./core, ./dense
 
 type
   CudaVector*[A] = object
-    len*: int32
     data*: ref[ptr A]
+    fp*: ptr A
+    len, step*: int32
   CudaMatrix*[A] = object
-    M*, N*: int32
+    M*, N*, ld*: int32
     data*: ref[ptr A]
-
-template fp[A](c: CudaVector[A] or CudaMatrix[A]): ptr A = c.data[]
+    fp*: ptr A
+    shape*: set[MatrixShape]
 
 proc cudaMalloc[A](size: int): ptr A =
   let s = size * sizeof(A)
@@ -36,14 +37,18 @@ proc freeDeviceMemory[A: SomeReal](p: ref[ptr A]) =
 
 template init*[A](v: CudaVector[A], n: int) =
   new v.data, freeDeviceMemory
-  v.data[] = cudaMalloc[A](n)
+  v.fp = cudaMalloc[A](n)
+  v.data[] = v.fp
   v.len = n.int32
+  v.step = 1
 
 template init*[A](v: CudaMatrix[A], m, n: int) =
   new v.data, freeDeviceMemory
-  v.data[] = cudaMalloc[A](m * n)
+  v.fp = cudaMalloc[A](m * n)
+  v.data[] = v.fp
   v.M = m.int32
   v.N = n.int32
+  v.ld = m.int32
 
 proc newCudaVector*[A](n: int): CudaVector[A] {.inline.} =
   init(result, n)
