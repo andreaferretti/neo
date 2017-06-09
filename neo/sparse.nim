@@ -13,11 +13,9 @@
 # limitations under the License.
 
 import sequtils
-import ./dense
+import ./core, ./dense
 
 type
-  Complex*[A] = tuple[re, im: A]
-  Number* = float32 or float64 or Complex[float32] or Complex[float64]
   SparseVector*[A] = ref object
     N*: int32
     indices*: seq[int32]
@@ -50,7 +48,7 @@ proc colLen*(m: SparseMatrix): int32 =
 proc sparseVector*[A](N: int32, indices: seq[int32], vals: seq[A]): SparseVector[A] =
   SparseVector[A](N: N, indices: indices, vals: vals)
 
-proc sparseMatrix*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
+proc sparseMatrix*[A: Scalar](kind: SparseMatrixKind, M, N, nnz: int32, rows, cols: seq[int32], vals: seq[A]): SparseMatrix[A] =
   SparseMatrix[A](
     kind: kind,
     M: M,
@@ -61,13 +59,13 @@ proc sparseMatrix*[A: Number](kind: SparseMatrixKind, M, N, nnz: int32, rows, co
     vals: vals
   )
 
-proc csr*[A: Number](rows, cols: seq[int32], vals: seq[A], numCols: int32): SparseMatrix[A] =
+proc csr*[A: Scalar](rows, cols: seq[int32], vals: seq[A], numCols: int32): SparseMatrix[A] =
   sparseMatrix(CSR, rows.len.int32 - 1, numCols, vals.len.int32, rows, cols, vals)
 
-proc csc*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows: int32): SparseMatrix[A] =
+proc csc*[A: Scalar](rows, cols: seq[int32], vals: seq[A], numRows: int32): SparseMatrix[A] =
   sparseMatrix(CSC, numRows, cols.len.int32 - 1, vals.len.int32, rows, cols, vals)
 
-proc coo*[A: Number](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int32): SparseMatrix[A] =
+proc coo*[A: Scalar](rows, cols: seq[int32], vals: seq[A], numRows, numCols: int32): SparseMatrix[A] =
   sparseMatrix(COO, numRows, numCols, vals.len.int32, rows, cols, vals)
 
 # Iterators

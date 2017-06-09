@@ -14,7 +14,7 @@
 
 import sequtils
 import nimcuda/[cuda_runtime_api, driver_types, cusparse, nimcuda]
-import ./sparse, ./private/neocommon
+import ./core, ./sparse, ./private/neocommon
 
 type
   CudaSparseVectorObj*[A] = object
@@ -71,7 +71,7 @@ template allocateAll(x, r, c, v: untyped) =
   check cudaMalloc(pointerTo x.cols, c)
   check cudaMalloc(pointerTo x.vals, v)
 
-proc gpu*[A: Number](v: SparseVector[A]): CudaSparseVector[A] =
+proc gpu*[A: Scalar](v: SparseVector[A]): CudaSparseVector[A] =
   new result, dealloc
   result.N = v.N
   result.nnz = v.nnz
@@ -81,7 +81,7 @@ proc gpu*[A: Number](v: SparseVector[A]): CudaSparseVector[A] =
   check cudaMemcpy(result.indices, v.indices.first, iLen, cudaMemcpyHostToDevice)
   check cudaMemcpy(result.vals, v.vals.first, vLen, cudaMemcpyHostToDevice)
 
-proc gpu*[A: Number](m: SparseMatrix[A]): CudaSparseMatrix[A] =
+proc gpu*[A: Scalar](m: SparseMatrix[A]): CudaSparseMatrix[A] =
   new result, dealloc
   result.kind = m.kind
   result.M = m.M
@@ -93,7 +93,7 @@ proc gpu*[A: Number](m: SparseMatrix[A]): CudaSparseMatrix[A] =
   check cudaMemcpy(result.cols, m.cols.first, c, cudaMemcpyHostToDevice)
   check cudaMemcpy(result.vals, m.vals.first, v, cudaMemcpyHostToDevice)
 
-proc cpu*[A: Number](v: CudaSparseVector[A]): SparseVector[A] =
+proc cpu*[A: Scalar](v: CudaSparseVector[A]): SparseVector[A] =
   result = SparseVector[A](
     N: v.N,
     indices: newSeq[int32](v.nnz),
@@ -103,7 +103,7 @@ proc cpu*[A: Number](v: CudaSparseVector[A]): SparseVector[A] =
   check cudaMemcpy(result.indices.first, v.indices, iLen, cudaMemcpyDeviceToHost)
   check cudaMemcpy(result.vals.first, v.vals, vLen, cudaMemcpyDeviceToHost)
 
-proc cpu*[A: Number](m: CudaSparseMatrix[A]): SparseMatrix[A] =
+proc cpu*[A: Scalar](m: CudaSparseMatrix[A]): SparseMatrix[A] =
   new result
   result.kind = m.kind
   result.M = m.M
@@ -117,7 +117,7 @@ proc cpu*[A: Number](m: CudaSparseMatrix[A]): SparseMatrix[A] =
   check cudaMemcpy(result.cols.first, m.cols, c, cudaMemcpyDeviceToHost)
   check cudaMemcpy(result.vals.first, m.vals, v, cudaMemcpyDeviceToHost)
 
-proc toCsr*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
+proc toCsr*[A: Scalar](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
   new result, dealloc
   result.kind = CSR
   result.M = m.M
@@ -144,7 +144,7 @@ proc toCsr*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSpar
     check cudaMemcpy(result.cols, m.cols, c, cudaMemcpyDeviceToDevice)
     check cudaMemcpy(result.vals, m.vals, v, cudaMemcpyDeviceToDevice)
 
-proc toCsc*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
+proc toCsc*[A: Scalar](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
   case m.kind
   of CSR:
     new result, dealloc
@@ -176,7 +176,7 @@ proc toCsc*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSpar
   of COO:
     result = m.toCsr().toCsc()
 
-proc toCoo*[A: Number](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
+proc toCoo*[A: Scalar](m: CudaSparseMatrix[A], handle = defaultHandle): CudaSparseMatrix[A] =
   new result, dealloc
   result.kind = COO
   result.M = m.M
