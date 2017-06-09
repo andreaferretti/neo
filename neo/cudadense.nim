@@ -96,83 +96,54 @@ proc `==`*[A](m, n: CudaVector[A]): bool =
 proc `==`*[A](m, n: CudaMatrix[A]): bool =
   m.cpu() == n.cpu()
 
-# BLAS overloads
+# CUBLAS overloads
 
 var defaultHandle: cublasHandle_t
 check cublasCreate_v2(addr defaultHandle)
 
-
-proc cublasScal(handle: cublasHandle_t, n: int32, alpha: float32, x: ptr float32): cublasStatus_t =
-  cublasSscal(handle, n, unsafeAddr(alpha), x, 1)
-
-proc cublasScal(handle: cublasHandle_t, n: int32, alpha: float64, x: ptr float64): cublasStatus_t =
-  cublasDscal(handle, n, unsafeAddr(alpha), x, 1)
-
-proc cublasAxpy(handle: cublasHandle_t, n: int32, alpha: float32, x, y: ptr float32): cublasStatus_t =
-  cublasSaxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
-
-proc cublasAxpy(handle: cublasHandle_t, n: int32, alpha: float64, x, y: ptr float64): cublasStatus_t =
-  cublasDaxpy(handle, n, unsafeAddr(alpha), x, 1, y, 1)
-
+overload(cublasScal, cublasSscal, cublasDscal)
+overload(cublasAxpy, cublasSaxpy, cublasDaxpy)
 overload(cublasAsum, cublasSasum, cublasDasum)
 overload(cublasNrm2, cublasSnrm2, cublasDnrm2)
 overload(cublasDot, cublasSdot, cublasDdot)
-
-proc cublasCopy(handle: cublasHandle_t, n: int32, x: ptr float32, incx: int32, y: ptr float32, incy: int32): cublasStatus_t =
-  cublasScopy(handle, n, x, incx, y, incy)
-
-proc cublasCopy(handle: cublasHandle_t, n: int32, x: ptr float64, incx: int32, y: ptr float64, incy: int32): cublasStatus_t =
-  cublasDcopy(handle, n, x, incx, y, incy)
-
-proc cublasGemv(handle: cublasHandle_t, trans: cublasOperation_t,
-  m, n: int32, alpha: float32, A: ptr float32, lda: int32, x: ptr float32, incx: int32,
-  beta: float32, y: ptr float32, incy: int32): cublasStatus_t =
-  cublasSgemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
-
-proc cublasGemv(handle: cublasHandle_t, trans: cublasOperation_t,
-  m, n: int32, alpha: float64, A: ptr float64, lda: int32, x: ptr float64, incx: int32,
-  beta: float64, y: ptr float64, incy: int32): cublasStatus_t =
-  cublasDgemv(handle, trans, m, n, unsafeAddr(alpha), A, lda, x, incx, unsafeAddr(beta), y, incy)
-
-proc cublasGemm(handle: cublasHandle_t, transa, transb: cublasOperation_t,
-  m, n, k: int32, alpha: float32, A: ptr float32, lda: int32, B: ptr float32,
-  ldb: int32, beta: float32, C: ptr float32, ldc: int32): cublasStatus_t =
-  cublasSgemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
-
-proc cublasGemm(handle: cublasHandle_t, transa, transb: cublasOperation_t,
-  m, n, k: int32, alpha: float64, A: ptr float64, lda: int32, B: ptr float64,
-  ldb: int32, beta: float64, C: ptr float64, ldc: int32): cublasStatus_t =
-  cublasDgemm(handle, transa, transb, m, n, k, unsafeAddr(alpha), A, lda, B, ldb, unsafeAddr(beta), C, ldc)
+overload(cublasCopy, cublasScopy, cublasDcopy)
+overload(cublasGemv, cublasSgemv, cublasDgemv)
+overload(cublasGemm, cublasSgemm, cublasDgemm)
 
 # BLAS level 1 operations
 
 proc `*=`*[A: SomeReal](v: var CudaVector[A], k: A) {. inline .} =
-  check cublasScal(defaultHandle, v.len, k, v.fp)
+  var k1 = k
+  check cublasScal(defaultHandle, v.len, addr(k1), v.fp, 1)
 
 proc `*`*[A: SomeReal](v: CudaVector[A], k: A): CudaVector[A]  {. inline .} =
   init(result, v.len)
+  var k1 = k
   check cublasCopy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
-  check cublasScal(defaultHandle, v.len, k, result.fp)
+  check cublasScal(defaultHandle, v.len, addr(k1), result.fp, 1)
 
 proc `+=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
-  check cublasAxpy(defaultHandle, v.len, 1, w.fp, v.fp)
+  var alpha: A = 1
+  check cublasAxpy(defaultHandle, v.len, addr(alpha), w.fp, 1, v.fp, 1)
 
 proc `+`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
   check cublasCopy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
-  check cublasAxpy(defaultHandle, v.len, 1, w.fp, result.fp)
+  result += w
 
 proc `-=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
-  check cublasAxpy(defaultHandle, v.len, -1, w.fp, v.fp)
+  var alpha: A = -1
+  check cublasAxpy(defaultHandle, v.len, addr(alpha), w.fp, 1, v.fp, 1)
 
 proc `-`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
+  var alpha: A = -1
   check cublasCopy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
-  check cublasAxpy(defaultHandle, v.len, -1, w.fp, result.fp)
+  result -= w
 
 proc `*`*[A: SomeReal](v, w: CudaVector[A]): A {. inline .} =
   checkDim(v.len == w.len)
@@ -185,12 +156,14 @@ proc l_1*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
   check cublasAsum(defaultHandle, v.len, v.fp, 1, addr(result))
 
 proc `*=`*[A: SomeReal](m: var CudaMatrix[A], k: A) {. inline .} =
-  check cublasScal(defaultHandle, m.M * m.N, k, m.fp)
+  var k1 = k
+  check cublasScal(defaultHandle, m.M * m.N, addr(k1), m.fp, 1)
 
 proc `*`*[A: SomeReal](m: CudaMatrix[A], k: A): CudaMatrix[A]  {. inline .} =
   init(result, m.M, m.N)
+  var k1 = k
   check cublasCopy(defaultHandle, m.M * m.N, m.fp, 1, result.fp, 1)
-  check cublasScal(defaultHandle, m.M * m.N, k, result.fp)
+  check cublasScal(defaultHandle, m.M * m.N, addr(k1), result.fp, 1)
 
 template `*`*[A: SomeReal](k: A, v: CudaVector[A] or CudaMatrix[A]): auto =
   v * k
@@ -203,23 +176,25 @@ template `/=`*[A: SomeReal](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
 
 proc `+=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  check cublasAxpy(defaultHandle, a.M * a.N, 1, b.fp, a.fp)
+  var alpha: A = 1
+  check cublasAxpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
 
 proc `+`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   check cublasCopy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
-  check cublasAxpy(defaultHandle, a.M * a.N, 1, b.fp, result.fp)
+  result += b
 
 proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  check cublasAxpy(defaultHandle, a.M * a.N, -1, b.fp, a.fp)
+  var alpha: A = -1
+  check cublasAxpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
 
 proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   check cublasCopy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
-  check cublasAxpy(defaultHandle, a.M * a.N, -1, b.fp, result.fp)
+  result -= b
 
 proc l_2*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
   check cublasNrm2(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
@@ -232,15 +207,24 @@ proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
 proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
   checkDim(a.N == v.len)
   init(result, a.M)
-  check cublasGemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, 1, a.fp, a.M, v.fp, 1, 0, result.fp, 1)
+  var
+    alpha: A = 1
+    beta: A = 0
+  check cublasGemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, addr(alpha), a.fp, a.M,
+    v.fp, 1, addr(beta), result.fp, 1)
 
 # BLAS level 3 operations
 
 proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
   checkDim(a.N == b.M)
   init(result, a.M, b.N)
-  check cublasGemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N, 1,
-    a.fp, a.M, b.fp, a.N, 0, result.fp, a.M)
+  var
+    alpha: A = 1
+    beta: A = 0
+  check cublasGemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N,
+    addr(alpha), a.fp, a.M, b.fp, a.N, addr(beta), result.fp, a.M)
+
+
 
 # Comparison
 
