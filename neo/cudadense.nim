@@ -114,46 +114,44 @@ overload(gemm, cublasSgemm, cublasDgemm)
 
 proc `*=`*[A: SomeReal](v: var CudaVector[A], k: A) {. inline .} =
   var k1 = k
-  check scal(defaultHandle, v.len, addr(k1), v.fp, 1)
+  check scal(defaultHandle, v.len, addr(k1), v.fp, v.step)
 
 proc `*`*[A: SomeReal](v: CudaVector[A], k: A): CudaVector[A]  {. inline .} =
   init(result, v.len)
-  var k1 = k
-  check copy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
-  check scal(defaultHandle, v.len, addr(k1), result.fp, 1)
+  check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
+  result *= k
 
 proc `+=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
   var alpha: A = 1
-  check axpy(defaultHandle, v.len, addr(alpha), w.fp, 1, v.fp, 1)
+  check axpy(defaultHandle, v.len, addr(alpha), w.fp, w.step, v.fp, v.step)
 
 proc `+`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
-  check copy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
+  check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
   result += w
 
 proc `-=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
   var alpha: A = -1
-  check axpy(defaultHandle, v.len, addr(alpha), w.fp, 1, v.fp, 1)
+  check axpy(defaultHandle, v.len, addr(alpha), w.fp, w.step, v.fp, v.step)
 
 proc `-`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
-  var alpha: A = -1
-  check copy(defaultHandle, v.len, v.fp, 1, result.fp, 1)
+  check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
   result -= w
 
 proc `*`*[A: SomeReal](v, w: CudaVector[A]): A {. inline .} =
   checkDim(v.len == w.len)
-  check dot(defaultHandle, v.len, v.fp, 1, w.fp, 1, addr(result))
+  check dot(defaultHandle, v.len, v.fp, v.step, w.fp, w.step, addr(result))
 
 proc l_2*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
-  check nrm2(defaultHandle, v.len, v.fp, 1, addr(result))
+  check nrm2(defaultHandle, v.len, v.fp, v.step, addr(result))
 
 proc l_1*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
-  check asum(defaultHandle, v.len, v.fp, 1, addr(result))
+  check asum(defaultHandle, v.len, v.fp, v.step, addr(result))
 
 proc `*=`*[A: SomeReal](m: var CudaMatrix[A], k: A) {. inline .} =
   var k1 = k
@@ -161,9 +159,8 @@ proc `*=`*[A: SomeReal](m: var CudaMatrix[A], k: A) {. inline .} =
 
 proc `*`*[A: SomeReal](m: CudaMatrix[A], k: A): CudaMatrix[A]  {. inline .} =
   init(result, m.M, m.N)
-  var k1 = k
   check copy(defaultHandle, m.M * m.N, m.fp, 1, result.fp, 1)
-  check scal(defaultHandle, m.M * m.N, addr(k1), result.fp, 1)
+  result *= k
 
 template `*`*[A: SomeReal](k: A, v: CudaVector[A] or CudaMatrix[A]): auto =
   v * k
@@ -211,7 +208,7 @@ proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. in
     alpha: A = 1
     beta: A = 0
   check gemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, addr(alpha), a.fp, a.M,
-    v.fp, 1, addr(beta), result.fp, 1)
+    v.fp, v.step, addr(beta), result.fp, 1)
 
 # BLAS level 3 operations
 
@@ -223,8 +220,6 @@ proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
     beta: A = 0
   check gemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N,
     addr(alpha), a.fp, a.M, b.fp, a.N, addr(beta), result.fp, a.M)
-
-
 
 # Comparison
 
