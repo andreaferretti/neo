@@ -33,6 +33,13 @@ proc cudaMalloc[A](size: int): ptr A =
 proc freeDeviceMemory[A: SomeReal](p: ref[ptr A]) =
   check cudaFree(p[])
 
+proc isContiguous*(v: CudaVector): bool {.inline.} =
+  v.step == 1
+
+proc isContiguous*(m: CudaMatrix): bool {.inline.} =
+  if m.order == colMajor: m.M == m.ld
+  else: m.N == m.ld
+
 # Initializing matrices
 
 template init*[A](v: CudaVector[A], n: int) =
