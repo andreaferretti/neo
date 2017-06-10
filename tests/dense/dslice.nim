@@ -150,6 +150,20 @@ suite "slicing column major matrices":
       ])
 
     check(s - n == zeros(3, 3))
+  test "scaling slices":
+    var
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
+      s = m[1 .. 3, 2 .. 4]
+    s *= 2
+    let expected = matrix(@[
+      @[0.0,  1.0,  2.0,  3.0,  4.0],
+      @[3.0,  4.0,  10.0, 12.0, 14.0],
+      @[6.0,  7.0,  16.0, 18.0, 20.0],
+      @[9.0,  10.0, 22.0, 24.0, 26.0],
+      @[12.0, 13.0, 14.0, 15.0, 16.0]
+    ])
+
+    check(m == expected)
 
 suite "slicing row major matrices":
   test "slice of a full matrix":
@@ -286,3 +300,17 @@ suite "slicing row major matrices":
       ])
 
     check(s - n == zeros(3, 3))
+  test "scaling slices":
+    var
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+    s *= 2
+    let expected = matrix(@[
+      @[0.0,  1.0,  2.0,  3.0,  4.0],
+      @[3.0,  4.0,  10.0, 12.0, 14.0],
+      @[6.0,  7.0,  16.0, 18.0, 20.0],
+      @[9.0,  10.0, 22.0, 24.0, 26.0],
+      @[12.0, 13.0, 14.0, 15.0, 16.0]
+    ])
+
+    check(m == expected)
