@@ -116,12 +116,25 @@ proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
   init(result, L)
   check cudaMemcpy(result.fp, addr(vp[s.a]), L * sizeof(A), cudaMemcpyDeviceToDevice)
 
-proc `[]`*[A](m: CudaMatrix[A], s: Slice[int]): CudaMatrix[A] =
-  checkBounds(s.a >= 0 and s.b < m.N)
-  let mp = cast[CPointer[A]](m.fp)
-  let L = s.b - s.a + 1
-  init(result, m.M, L)
-  check cudaMemcpy(result.fp, addr(mp[s.a * m.M]), m.M * L * sizeof(A), cudaMemcpyDeviceToDevice)
+proc `[]`*[A](m: CudaMatrix[A], rows, cols: Slice[int]): CudaMatrix[A] =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
+  let
+    mp = cast[CPointer[A]](m.fp)
+    fp = addr(mp[cols.a * m.ld + rows.a])
+  result = CudaMatrix[A](
+    M: (rows.b - rows.a + 1).int32,
+    N: (cols.b - cols.a + 1).int32,
+    ld: m.ld,
+    data: m.data,
+    fp: fp
+  )
+
+proc `[]`*[A](m: CudaMatrix[A], rows: Slice[int], cols: typedesc[All]): CudaMatrix[A] =
+  m[rows, 0 ..< m.N]
+
+proc `[]`*[A](m: CudaMatrix[A], rows: typedesc[All], cols: Slice[int]): CudaMatrix[A] =
+  m[0 ..< m.M, cols]
 
 # CUBLAS overloads
 

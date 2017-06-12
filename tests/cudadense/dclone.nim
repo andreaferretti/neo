@@ -45,7 +45,7 @@ suite "cloning and slicing":
         @[0'f64, 8, 2, 7, 0]
       ])
       m2 = m1.gpu()
-      m3 = m2[1 .. 3]
+      m3 = m2[All, 1 .. 3]
       m4 = m3.cpu()
       m5 = matrix(@[
         @[2'f64, 3, 4],
