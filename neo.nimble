@@ -63,6 +63,7 @@ task testmkl, "run CPU tests on mkl":
 
 task testcuda, "run GPU tests":
   configForTests()
+  --gc:markAndSweep # TODO: remove temporary workaround
   setCommand "c", "tests/allcuda.nim"
 
 task testcudadense, "run GPU dense tests":
