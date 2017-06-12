@@ -109,24 +109,19 @@ proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
 
   # Slicing
 
-type
-  CArray{.unchecked.}[T] = array[1, T]
-  CPointer[T] = ptr CArray[T]
-
-proc plus[A](p: ptr A, n: int): ptr A {.inline.} =
-  addr(cast[CPointer[A]](p)[n])
-
 proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
   checkBounds(s.a >= 0 and s.b < v.len)
+  let vp = cast[CPointer[A]](v.fp)
   let L = s.b - s.a + 1
   init(result, L)
-  check cudaMemcpy(result.fp, v.fp.plus(s.a), L * sizeof(A), cudaMemcpyDeviceToDevice)
+  check cudaMemcpy(result.fp, addr(vp[s.a]), L * sizeof(A), cudaMemcpyDeviceToDevice)
 
 proc `[]`*[A](m: CudaMatrix[A], s: Slice[int]): CudaMatrix[A] =
   checkBounds(s.a >= 0 and s.b < m.N)
+  let mp = cast[CPointer[A]](m.fp)
   let L = s.b - s.a + 1
   init(result, m.M, L)
-  check cudaMemcpy(result.fp, m.fp.plus(s.a * m.M), m.M * L * sizeof(A), cudaMemcpyDeviceToDevice)
+  check cudaMemcpy(result.fp, addr(mp[s.a * m.M]), m.M * L * sizeof(A), cudaMemcpyDeviceToDevice)
 
 # CUBLAS overloads
 
