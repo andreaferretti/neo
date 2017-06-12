@@ -187,6 +187,45 @@ iterator rowsSlow*[A](m: CudaMatrix[A]): auto {. inline .} =
   for i in 0 ..< m.M:
     yield m.row(i)
 
+# Trivial operations
+
+proc reshape*[A](m: CudaMatrix[A], a, b: int): CudaMatrix[A] =
+  if m.isContiguous:
+    checkDim(m.M * m.N == a * b, "The dimensions do not match: M = " & $(m.M) & ", N = " & $(m.N) & ", A = " & $(a) & ", B = " & $(b))
+    result = CudaMatrix[A](
+      M: a.int32,
+      N: b.int32,
+      ld: a.int32,
+      data: m.data,
+      fp: m.fp
+    )
+  else:
+    result = m.clone().reshape(a, b)
+
+proc asMatrix*[A](v: CudaVector[A], a, b: int): CudaMatrix[A] =
+  if v.isContiguous:
+    checkDim(v.len == a * b, "The dimensions do not match: N = " & $(v.len) & ", A = " & $(a) & ", B = " & $(b))
+    result = CudaMatrix[A](
+      M: a.int32,
+      N: b.int32,
+      ld: a.int32,
+      data: v.data,
+      fp: v.fp
+    )
+  else:
+    result = v.clone().asMatrix(a, b)
+
+proc asVector*[A](m: CudaMatrix[A]): CudaVector[A] =
+  if m.isContiguous:
+    CudaVector[A](
+      len: m.M * m.N,
+      step: 1,
+      data: m.data,
+      fp: m.fp
+    )
+  else:
+    m.clone().asVector()
+
 # CUBLAS overloads
 
 var defaultHandle: cublasHandle_t

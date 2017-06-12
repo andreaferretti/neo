@@ -13,4 +13,4 @@
 # limitations under the License.
 
 import cudadense/dcopy, cudadense/dequality, cudadense/diterators,
-  cudadense/dclone, cudadense/dslice, cudadense/dops
+  cudadense/dclone, cudadense/dslice, cudadense/dops, cudadense/dtrivial_ops
