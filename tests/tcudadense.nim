@@ -12,4 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import cudadense/dcopy, cudadense/dequality, cudadense/dops, cudadense/dclone
+import cudadense/dcopy, cudadense/dequality, cudadense/dops, cudadense/dclone,
+  cudadense/dslice

@@ -30,7 +30,7 @@ proc cudaMalloc[A](size: int): ptr A =
   let s = size * sizeof(A)
   check cudaMalloc(cast[ptr pointer](addr result), s)
 
-proc freeDeviceMemory[A: SomeReal](p: ref[ptr A]) =
+proc freeDeviceMemory[A](p: ref[ptr A]) =
   check cudaFree(p[])
 
 proc isContiguous*(v: CudaVector): bool {.inline.} =
@@ -65,21 +65,21 @@ proc newCudaMatrix*[A](m, n: int): CudaMatrix[A] {.inline.} =
 
 # Copying between host and device
 
-proc gpu*[A: SomeReal](v: Vector[A]): CudaVector[A] =
+proc gpu*[A](v: Vector[A]): CudaVector[A] =
   init(result, v.len)
   check cublasSetVector(v.len.int32, sizeof(A).int32, v.fp, v.step.int32, result.fp, result.step)
 
-proc gpu*[A: SomeReal](m: Matrix[A]): CudaMatrix[A] =
+proc gpu*[A](m: Matrix[A]): CudaMatrix[A] =
   if m.order == rowMajor:
     raise newException(ValueError, "m must be column major")
   init(result, m.M, m.N)
   check cublasSetMatrix(m.M.int32, m.N.int32, sizeof(A).int32, m.fp, m.ld.int32, result.fp, result.ld)
 
-proc cpu*[A: SomeReal](v: CudaVector[A]): Vector[A] =
+proc cpu*[A](v: CudaVector[A]): Vector[A] =
   result = zeros(v.len, A)
   check cublasGetVector(v.len, sizeof(A).int32, v.fp, v.step, result.fp, result.step.int32)
 
-proc cpu*[A: SomeReal](m: CudaMatrix[A]): Matrix[A] =
+proc cpu*[A](m: CudaMatrix[A]): Matrix[A] =
   result = zeros(m.M, m.N, A, colMajor)
   check cublasGetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.ld, result.fp, result.ld.int32)
 
@@ -140,6 +140,26 @@ proc `[]`*[A](m: CudaMatrix[A], rows: Slice[int], cols: typedesc[All]): CudaMatr
 
 proc `[]`*[A](m: CudaMatrix[A], rows: typedesc[All], cols: Slice[int]): CudaMatrix[A] =
   m[0 ..< m.M, cols]
+
+proc column*[A](m: CudaMatrix[A], j: int): CudaVector[A] {. inline .} =
+  checkBounds(j >= 0 and j < m.N)
+  let mp = cast[CPointer[A]](m.fp)
+  result = CudaVector[A](
+    data: m.data,
+    fp: addr(mp[j * m.ld]),
+    len: m.M,
+    step: 1
+  )
+
+proc row*[A](m: CudaMatrix[A], i: int): CudaVector[A] {. inline .} =
+  checkBounds(i >= 0 and i < m.M)
+  let mp = cast[CPointer[A]](m.fp)
+  result = CudaVector[A](
+    data: m.data,
+    fp: addr(mp[i]),
+    len: m.N,
+    step: m.ld
+  )
 
 # CUBLAS overloads
 
