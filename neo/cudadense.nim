@@ -311,13 +311,17 @@ proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
     result = a.clone()
   result -= b
 
-# TODO: handle non contiguous matrices
 proc l_2*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
-  check nrm2(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
+  if m.isContiguous:
+    check nrm2(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
+  else:
+    result = l_2(m.clone())
 
-# TODO: handle non contiguous matrices
 proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
-  check asum(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
+  if m.isContiguous:
+    check asum(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
+  else:
+    result = l_1(m.clone())
 
 # BLAS level 2 operations
 
