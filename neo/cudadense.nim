@@ -283,8 +283,8 @@ proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
   var
     alpha: A = 1
     beta: A = 0
-  check gemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N,
-    addr(alpha), a.fp, a.M, b.fp, a.N, addr(beta), result.fp, a.M)
+  let x = gemm(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, b.N, a.N,
+    addr(alpha), a.fp, a.ld, b.fp, b.ld, addr(beta), result.fp, result.ld)
 
 # Comparison
 
