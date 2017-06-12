@@ -161,6 +161,32 @@ proc row*[A](m: CudaMatrix[A], i: int): CudaVector[A] {. inline .} =
     step: m.ld
   )
 
+# Iterators
+
+iterator columns*[A](m: CudaMatrix[A]): auto {. inline .} =
+  let mp = cast[CPointer[A]](m.fp)
+  var v = m.column(0)
+  yield v
+  for j in 1 ..< m.N:
+    v.fp = addr(mp[j * m.ld])
+    yield v
+
+iterator rows*[A](m: CudaMatrix[A]): auto {. inline .} =
+  let mp = cast[CPointer[A]](m.fp)
+  var v = m.row(0)
+  yield v
+  for i in 1 ..< m.M:
+    v.fp = addr(mp[i])
+    yield v
+
+iterator columnsSlow*[A](m: CudaMatrix[A]): auto {. inline .} =
+  for i in 0 ..< m.N:
+    yield m.column(i)
+
+iterator rowsSlow*[A](m: CudaMatrix[A]): auto {. inline .} =
+  for i in 0 ..< m.M:
+    yield m.row(i)
+
 # CUBLAS overloads
 
 var defaultHandle: cublasHandle_t
