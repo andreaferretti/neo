@@ -111,10 +111,15 @@ proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
 
 proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
   checkBounds(s.a >= 0 and s.b < v.len)
-  let vp = cast[CPointer[A]](v.fp)
-  let L = s.b - s.a + 1
-  init(result, L)
-  check cudaMemcpy(result.fp, addr(vp[s.a]), L * sizeof(A), cudaMemcpyDeviceToDevice)
+  let
+    vp = cast[CPointer[A]](v.fp)
+    fp = addr(vp[s.a * v.step])
+  result = CudaVector[A](
+    len: (s.b - s.a + 1).int32,
+    step: v.step,
+    data: v.data,
+    fp: fp
+  )
 
 proc `[]`*[A](m: CudaMatrix[A], rows, cols: Slice[int]): CudaMatrix[A] =
   checkBounds(rows.a >= 0 and rows.b < m.M)
