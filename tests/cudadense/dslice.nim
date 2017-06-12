@@ -97,18 +97,18 @@ suite "slicing column major matrices":
       r = s2.row(1)
 
     check r == vector(8, 9, 10).gpu()
-  # test "matrix/vector multiplication on slices":
-  #   let
-  #     m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
-  #     s = m[1 .. 3, 2 .. 4]
-  #     n = matrix(@[
-  #       @[5.0, 6, 7],
-  #       @[8.0, 9, 10],
-  #       @[11.0, 12, 13]
-  #     ])
-  #     v = n.column(2)
+  test "matrix/vector multiplication on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ]).gpu()
+      v = n.column(2)
 
-  #   check(s * v == n * v)
+    check(s * v == n * v)
   # test "matrix multiplication on slices":
   #   let
   #     m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)

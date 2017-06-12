@@ -272,8 +272,8 @@ proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. in
   var
     alpha: A = 1
     beta: A = 0
-  check gemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, addr(alpha), a.fp, a.M,
-    v.fp, v.step, addr(beta), result.fp, 1)
+  check gemv(defaultHandle, CUBLAS_OP_N, a.M, a.N, addr(alpha), a.fp, a.ld,
+    v.fp, v.step, addr(beta), result.fp, result.step)
 
 # BLAS level 3 operations
 
