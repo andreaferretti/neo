@@ -15,7 +15,7 @@
 import unittest, neo/dense, neo/cudadense
 
 
-suite "cloning and slicing":
+suite "cloning":
   test "cloning a vector":
     let
       v1 = randomVector(10)
@@ -30,26 +30,3 @@ suite "cloning and slicing":
       m3 = m2.clone()
       m4 = m3.cpu()
     check m1 == m4
-  test "slicing a vector":
-    let
-      v1 = vector([1'f64, 2, 3, 4, 5, 6, 7, 8, 9])
-      v2 = v1.gpu()
-      v3 = v2[3 .. 6]
-      v4 = v3.cpu()
-    check v4 == vector([4'f64, 5, 6, 7])
-  test "slicing a matrix":
-    let
-      m1 = matrix(@[
-        @[1'f64, 2, 3, 4, 5],
-        @[3'f64, 1, 1, 6, 8],
-        @[0'f64, 8, 2, 7, 0]
-      ])
-      m2 = m1.gpu()
-      m3 = m2[All, 1 .. 3]
-      m4 = m3.cpu()
-      m5 = matrix(@[
-        @[2'f64, 3, 4],
-        @[1'f64, 1, 6],
-        @[8'f64, 2, 7]
-      ])
-    check m4 == m5
