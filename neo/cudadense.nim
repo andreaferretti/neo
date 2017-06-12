@@ -239,6 +239,7 @@ overload(dot, cublasSdot, cublasDdot)
 overload(copy, cublasScopy, cublasDcopy)
 overload(gemv, cublasSgemv, cublasDgemv)
 overload(gemm, cublasSgemm, cublasDgemm)
+overload(geam, cublasSgeam, cublasDgeam)
 
 # BLAS level 1 operations
 
@@ -311,44 +312,32 @@ template `/=`*[A: SomeReal](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
 proc `+=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   var alpha: A = 1
-  if a.isContiguous and b.isContiguous:
-    check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
-  else:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for j in 0 ..< a.N:
-      check axpy(defaultHandle, a.M, addr(alpha), addr(bp[j * b.ld]), 1, addr(ap[j * a.ld]), 1)
+  check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
+    a.fp, a.ld, addr(alpha), b.fp, b.ld, a.fp, a.ld)
 
 proc `+`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  if a.isContiguous:
-    init(result, a.M, a.N)
-    check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
-  else:
-    result = a.clone()
-  result += b
+  init(result, a.M, a.N)
+  var alpha: A = 1
+  check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
+    a.fp, a.ld, addr(alpha), b.fp, b.ld, result.fp, result.ld)
 
 proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  var alpha: A = -1
-  if a.isContiguous and b.isContiguous:
-    check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
-  else:
-    let
-      ap = cast[CPointer[A]](a.fp)
-      bp = cast[CPointer[A]](b.fp)
-    for j in 0 ..< a.N:
-      check axpy(defaultHandle, a.M, addr(alpha), addr(bp[j * b.ld]), 1, addr(ap[j * a.ld]), 1)
+  var
+    alpha: A = 1
+    beta: A = -1
+  check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
+    a.fp, a.ld, addr(beta), b.fp, b.ld, a.fp, a.ld)
 
 proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  if a.isContiguous:
-    init(result, a.M, a.N)
-    check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
-  else:
-    result = a.clone()
-  result -= b
+  init(result, a.M, a.N)
+  var
+    alpha: A = 1
+    beta: A = -1
+  check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
+    a.fp, a.ld, addr(beta), b.fp, b.ld, result.fp, result.ld)
 
 proc l_2*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
   if m.isContiguous:
