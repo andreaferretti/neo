@@ -47,3 +47,18 @@ suite "trivial operations CUDA objects":
         @[3.0, 2.0, 2.0, 4.0]
       ]).gpu()
     check m.asVector == v
+  test "transpose of matrices":
+    var
+      m1 = matrix(@[
+        @[1.0, 0.0, 2.0, -1.0],
+        @[-1.0, 1.0, 3.0, 1.0],
+        @[3.0, 2.0, 2.0, 4.0]
+      ]).gpu()
+      m2 = matrix(@[
+        @[1.0, -1.0, 3.0],
+        @[0.0, 1.0, 2.0],
+        @[2.0, 3.0, 2.0],
+        @[-1.0, 1.0, 4.0]
+      ]).gpu()
+
+    check(m1.t == m2)

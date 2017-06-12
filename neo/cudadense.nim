@@ -351,6 +351,14 @@ proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
   else:
     result = l_1(m.clone())
 
+proc t*[A](m: CudaMatrix[A]): CudaMatrix[A] =
+  init(result, m.N, m.M)
+  var
+    alpha: A = 1
+    beta: A = 0
+  check geam(defaultHandle, CUBLAS_OP_T, CUBLAS_OP_T, m.N, m.M, addr(alpha),
+    m.fp, m.ld, addr(beta), m.fp, m.ld, result.fp, result.ld)
+
 # BLAS level 2 operations
 
 proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
