@@ -120,28 +120,28 @@ suite "slicing column major matrices":
       ]).gpu()
 
     check(s * s == n * n)
-  # test "matrix addition on slices":
-  #   let
-  #     m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
-  #     s = m[1 .. 3, 2 .. 4]
-  #     n = matrix(@[
-  #       @[5.0, 6, 7],
-  #       @[8.0, 9, 10],
-  #       @[11.0, 12, 13]
-  #     ])
+  test "matrix addition on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ]).gpu()
 
-  #   check(s + s == n + n)
-  # test "matrix subtraction on slices":
-  #   let
-  #     m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
-  #     s = m[1 .. 3, 2 .. 4]
-  #     n = matrix(@[
-  #       @[5.0, 6, 7],
-  #       @[8.0, 9, 10],
-  #       @[11.0, 12, 13]
-  #     ])
+    check(s + s == n + n)
+  test "matrix subtraction on slices":
+    let
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
+      s = m[1 .. 3, 2 .. 4]
+      n = matrix(@[
+        @[5.0, 6, 7],
+        @[8.0, 9, 10],
+        @[11.0, 12, 13]
+      ]).gpu()
 
-  #   check(s - n == zeros(3, 3))
+    check(s - n == zeros(3, 3).gpu())
   test "scaling slices":
     var
       m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
@@ -156,18 +156,18 @@ suite "slicing column major matrices":
     ]).gpu()
 
     check(m == expected)
-  # test "mutable sum on slices":
-  #   var
-  #     m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
-  #     s = m[1 .. 3, 2 .. 4]
-  #     t = makeMatrixIJ(float64, 3, 3, (i - j).float64)
-  #   s += t
-  #   let expected = matrix(@[
-  #     @[0.0,  1.0,  2.0,  3.0,  4.0],
-  #     @[3.0,  4.0,  5.0,  5.0,  5.0],
-  #     @[6.0,  7.0,  9.0,  9.0,  9.0],
-  #     @[9.0,  10.0, 13.0, 13.0, 13.0],
-  #     @[12.0, 13.0, 14.0, 15.0, 16.0]
-  #   ])
+  test "mutable sum on slices":
+    var
+      m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
+      s = m[1 .. 3, 2 .. 4]
+      t = makeMatrixIJ(float64, 3, 3, (i - j).float64).gpu()
+    s += t
+    let expected = matrix(@[
+      @[0.0,  1.0,  2.0,  3.0,  4.0],
+      @[3.0,  4.0,  5.0,  5.0,  5.0],
+      @[6.0,  7.0,  9.0,  9.0,  9.0],
+      @[9.0,  10.0, 13.0, 13.0, 13.0],
+      @[12.0, 13.0, 14.0, 15.0, 16.0]
+    ]).gpu()
 
-  #   check(m == expected)
+    check(m == expected)

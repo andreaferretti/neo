@@ -31,7 +31,8 @@ proc cudaMalloc[A](size: int): ptr A =
   check cudaMalloc(cast[ptr pointer](addr result), s)
 
 proc freeDeviceMemory[A](p: ref[ptr A]) =
-  check cudaFree(p[])
+  if not p[].isNil:
+    check cudaFree(p[])
 
 proc isContiguous*(v: CudaVector): bool {.inline.} =
   v.step == 1
@@ -268,30 +269,46 @@ template `/`*[A: SomeReal](v: CudaVector[A] or CudaMatrix[A], k: A): auto =
 template `/=`*[A: SomeReal](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
   v *= (1 / k)
 
-# TODO: handle non contiguous matrices
 proc `+=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   var alpha: A = 1
-  check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
+  if a.isContiguous and b.isContiguous:
+    check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
+  else:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
+    for j in 0 ..< a.N:
+      check axpy(defaultHandle, a.M, addr(alpha), addr(bp[j * b.ld]), 1, addr(ap[j * a.ld]), 1)
 
-# TODO: handle non contiguous matrices
 proc `+`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  init(result, a.M, a.N)
-  check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
+  if a.isContiguous:
+    init(result, a.M, a.N)
+    check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
+  else:
+    result = a.clone()
   result += b
 
-# TODO: handle non contiguous matrices
 proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   var alpha: A = -1
-  check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
+  if a.isContiguous and b.isContiguous:
+    check axpy(defaultHandle, a.M * a.N, addr(alpha), b.fp, 1, a.fp, 1)
+  else:
+    let
+      ap = cast[CPointer[A]](a.fp)
+      bp = cast[CPointer[A]](b.fp)
+    for j in 0 ..< a.N:
+      check axpy(defaultHandle, a.M, addr(alpha), addr(bp[j * b.ld]), 1, addr(ap[j * a.ld]), 1)
 
-# TODO: handle non contiguous matrices
 proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
-  init(result, a.M, a.N)
-  check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
+  if a.isContiguous:
+    init(result, a.M, a.N)
+    check copy(defaultHandle, a.M * a.N, a.fp, 1, result.fp, 1)
+  else:
+    result = a.clone()
   result -= b
 
 # TODO: handle non contiguous matrices
