@@ -179,6 +179,12 @@ suite "slicing column major matrices":
     ])
 
     check(m == expected)
+  test "hard transpose on slices":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+      s = m[1 .. 3, 2 .. 4]
+
+    check(s.t == s.T)
 
 suite "slicing row major matrices":
   test "slice of a full matrix":
@@ -329,3 +335,9 @@ suite "slicing row major matrices":
     ])
 
     check(m == expected)
+  test "hard transpose on slices":
+    let
+      m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+      s = m[1 .. 3, 2 .. 4]
+
+    check(s.t == s.T)

@@ -351,7 +351,7 @@ proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
   else:
     result = l_1(m.clone())
 
-proc t*[A](m: CudaMatrix[A]): CudaMatrix[A] =
+proc T*[A](m: CudaMatrix[A]): CudaMatrix[A] =
   init(result, m.N, m.M)
   var
     alpha: A = 1

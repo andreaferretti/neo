@@ -61,7 +61,22 @@ suite "trivial operations on 32-bit matrices":
         @[-1'f32, 1'f32, 4'f32]
       ])
     check m1.t == m2
+  test "hard transpose of matrices":
+    let m = matrix(@[
+      @[1'f32, 0'f32, 2'f32, -1'f32],
+      @[-1'f32, 1'f32, 3'f32, 1'f32],
+      @[3'f32, 2'f32, 2'f32, 4'f32]
+    ])
 
+    check(m.t == m.T)
+  test "hard transpose of row major matrices":
+    let m = matrix(@[
+      @[1'f32, 0'f32, 2'f32, -1'f32],
+      @[-1'f32, 1'f32, 3'f32, 1'f32],
+      @[3'f32, 2'f32, 2'f32, 4'f32]
+    ], order = rowMajor)
+
+    check(m.t == m.T)
 
 suite "trivial operations should share storage":
   test "reshape of matrices":

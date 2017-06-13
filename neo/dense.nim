@@ -684,6 +684,13 @@ proc min*[A](m: Matrix[A]): A =
       result = x
     first = false
 
+proc T*[A](m: Matrix[A]): Matrix[A] =
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    result = makeMatrixIJ(A, m.N, m.M, elColMajor(mp, m, j, i), colMajor)
+  else:
+    result = makeMatrixIJ(A, m.N, m.M, elRowMajor(mp, m, j, i), rowMajor)
+
 # BLAS level 2 operations
 
 proc `*`*[A: SomeReal](a: Matrix[A], v: Vector[A]): Vector[A]  {. inline .} =

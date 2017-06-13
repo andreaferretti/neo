@@ -334,6 +334,17 @@ Notice that `clone()` will be called internally anyway when using one of the
 reshape operations with a matrix that is not contiguous (that is, a matrix
 obtained by slicing).
 
+There is also a hard transpose operation which, unlike `t()` will not try
+to share storage but will always create a new matrix instead and copy the
+data to the new matrix (this way, it will also preserve  the row-major or
+colum-major order). The hard transpose is denoted `T()`, so that
+
+```nim
+m.t == m.T
+```
+
+always holds, although the internal representations differ.
+
 #### BLAS Operations
 
 A few linear algebra operations are available, wrapping BLAS libraries:

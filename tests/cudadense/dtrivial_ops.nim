@@ -47,7 +47,7 @@ suite "trivial operations CUDA objects":
         @[3.0, 2.0, 2.0, 4.0]
       ]).gpu()
     check m.asVector == v
-  test "transpose of matrices":
+  test "hard transpose of matrices":
     var
       m1 = matrix(@[
         @[1.0, 0.0, 2.0, -1.0],
@@ -61,4 +61,4 @@ suite "trivial operations CUDA objects":
         @[-1.0, 1.0, 4.0]
       ]).gpu()
 
-    check(m1.t == m2)
+    check(m1.T == m2)
