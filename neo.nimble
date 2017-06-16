@@ -9,7 +9,7 @@ skipDirs      = @["tests", "benchmarks", "htmldocs"]
 skipFiles     = @["_config.yml"]
 
 requires "nim >= 0.17.0", "nimblas >= 0.2.0", "nimcuda >= 0.1.4",
-  "nimlapack >= 0.1.0"
+  "nimlapack >= 0.1.1"
 
 --forceBuild
 
@@ -52,6 +52,7 @@ task testsparse, "run CPU sparse tests":
 task testopenblas, "run CPU tests on openblas":
   configForTests()
   --define:"blas=openblas"
+  --define:"lapack=openblas"
   setCommand "c", "tests/all.nim"
 
 task testmkl, "run CPU tests on mkl":
