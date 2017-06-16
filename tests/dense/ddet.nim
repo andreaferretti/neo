@@ -12,11 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{.push warning[ProveInit]: off .}
+import unittest, neo/dense
 
-import dense/dinitialize, dense/daccess, dense/dslice, dense/dequality,
-  dense/dconversions, dense/diterators, dense/dcollection, dense/dtrivial_ops,
-  dense/dops, dense/drow_major_ops, dense/dmixed_ops, dense/dufunc,
-  dense/dstack, dense/dsolvers, dense/deigenvalues, dense/ddet
+# -1 -1 0
+# 0 1 2
+# 1 3 5
 
-{. pop .}
+suite "trace and determinant computations":
+  test "trace of a matrix":
+    let a = makeMatrixIJ(int, 3, 3, i + i * j - 1)
+
+    check(tr(a) == 5)
+  test "determinant of a matrix":
+    let a = matrix(@[
+      @[-1.0, -1.0, 0.0],
+      @[ 0.0,  1.0, 2.0],
+      @[ 1.0,  3.0, 5.0]
+    ])
+
+    check((det(a) + -1) < 1e-6)

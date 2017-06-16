@@ -1101,3 +1101,22 @@ proc schur*[A: SomeReal](a: Matrix[A]): SchurResult[A] =
     result.eigenvalues.real, result.eigenvalues.img, q, ldq, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to find the Schur decomposition")
+
+# Trace and determinant
+
+proc tr*[A](a: Matrix[A]): A =
+  checkDim(a.M == a.N, "`tr` requires a square matrix")
+  let ap = cast[CPointer[A]](a.fp)
+  for i in 0 ..< a.M:
+    result += ap[i * (1 + a.ld)]
+
+# TODO: pick a faster decomposition
+proc det*[A: SomeReal](a: Matrix[A]): A =
+  checkDim(a.M == a.N, "`det` requires a square matrix")
+  result  = A(1)
+  let
+    s = schur(a)
+    u = s.factorization
+  let up = cast[CPointer[A]](u.fp)
+  for i in 0 ..< a.M:
+    result *= up[i * (1 + u.ld)]
