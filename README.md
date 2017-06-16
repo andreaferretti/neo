@@ -20,9 +20,9 @@ Table of contents
 -----------------
 <!-- TOC depthFrom:2 depthTo:6 orderedList:false updateOnSave:true withLinks:true -->
 
+- [Introduction](#introduction)
 - [Working on the CPU](#working-on-the-cpu)
   - [Dense linear algebra](#dense-linear-algebra)
-    - [Introduction](#introduction)
     - [Initialization](#initialization)
     - [Working with 32-bit](#working-with-32-bit)
     - [Accessors](#accessors)
@@ -36,22 +36,23 @@ Table of contents
     - [Rewrite rules](#rewrite-rules)
     - [Solving linear systems](#solving-linear-systems)
     - [Computing eigenvalues and eigenvectors](#computing-eigenvalues-and-eigenvectors)
-    - [Linking BLAS and LAPACK implementations](#linking-blas-and-lapack-implementations)
   - [Sparse linear algebra](#sparse-linear-algebra)
 - [Working on the GPU](#working-on-the-gpu)
-  - [Linking CUDA](#linking-cuda)
   - [Dense linear algebra](#dense-linear-algebra-1)
   - [Sparse linear algebra](#sparse-linear-algebra-1)
+- [Design](#design)
+  - [On the CPU](#on-the-cpu)
+  - [Why fields are public](#why-fields-are-public)
+  - [On the GPU](#on-the-gpu)
+- [Linking external libraries](#linking-external-libraries)
+  - [Linking BLAS and LAPACK implementations](#linking-blas-and-lapack-implementations)
+  - [Linking CUDA](#linking-cuda)
 - [TODO](#todo)
 - [Contributing](#contributing)
 
 <!-- /TOC -->
 
-## Working on the CPU
-
-### Dense linear algebra
-
-#### Introduction
+## Introduction
 
 The library revolves around operations on vectors and matrices of floating
 point numbers. It allows to compute operations either on the CPU or on the
@@ -62,6 +63,17 @@ restricted to be `float32` or `float64` (usually to use BLAS and LAPACK
 routines). Actually, `Vector[A]` is just a small wrapper around `seq[A]`, which
 allows to perform linear algebra operations on standard Nim sequences without
 copying.
+
+Similar types exist on the GPU side, and there are facilities to move them
+back and forth from the CPU.
+
+Neo makes use of many standard libraries such as BLAS, LAPACK and CUDA. See
+[this section](#linking-external-libraries) to learn how to link the correct
+implementation for your platform.
+
+## Working on the CPU
+
+### Dense linear algebra
 
 #### Initialization
 
@@ -463,63 +475,11 @@ These functions require a LAPACK implementation.
 
 To be documented.
 
-#### Linking BLAS and LAPACK implementations
-
-The library requires to link some BLAS implementation to perform the actual
-linear algebra operations. By default, it tries to link whatever is the default
-system-wide BLAS implementation.
-
-A few compile flags are available to link specific BLAS implementations
-
-    -d:atlas
-    -d:openblas
-    -d:mkl
-    -d:mkl -d:threaded
-
-Packages for various BLAS implementations are available from the package
-managers of many Linux distributions. On OSX one can add the brew formulas
-from [Homebrew Science](https://github.com/Homebrew/homebrew-science), such
-as `brew install homebrew/science/openblas`.
-
-You may also need to add suitable paths for the includes and library dirs.
-On OSX, this should do the trick
-
-```nim
-switch("clibdir", "/usr/local/opt/openblas/lib")
-switch("cincludes", "/usr/local/opt/openblas/include")
-```
-
-If you have problems with MKL, you may want to link it statically. Just pass
-the options
-
-```nim
---dynlibOverride:mkl_intel_lp64
---passL:${PATH_TO_MKL}/libmkl_intel_lp64.a
-```
-
-to enable static linking.
-
 ### Sparse linear algebra
 
 To be documented.
 
 ## Working on the GPU
-
-### Linking CUDA
-
-It is possible to delegate work to the GPU using CUDA. The library has been
-tested to work with NVIDIA CUDA 8.0, but it is possible that earlier
-versions will work as well. In order to compile and link against CUDA, you
-should make the appropriate headers and libraries available. If they are not
-globally set, you can pass suitable options to the Nim compiler, such as
-
-```
---cincludes:"/usr/local/cuda/include"
---clibdir:"/usr/local/cuda/lib64"
-```
-
-Support for CUDA is under the package `neo/cuda`, that needs to be imported
-explicitly.
 
 ### Dense linear algebra
 
@@ -558,6 +518,178 @@ For more information, look at the tests in `tests/cudadense`.
 ### Sparse linear algebra
 
 To be documented.
+
+## Design
+
+### On the CPU
+
+On the CPU, dense vectors and matrices are stored using this structure:
+
+```nim
+type
+  MatrixShape* = enum
+    Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
+  Vector*[A] = ref object
+    data*: seq[A]
+    fp*: ptr A # float pointer
+    len*, step*: int
+  Matrix*[A] = ref object
+    order*: OrderType
+    M*, N*, ld*: int # ld = leading dimension
+    fp*: ptr A # float pointer
+    data*: seq[A]
+    shape*: set[MatrixShape]
+```
+
+Each store some information on dimensions (`len` for vectors, `M` and `N` for
+matrices) and a pointer to the beginning of the actual data `fp`.
+
+The `order` of a matrix can be `colMajor` or `rowMajor`: the first one means
+that the matrix is stored column by column, the second row by row.
+
+To make it easier to share data without copying, but still keep the data
+garbage collected, the actual data is usually allocated in a `seq`, here called
+`data`, which can be shared between matrices and their slices, or row and
+column vectors. The pointer `fp` is usually a pointer somewhere inside this
+sequence, although this is not required.
+
+All operations are expressed in terms of `fp`, so `data` is not really
+required. When the last reference to `data` goes away, though, the sequence
+is garbage collected and there will be no more pointers inside it. If there is
+a small vector or matrix holding the last reference to a big chunk of
+data, it may be more convenient to copy it to a fresh location and free the
+data itself: this can be done by using the `clone()` operation.
+
+Vectors are not required to be contiguous, and they have a `step` parameter
+that determines how far apart are their elements. This is useful when
+taking a `row` of a column major matrix or the `column` of a row major one.
+
+Matrices can also not be contiguous. When taking a minor of a column major
+matrix, one gets a submatrix whose elements are contiguous in a column, but
+whose column are not contiguously placed. Rather, the distance (in elements)
+between the start of two successive columns is the same as the parent matrix,
+and is called the leading dimension of the matrix (here stored as `ld`). A
+similar remark holds for row major matrices, where `ld` is the number of
+elements between the beginning of rows.
+
+### Why fields are public
+
+Notice that all members of the types are public, but in general **it is not
+safe** to change them if you don't know what you are doing. These fields are
+not generally meant to be changed, and a previous version of the library
+had them private. In general, though, a user may need access to some of
+these fields for performance reasons, so they are exposed.
+
+An example of this case is the `rows` (or `columns`) iterator. Neo keeps
+vector and matrix types on the heap (they are `ref` types). This prevents
+accidental copying, but has the downside that creating a new one requires
+allocation. When iterating over rows in a loop, one wants to avoid to trigger
+many costly allocations, since the underlying data is always the same, and
+the only thing that changes is the position of the vectors inside this
+data array. For this reason, the iterator is implemented as follows:
+
+```nim
+iterator rows*[A](m: Matrix[A]): auto {. inline .} =
+  let
+    mp = cast[CPointer[A]](m.fp)
+    step = if m.order == rowMajor: m.ld else: 1
+  var v = m.row(0)
+  yield v
+  for i in 1 ..< m.M:
+    v.fp = addr(mp[i * step])
+    yield v
+```
+
+There is a single vector which is reused at each step and the iterator
+always yields this vector, where `fp` is changed. A user that wants - say -
+to implement a similar iteration over some minors of a matrix may need
+to perform a similar trick, and preventing to change `fp` would impede
+this optimization.
+
+### On the GPU
+
+On the GPU side, the definitions are similar:
+
+```nim
+type
+  CudaVector*[A] = object
+    data*: ref[ptr A]
+    fp*: ptr A
+    len, step*: int32
+  CudaMatrix*[A] = object
+    M*, N*, ld*: int32
+    data*: ref[ptr A]
+    fp*: ptr A
+    shape*: set[MatrixShape]
+```
+
+The main difference here is that one cannot store the underlying data in
+a sequence, because data is allocated on a device, and the CUDA api returns
+the relevant pointers, over which we have no control.
+
+To have a similar approach to the former case, the CUDA pointer to the data
+is wrapped inside a `ref`. The actual pointer used in computation is, again,
+`fp`, while `data` is shared for slices, or rows and vectors of a matrix.
+
+When the last reference to `data` goes away, a finalizer calls the CUDA
+routines to clean up the allocated memory.
+
+Also, CUDA matrices are only column major for now, although this is going
+to change in the future.
+
+## Linking external libraries
+
+### Linking BLAS and LAPACK implementations
+
+Neo requires to link some BLAS implementation to perform the actual
+linear algebra operations. By default, it tries to link whatever is the default
+system-wide BLAS implementation.
+
+A few compile flags are available to link specific BLAS implementations
+
+    -d:atlas
+    -d:openblas
+    -d:mkl
+    -d:mkl -d:threaded
+
+Packages for various BLAS implementations are available from the package
+managers of many Linux distributions. On OSX one can add the brew formulas
+from [Homebrew Science](https://github.com/Homebrew/homebrew-science), such
+as `brew install homebrew/science/openblas`.
+
+You may also need to add suitable paths for the includes and library dirs.
+On OSX, this should do the trick
+
+```nim
+switch("clibdir", "/usr/local/opt/openblas/lib")
+switch("cincludes", "/usr/local/opt/openblas/include")
+```
+
+If you have problems with MKL, you may want to link it statically. Just pass
+the options
+
+```nim
+--dynlibOverride:mkl_intel_lp64
+--passL:${PATH_TO_MKL}/libmkl_intel_lp64.a
+```
+
+to enable static linking.
+
+### Linking CUDA
+
+It is possible to delegate work to the GPU using CUDA. The library has been
+tested to work with NVIDIA CUDA 8.0, but it is possible that earlier
+versions will work as well. In order to compile and link against CUDA, you
+should make the appropriate headers and libraries available. If they are not
+globally set, you can pass suitable options to the Nim compiler, such as
+
+```
+--cincludes:"/usr/local/cuda/include"
+--clibdir:"/usr/local/cuda/lib64"
+```
+
+Support for CUDA is under the package `neo/cuda`, that needs to be imported
+explicitly.
 
 
 ## TODO
