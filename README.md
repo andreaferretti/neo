@@ -650,18 +650,30 @@ to change in the future.
 
 ### Linking BLAS and LAPACK implementations
 
-Neo requires to link some BLAS implementation to perform the actual
-linear algebra operations. By default, it tries to link whatever is the default
-system-wide BLAS implementation.
+Neo requires to link some BLAS and LAPACK implementation to perform the actual
+linear algebra operations. By default, it tries to link whatever are the default
+system-wide implementations.
 
-A few compile flags are available to link specific BLAS implementations
+You can link against different implementations by a combination of:
 
-    -d:atlas
-    -d:openblas
-    -d:mkl
-    -d:mkl -d:threaded
+* changing the path for linked libraries (use
+  [`--clibdir`](https://nim-lang.org/docs/nimc.html#compiler-usage-command-line-switches)
+  for this)
+* using the `--define:blas` flag. By default, the system tries to load a BLAS
+  library called `blas`, which translates into something called `blas.dll`
+  or `libblas.so` according to the underling operating system. To link,
+  say, the library `libopenblas.so.3` on Linux, you should pass to Nim the
+  option `--define:blas=openblas`.
+* using the `--define:lapack` flag. By default, the system tries to load a LAPACK
+  library called `lapack`, which translates into something called `lapack.dll`
+  or `liblapack.so` according to the underling operating system. To link,
+  say, the library `libopenblas.so.3` on Linux, you should pass to Nim the
+  option `--define:lapack=openblas`.
 
-Packages for various BLAS implementations are available from the package
+See the tasks inside [neo.nimble](https://github.com/unicredit/neo/blob/master/neo.nimble)
+for a few examples.
+
+Packages for various BLAS or LAPACK implementations are available from the package
 managers of many Linux distributions. On OSX one can add the brew formulas
 from [Homebrew Science](https://github.com/Homebrew/homebrew-science), such
 as `brew install homebrew/science/openblas`.
@@ -683,7 +695,6 @@ the options
 ```
 
 to enable static linking.
-
 ### Linking CUDA
 
 It is possible to delegate work to the GPU using CUDA. The library has been
