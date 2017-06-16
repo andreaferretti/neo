@@ -695,6 +695,7 @@ the options
 ```
 
 to enable static linking.
+
 ### Linking CUDA
 
 It is possible to delegate work to the GPU using CUDA. The library has been
@@ -714,13 +715,7 @@ explicitly.
 
 ## TODO
 
-* Add support for matrices and vector on the stack
-* Use rewrite rules to optimize complex operations into a single BLAS call
-* More specialized BLAS operations
-* Try on more platforms/configurations
-* Make a proper benchmark
-* Improve documentation
-* Better pretty-print
+See the [issue list](https://github.com/unicredit/neo/issues)
 
 ## Contributing
 
@@ -730,4 +725,6 @@ Every contribution is very much appreciated! This can range from:
   it works fine
 * building other parts of the scientific environment on top of it
 * writing blog posts and tutorials
-* contributing actual code (see the **TODO** section)
+* helping with the documentation
+* contributing actual code (see the
+  [issue list](https://github.com/unicredit/neo/issues) section)
