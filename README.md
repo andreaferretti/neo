@@ -572,6 +572,15 @@ and is called the leading dimension of the matrix (here stored as `ld`). A
 similar remark holds for row major matrices, where `ld` is the number of
 elements between the beginning of rows.
 
+This design allows to have matrices or vectors that are not managed by the
+garbage collector. In this case, it is enough to set `fp` manually, and
+leave `data` nil. This allows to support
+
+* matrices and vectors with data on the stack, which can be constructed
+  using the `stackVector` and `stackMatrix` constructors (and which are
+  only valid as long as the relevant data lives on the stack), and
+* matrices and vectors allocated manually on the shared heap.
+
 ### Why fields are public
 
 Notice that all members of the types are public, but in general **it is not
