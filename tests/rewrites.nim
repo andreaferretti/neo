@@ -34,3 +34,13 @@ suite "rewrite macros tests":
     a += 3.0 * b
 
     check getRewriteCount() == 1
+
+  test "vector linear combination after template application":
+    resetRewriteCount()
+    let
+      a = vector(1.0, 2.0, 3.0)
+      b = vector(2.0, -1.0, 3.0)
+
+    discard a + b / 3.0
+
+    check getRewriteCount() == 1
