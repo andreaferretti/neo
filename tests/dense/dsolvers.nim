@@ -53,7 +53,7 @@ suite "linear system solving":
   test "singular matrix error":
     let
       a = matrix(@[
-        @[3.0, 3.0],
+        @[2.0, 2.0],
         @[1.0, 1.0]
       ])
       b = matrix(@[

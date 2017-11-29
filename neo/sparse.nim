@@ -89,7 +89,7 @@ iterator pairs*[A](v: SparseVector[A]): tuple[key: int32, val: A] =
     zero: A
     next = v.indices[0]
     count = 0
-  for i in 0 ..< v.N:
+  for i in 0'i32 ..< v.N:
     if i == next:
       yield (i, v.vals[count])
       inc count
@@ -152,9 +152,9 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
   case m.kind
   of CSR:
     var next = m.cols[0]
-    for i in 0 ..< m.M:
+    for i in 0'i32 ..< m.M:
       let max = m.rows[i + 1]
-      for j in 0 ..< m.N:
+      for j in 0'i32 ..< m.N:
         if count < max and j == next:
           yield ((i, j), m.vals[count])
           inc count
@@ -164,9 +164,9 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
           yield ((i, j), zero)
   of CSC:
     var next = m.rows[0]
-    for j in 0 ..< m.N:
+    for j in 0'i32 ..< m.N:
       let max = m.cols[j + 1]
-      for i in 0 ..< m.M:
+      for i in 0'i32 ..< m.M:
         if count < max and i == next:
           yield ((i, j), m.vals[count])
           inc count
@@ -178,8 +178,8 @@ iterator pairs*[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A] =
     var
       nextR = m.rows[0]
       nextC = m.cols[0]
-    for i in 0 ..< m.M:
-      for j in 0 ..< m.N:
+    for i in 0'i32 ..< m.M:
+      for j in 0'i32 ..< m.N:
         if i == nextR and j == nextC:
           yield ((i, j), m.vals[count])
           inc count
