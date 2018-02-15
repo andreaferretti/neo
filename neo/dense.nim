@@ -110,10 +110,10 @@ template makeVectorI*[A](N: int, f: untyped): Vector[A] =
   result
 
 proc randomVector*(N: int, max: float64 = 1): Vector[float64] =
-  makeVectorI[float64](N, random(max))
+  makeVectorI[float64](N, rand(max))
 
 proc randomVector*(N: int, max: float32): Vector[float32] =
-  makeVectorI[float32](N, random(max).float32)
+  makeVectorI[float32](N, rand(max).float32)
 
 proc constantVector*[A](N: int, a: A): Vector[A] = makeVectorI[A](N, a)
 
@@ -163,7 +163,7 @@ template makeMatrixIJ*(A: typedesc, M1, N1: int, f: untyped, ord = colMajor): au
 proc randomMatrix*[A: SomeReal](M, N: int, max: A = 1, order = colMajor): Matrix[A] =
   result = matrix[A](order, M, N, newSeq[A](M * N))
   for i in 0 ..< (M * N):
-    result.data[i] = random(max)
+    result.data[i] = rand(max)
 
 proc randomMatrix*(M, N: int, order = colMajor): Matrix[float64] =
   randomMatrix(M, N, 1'f64, order)
@@ -195,22 +195,25 @@ proc eye*(N: int, A: typedesc[float64], order = colMajor): Matrix[float64] =
 proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
-# TODO: buggy because of https://github.com/nim-lang/Nim/issues/5962
 proc stackMatrix*[M, N: static[int]](a: var DoubleArray32[M, N], order = colMajor): Matrix[float32] =
-  Matrix[float32](
+  let M1: int = if order == colMajor: N else: M
+  let N1: int = if order == colMajor: M else: N
+  result = Matrix[float32](
     order: order,
     fp: addr a[0][0],
-    M: if order == colMajor: N else: M,
-    N: if order == colMajor: M else: N,
+    M: M1,
+    N: N1,
     ld: N
   )
 
 proc stackMatrix*[M, N: static[int]](a: var DoubleArray64[M, N], order = colMajor): Matrix[float64] =
+  let M1: int = if order == colMajor: N else: M
+  let N1: int = if order == colMajor: M else: N
   Matrix[float64](
     order: order,
     fp: addr a[0][0],
-    M: if order == colMajor: N else: M,
-    N: if order == colMajor: M else: N,
+    M: M1,
+    N: N1,
     ld: N
   )
 
