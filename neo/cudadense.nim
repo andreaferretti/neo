@@ -136,10 +136,10 @@ proc `[]`*[A](m: CudaMatrix[A], rows, cols: Slice[int]): CudaMatrix[A] =
   )
 
 proc `[]`*[A](m: CudaMatrix[A], rows: Slice[int], cols: typedesc[All]): CudaMatrix[A] =
-  m[rows, 0 ..< m.N]
+  m[rows, 0 ..< m.N.int]
 
 proc `[]`*[A](m: CudaMatrix[A], rows: typedesc[All], cols: Slice[int]): CudaMatrix[A] =
-  m[0 ..< m.M, cols]
+  m[0 ..< m.M.int, cols]
 
 proc column*[A](m: CudaMatrix[A], j: int): CudaVector[A] {. inline .} =
   checkBounds(j >= 0 and j < m.N)
