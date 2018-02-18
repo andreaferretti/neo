@@ -49,6 +49,10 @@ task testsparse, "run CPU sparse tests":
   configForTests()
   setCommand "c", "tests/tsparse.nim"
 
+task teststatic, "run CPU static tests":
+  configForTests()
+  setCommand "c", "tests/tstatics.nim"
+
 task testopenblas, "run CPU tests on openblas":
   configForTests()
   --define:"blas=openblas"

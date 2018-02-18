@@ -14,6 +14,6 @@
 
 {.push warning[ProveInit]: off .}
 
-import tdense, tsparse, tstatics
+import statics/initialize
 
 {. pop .}

@@ -4,6 +4,7 @@ tests/tdense
 tests/tcudadense
 tests/tsparse
 tests/tcudasparse
+tests/tstatics
 tests/all
 tests/allcuda
 tests/rewrites
