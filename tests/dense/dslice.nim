@@ -12,8 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, neo/dense
+import unittest, neo/dense, sequtils
 
+
+suite "slicing vectors":
+  test "getting a slice of a vector":
+    let
+      v = vector(toSeq(1 .. 5))
+      w = v[2 .. 3]
+
+    check w == vector(3, 4)
+
+  test "assigning to a slice":
+    var v = vector(toSeq(1 .. 5))
+    let w = vector(6, 7)
+
+    v[2 .. 3] = w
+    check v == vector(1, 2, 6, 7, 5)
+
+  test "assigning to a slice with BLAS operations":
+    var v = vector(toSeq(1 .. 5).mapIt(it.float64))
+    let
+      w = vector(6'f64, 7'f64)
+      expected = vector(1'f64, 2'f64, 6'f64, 7'f64, 5'f64)
+
+    v[2 .. 3] = w
+    check v == expected
+
+  test "assigning a slice to another slice":
+    var v = vector(toSeq(1 .. 5))
+    let w = vector(toSeq(6 .. 10))
+
+    v[2 .. 3] = w[3 .. 4]
+    check v == vector(1, 2, 9, 10, 5)
 
 suite "slicing column major matrices":
   test "slice of a full matrix":

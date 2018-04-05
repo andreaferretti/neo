@@ -512,6 +512,26 @@ proc asVector*[A](m: Matrix[A]): Vector[A] =
   else:
     vector(toSeq(m.items))
 
+# Slice accessors
+
+proc pointerAt[A](v: Vector[A], i: int): ptr A {. inline .} =
+  let s = cast[CPointer[A]](v.fp)
+  addr s[i]
+
+proc `[]`*[A](v: Vector[A], s: Slice[int]): Vector[A] {. inline .} =
+  Vector[A](data: v.data, fp: v.pointerAt(s.a), step: v.step, len: s.b - s.a + 1)
+
+proc `[]=`*[A](v: var Vector[A], s: Slice[int], val: Vector[A]) {. inline .} =
+  checkBounds(s.a >= 0 and s.b < v.len)
+  checkDim(s.b - s.a + 1 == val.len)
+  when A is SomeReal:
+    copy(val.len, val.fp, val.step, v.pointerAt(s.a), v.step)
+  else:
+    var count = 0
+    for i in s:
+      v[i] = val[count]
+      count += 1
+
 # BLAS level 1 operations
 
 proc `*=`*[A: SomeReal](v: var Vector[A], k: A) {. inline .} =
