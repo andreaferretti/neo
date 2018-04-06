@@ -535,14 +535,35 @@ proc `[]`*[A](m: Matrix[A], rows: typedesc[All], cols: Slice[int]): Matrix[A] =
 proc `[]=`*[A](m: var Matrix[A], rows, cols: Slice[int], val: Matrix[A]) {. inline .} =
   checkBounds(rows.a >= 0 and rows.b < m.M)
   checkBounds(cols.a >= 0 and cols.b < m.N)
-  checkDim(rows.b - rows.a + 1 == val.M)
-  checkDim(cols.b - cols.a + 1 == val.N)
-  when false:
-    discard # TODO: when A is SomeReal use BLAS copy operations instead
+  checkDim(rows.len == val.M)
+  checkDim(cols.len == val.N)
+  let
+    mp = cast[CPointer[A]](m.fp)
+    vp = cast[CPointer[A]](val.fp)
+  when A is SomeReal:
+    if m.order == colMajor:
+      if val.order == colMajor:
+        var col = 0
+        for c in cols:
+          copy(val.M, addr elColMajor(vp, val, 0, col), 1, addr elColMajor(mp, m, rows.a, c), 1)
+          col += 1
+      else:
+        var col = 0
+        for c in cols:
+          copy(val.M, addr elRowMajor(vp, val, 0, col), val.ld, addr elColMajor(mp, m, rows.a, c), 1)
+          col += 1
+    else:
+      if val.order == colMajor:
+        var row = 0
+        for r in rows:
+          copy(val.N, addr elColMajor(vp, val, row, 0), val.ld, addr elRowMajor(mp, m, r, cols.a), 1)
+          row += 1
+      else:
+        var row = 0
+        for r in rows:
+          copy(val.N, addr elRowMajor(vp, val, row, 0), 1, addr elRowMajor(mp, m, r, cols.a), 1)
+          row += 1
   else:
-    let
-      mp = cast[CPointer[A]](m.fp)
-      vp = cast[CPointer[A]](val.fp)
     var row = 0
     var col = 0
     if m.order == colMajor:

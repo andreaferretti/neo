@@ -49,6 +49,17 @@ suite "mixed slice assignments":
     check m[2, 2] == 4
     check m[3, 2] == 6
 
+  test "assigning to a slice with BLAS operations":
+    var m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64, rowMajor)
+    let n = matrix(@[
+        @[5'f64, 6, 7],
+        @[8'f64, 9, 10],
+        @[11'f64, 12, 13]
+      ])
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9'f64
+    check m[3, 2] == 12'f64
+
 suite "mixed matrix operations":
   test "mixed matrix sum":
     let
