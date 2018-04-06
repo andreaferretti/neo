@@ -14,6 +14,41 @@
 
 import unittest, neo/dense
 
+suite "mixed slice assignments":
+  test "assigning to a slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ], rowMajor)
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9
+    check m[3, 2] == 12
+
+  test "assigning a slice to another slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = makeMatrixIJ(int, 5, 5, 2 * i + 2 * j)
+    m[1 .. 3, 1 .. 3] = n[2 .. 4, 2 .. 4]
+    check m[2, 2] == 12
+    check m[3, 2] == 14
+
+  test "assigning to a slice on columns only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = makeMatrixIJ(int, 5, 3, 2 * i + 2 * j, rowMajor)
+
+    m[All, 2 .. 4] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
+  test "assigning to a slice on rows only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = makeMatrixIJ(int, 3, 5, 2 * i + 2 * j)
+
+    m[2 .. 4, All] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
 suite "mixed matrix operations":
   test "mixed matrix sum":
     let
