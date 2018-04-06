@@ -107,6 +107,21 @@ proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
   init(result, m.M, m.N)
   check cublasSetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.ld, result.fp, result.ld)
 
+# CUBLAS overloads
+
+var defaultHandle: cublasHandle_t
+check cublasCreate_v2(addr defaultHandle)
+
+overload(scal, cublasSscal, cublasDscal)
+overload(axpy, cublasSaxpy, cublasDaxpy)
+overload(asum, cublasSasum, cublasDasum)
+overload(nrm2, cublasSnrm2, cublasDnrm2)
+overload(dot, cublasSdot, cublasDdot)
+overload(copy, cublasScopy, cublasDcopy)
+overload(gemv, cublasSgemv, cublasDgemv)
+overload(gemm, cublasSgemm, cublasDgemm)
+overload(geam, cublasSgeam, cublasDgeam)
+
   # Slicing
 
 proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
@@ -120,6 +135,15 @@ proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
     data: v.data,
     fp: fp
   )
+
+proc pointerAt[A](v: CudaVector[A], i: int): ptr A {. inline .} =
+  let s = cast[CPointer[A]](v.fp)
+  addr s[i]
+
+proc `[]=`*[A: SomeReal](v: var CudaVector[A], s: Slice[int], val: CudaVector[A]) {. inline .} =
+  checkBounds(s.a >= 0 and s.b < v.len)
+  checkDim(s.len == val.len)
+  check copy(defaultHandle, val.len, val.fp, val.step, v.pointerAt(s.a), v.step)
 
 proc `[]`*[A](m: CudaMatrix[A], rows, cols: Slice[int]): CudaMatrix[A] =
   checkBounds(rows.a >= 0 and rows.b < m.M)
@@ -140,6 +164,19 @@ proc `[]`*[A](m: CudaMatrix[A], rows: Slice[int], cols: typedesc[All]): CudaMatr
 
 proc `[]`*[A](m: CudaMatrix[A], rows: typedesc[All], cols: Slice[int]): CudaMatrix[A] =
   m[0 ..< m.M.int, cols]
+
+proc `[]=`*[A: SomeReal](m: var CudaMatrix[A], rows, cols: Slice[int], val: CudaMatrix[A]) {. inline .} =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
+  checkDim(rows.len == val.M)
+  checkDim(cols.len == val.N)
+  let
+    mp = cast[CPointer[A]](m.fp)
+    vp = cast[CPointer[A]](val.fp)
+  var col = 0
+  for c in cols:
+    check copy(defaultHandle, val.M, addr vp[col * val.ld], 1, addr mp[c * m.ld + rows.a], 1)
+    col += 1
 
 proc column*[A](m: CudaMatrix[A], j: int): CudaVector[A] {. inline .} =
   checkBounds(j >= 0 and j < m.N)
@@ -225,21 +262,6 @@ proc asVector*[A](m: CudaMatrix[A]): CudaVector[A] =
     )
   else:
     m.clone().asVector()
-
-# CUBLAS overloads
-
-var defaultHandle: cublasHandle_t
-check cublasCreate_v2(addr defaultHandle)
-
-overload(scal, cublasSscal, cublasDscal)
-overload(axpy, cublasSaxpy, cublasDaxpy)
-overload(asum, cublasSasum, cublasDasum)
-overload(nrm2, cublasSnrm2, cublasDnrm2)
-overload(dot, cublasSdot, cublasDdot)
-overload(copy, cublasScopy, cublasDcopy)
-overload(gemv, cublasSgemv, cublasDgemv)
-overload(gemm, cublasSgemm, cublasDgemm)
-overload(geam, cublasSgeam, cublasDgeam)
 
 # BLAS level 1 operations
 
