@@ -249,33 +249,6 @@ proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
   else:
     return elRowMajor(mp, m, i, j)
 
-type All* = object
-
-proc `[]`*[A](m: Matrix[A], rows, cols: Slice[int]): Matrix[A] =
-  checkBounds(rows.a >= 0 and rows.b < m.M)
-  checkBounds(cols.a >= 0 and cols.b < m.N)
-  let
-    mp = cast[CPointer[A]](m.fp)
-    fp =
-      if m.order == colMajor:
-        addr(elColMajor(mp, m, rows.a, cols.a))
-      else:
-        addr(elRowMajor(mp, m, rows.a, cols.a))
-  result = Matrix[A](
-    order: m.order,
-    M: (rows.b - rows.a + 1),
-    N: (cols.b - cols.a + 1),
-    ld: m.ld,
-    data: m.data,
-    fp: fp
-  )
-
-proc `[]`*[A](m: Matrix[A], rows: Slice[int], cols: typedesc[All]): Matrix[A] =
-  m[rows, 0 ..< m.N]
-
-proc `[]`*[A](m: Matrix[A], rows: typedesc[All], cols: Slice[int]): Matrix[A] =
-  m[0 ..< m.M, cols]
-
 proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
   checkBounds(i >= 0 and i < m.M)
   checkBounds(j >= 0 and j < m.N)
@@ -531,6 +504,83 @@ proc `[]=`*[A](v: var Vector[A], s: Slice[int], val: Vector[A]) {. inline .} =
     for i in s:
       v[i] = val[count]
       count += 1
+
+type All* = object
+
+proc `[]`*[A](m: Matrix[A], rows, cols: Slice[int]): Matrix[A] =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
+  let
+    mp = cast[CPointer[A]](m.fp)
+    fp =
+      if m.order == colMajor:
+        addr(elColMajor(mp, m, rows.a, cols.a))
+      else:
+        addr(elRowMajor(mp, m, rows.a, cols.a))
+  result = Matrix[A](
+    order: m.order,
+    M: (rows.b - rows.a + 1),
+    N: (cols.b - cols.a + 1),
+    ld: m.ld,
+    data: m.data,
+    fp: fp
+  )
+
+proc `[]`*[A](m: Matrix[A], rows: Slice[int], cols: typedesc[All]): Matrix[A] =
+  m[rows, 0 ..< m.N]
+
+proc `[]`*[A](m: Matrix[A], rows: typedesc[All], cols: Slice[int]): Matrix[A] =
+  m[0 ..< m.M, cols]
+
+proc `[]=`*[A](m: var Matrix[A], rows, cols: Slice[int], val: Matrix[A]) {. inline .} =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
+  checkDim(rows.b - rows.a + 1 == val.M)
+  checkDim(cols.b - cols.a + 1 == val.N)
+  when false:
+    discard # TODO: when A is SomeReal use BLAS copy operations instead
+  else:
+    let
+      mp = cast[CPointer[A]](m.fp)
+      vp = cast[CPointer[A]](val.fp)
+    var row = 0
+    var col = 0
+    if m.order == colMajor:
+      if val.order == colMajor:
+        for r in rows:
+          col = 0
+          for c in cols:
+            elColMajor(mp, m, r, c) = elColMajor(vp, val, row, col)
+            col += 1
+          row += 1
+      else:
+        for r in rows:
+          col = 0
+          for c in cols:
+            elColMajor(mp, m, r, c) = elRowMajor(vp, val, row, col)
+            col += 1
+          row += 1
+    else:
+      if val.order == colMajor:
+        for r in rows:
+          col = 0
+          for c in cols:
+            elRowMajor(mp, m, r, c) = elColMajor(vp, val, row, col)
+            col += 1
+          row += 1
+      else:
+        for r in rows:
+          col = 0
+          for c in cols:
+            elRowMajor(mp, m, r, c) = elRowMajor(vp, val, row, col)
+            col += 1
+          row += 1
+
+proc `[]=`*[A](m: var Matrix[A], rows: Slice[int], cols: typedesc[All], val: Matrix[A]) {. inline .} =
+  m[rows, 0 ..< m.N] = val
+
+proc `[]=`*[A](m: var Matrix[A], rows: typedesc[All], cols: Slice[int], val: Matrix[A]) {. inline .} =
+  m[0 ..< m.M, cols] = val
 
 # BLAS level 1 operations
 
