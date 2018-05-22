@@ -22,7 +22,7 @@ macro overload*(s: untyped, p: typed): auto =
   var j = 0
   for c in args.children:
     if j > 0:
-      if $(c[0].symbol) == "result":
+      if $(c[0]) == "result":
         c[0] = genSym(nskParam, "res")
     inc j
   var
