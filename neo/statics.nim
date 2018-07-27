@@ -84,10 +84,21 @@ proc ones*(N: static[int], A: typedesc[float32]): auto = constantVector(N, 1'f32
 
 proc ones*(N: static[int], A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
+proc constantMatrix*[A](M, N: static[int], x: A): auto =
+  dense.constantMatrix(M, N, x).asStatic(M, N)
+
 proc makeMatrix*[A](M, N: static[int], f: proc (i, j: int): A): auto =
   dense.makeMatrix(M, N, f).asStatic(M, N)
 
+proc zeros*(M, N: static[int]): auto = constantMatrix(M, N, 0'f64)
+
+proc zeros*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N, 0'f32)
+
+proc zeros*(M, N: static[int], A: typedesc[float64]): auto = constantMatrix(M, N, 0'f64)
+
 # Accessors
+
+proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
 
 proc `[]`*[N: static[int]; A](v: StaticVector[N, A], i: int): A {. inline .} =
   dyn(v, A)[i]
@@ -95,7 +106,16 @@ proc `[]`*[N: static[int]; A](v: StaticVector[N, A], i: int): A {. inline .} =
 proc `[]=`*[N: static[int]; A](v: StaticVector[N, A], i: int, val: A) {. inline .} =
   dyn(v, A)[i] = val
 
-proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
+proc `[]`*[M, N: static[int]; A](m: StaticMatrix[M, N, A], i, j: int): A {. inline .} =
+  dyn(m, A)[i, j]
+
+proc `[]=`*[M, N: static[int]; A](v: StaticMatrix[M, N, A], i, j: int, val: A) {. inline .} =
+  dyn(m, A)[i, j] = val
+
+proc dim*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): tuple[M, N: int] {. inline .} =
+  (M: M, N: N)
+
+# Operations
 
 proc `*`*[M, N, K: static[int]; A: SomeFloat](
   m: StaticMatrix[M, K, A],
