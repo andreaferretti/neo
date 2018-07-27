@@ -158,6 +158,16 @@ iterator pairs*[N: static[int]; A](v: StaticVector[N, A]): auto {. inline .} =
   for i in 0 ..< N:
     yield (i, v[i])
 
+iterator items*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for i in 0 ..< M:
+    for j in 0 ..< N:
+      yield m[i, j]
+
+iterator pairs*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for i in 0 ..< M:
+    for j in 0 ..< N:
+      yield ((i, j), m[i, j])
+
 # Conversion
 
 proc clone*[N: static[int]; A](v: StaticVector[N, A]): StaticVector[N, A] =
