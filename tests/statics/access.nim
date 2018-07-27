@@ -73,14 +73,14 @@ suite "matrix accessors":
       c = m.column(1)
     check c[0] == -2.0
     check c[1] == 1.0
-  # test "cloning matrices":
-  #   var m = randomMatrix(5, 5)
-  #   let
-  #     n = m.clone
-  #     f = n[2, 2]
-  #   check m == n
-  #   m[2, 2] = m[2, 2] + 1
-  #   check n[2, 2] == f
+  test "cloning matrices":
+    var m = randomMatrix(5, 5)
+    let
+      n = m.clone
+      f = n[2, 2]
+    check m == n
+    m[2, 2] = m[2, 2] + 1
+    check n[2, 2] == f
 #   test "mapping matrices":
 #     let
 #       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
