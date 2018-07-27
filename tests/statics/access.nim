@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, neo/statics
+import unittest, neo, neo/statics
 
 
 suite "vector accessors":
@@ -40,10 +40,10 @@ suite "vector accessors":
     check v == w
     v[0] = v[0] + 1
     check w[0] == f
-  # test "mapping vectors":
-  #   var v = vector([1.0, 2.0, 3.0, 4.0, 5.0])
-  #   check v.map(proc(x: float64): float64 = 2 * x) ==
-  #     vector([2.0, 4.0, 6.0, 8.0, 10.0])
+  test "mapping vectors":
+    var v = vector([1.0, 2.0, 3.0, 4.0, 5.0])
+    check v.map(proc(x: float64): float64 = 2 * x) ==
+      vector([2.0, 4.0, 6.0, 8.0, 10.0])
 
 suite "matrix accessors":
   test "reading matrix dimensions":

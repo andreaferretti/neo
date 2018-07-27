@@ -133,9 +133,6 @@ proc `[]`*[N: static[int]; A](v: StaticVector[N, A], i: int): A {. inline .} =
 proc `[]=`*[N: static[int]; A](v: var StaticVector[N, A], i: int, val: A) {. inline .} =
   dyn(v, A)[i] = val
 
-proc clone*[N: static[int]; A](v: StaticVector[N, A]): StaticVector[N, A] =
-  dyn(v, A).clone().asStatic(N)
-
 proc dim*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): tuple[rows, columns: int] {. inline .} =
   (rows: M, columns: N)
 
@@ -150,6 +147,24 @@ proc column*[M, N: static[int]; A](m: StaticMatrix[M, N, A], j: int): StaticVect
 
 proc row*[M, N: static[int]; A](m: StaticMatrix[M, N, A], i: int): StaticVector[N, A] {. inline .} =
   dyn(m, A).row(i).asStatic(N)
+
+# Iterators
+
+iterator items*[N: static[int]; A](v: StaticVector[N, A]): auto {. inline .} =
+  for i in 0 ..< N:
+    yield v[i]
+
+iterator pairs*[N: static[int]; A](v: StaticVector[N, A]): auto {. inline .} =
+  for i in 0 ..< N:
+    yield (i, v[i])
+
+# Conversion
+
+proc clone*[N: static[int]; A](v: StaticVector[N, A]): StaticVector[N, A] =
+  dyn(v, A).clone().asStatic(N)
+
+proc map*[N: static[int]; A, B](v: StaticVector[N, A], f: proc(x: A): B): auto =
+  dyn(v, A).map(f).asStatic(N)
 
 proc clone*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
   dyn(m, A).clone().asStatic(M, N)
