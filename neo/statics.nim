@@ -85,7 +85,7 @@ proc `[]=`*[N: static[int]; A](v: StaticVector[N, A], i: int, val: A) {. inline 
 
 proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
 
-proc `*`*[M, N, K: static[int]; A: SomeReal](
+proc `*`*[M, N, K: static[int]; A: SomeFloat](
   m: StaticMatrix[M, K, A],
   n: StaticMatrix[K, N, A]
 ): StaticMatrix[M, N, A] = (dyn(m, A) * dyn(n, A)).asStatic(M, N)
