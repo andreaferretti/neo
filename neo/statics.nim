@@ -169,6 +169,9 @@ proc map*[N: static[int]; A, B](v: StaticVector[N, A], f: proc(x: A): B): auto =
 proc clone*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
   dyn(m, A).clone().asStatic(M, N)
 
+proc map*[M, N: static[int]; A, B](m: StaticMatrix[M, N, A], f: proc(x: A): B): auto =
+  dyn(m, A).map(f).asStatic(M, N)
+
 # Operations
 
 proc `*`*[M, N, K: static[int]; A: SomeFloat](

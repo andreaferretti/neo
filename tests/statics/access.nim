@@ -81,9 +81,9 @@ suite "matrix accessors":
     check m == n
     m[2, 2] = m[2, 2] + 1
     check n[2, 2] == f
-#   test "mapping matrices":
-#     let
-#       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-#       n = makeMatrix(2, 2, proc(i, j: int): float64 = (6 * i - 4 * j).float64)
-#     proc double(x: float64): float64 = 2 * x
-#     check m.map(double) == n
+  test "mapping matrices":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      n = makeMatrix(2, 2, proc(i, j: int): float64 = (6 * i - 4 * j).float64)
+    proc double(x: float64): float64 = 2 * x
+    check m.map(double) == n
