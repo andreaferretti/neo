@@ -133,14 +133,20 @@ proc `[]`*[N: static[int]; A](v: StaticVector[N, A], i: int): A {. inline .} =
 proc `[]=`*[N: static[int]; A](v: var StaticVector[N, A], i: int, val: A) {. inline .} =
   dyn(v, A)[i] = val
 
+proc dim*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): tuple[rows, columns: int] {. inline .} =
+  (rows: M, columns: N)
+
 proc `[]`*[M, N: static[int]; A](m: StaticMatrix[M, N, A], i, j: int): A {. inline .} =
   dyn(m, A)[i, j]
 
 proc `[]=`*[M, N: static[int]; A](m: var StaticMatrix[M, N, A], i, j: int, val: A) {. inline .} =
   dyn(m, A)[i, j] = val
 
-proc dim*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): tuple[M, N: int] {. inline .} =
-  (M: M, N: N)
+proc column*[M, N: static[int]; A](m: StaticMatrix[M, N, A], j: int): StaticVector[M, A] {. inline .} =
+  dyn(m, A).column(j).asStatic(M)
+
+proc row*[M, N: static[int]; A](m: StaticMatrix[M, N, A], i: int): StaticVector[N, A] {. inline .} =
+  dyn(m, A).row(i).asStatic(N)
 
 # Operations
 

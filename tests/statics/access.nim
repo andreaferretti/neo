@@ -61,18 +61,18 @@ suite "matrix accessors":
     m[1, 1] = 1.0
     check m[0, 2] == -2.1
     check m[1, 1] == 1.0
-#   test "reading matrix rows":
-#     let
-#       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-#       r = m.row(1)
-#     check r[0] == 3.0
-#     check r[1] == 1.0
-#   test "reading matrix columns":
-#     let
-#       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-#       c = m.column(1)
-#     check c[0] == -2.0
-#     check c[1] == 1.0
+  test "reading matrix rows":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      r = m.row(1)
+    check r[0] == 3.0
+    check r[1] == 1.0
+  test "reading matrix columns":
+    let
+      m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
+      c = m.column(1)
+    check c[0] == -2.0
+    check c[1] == 1.0
 #   # test "reading matrix rows without copy":
 #   #   let
 #   #     m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
