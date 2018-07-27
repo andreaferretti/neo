@@ -93,6 +93,9 @@ proc makeMatrix*[A](M, N: static[int], f: proc (i, j: int): A): auto =
 template makeMatrixIJ*(A: typedesc; M, N: static[int], f: untyped): auto =
   dense.makeMatrixIJ(A, M, N, f).asStatic(M, N)
 
+proc matrix*[M, N: static[int], A](xs: DoubleArray[M, N, A]): auto =
+  makeMatrixIJ(A, M, N, xs[i][j])
+
 proc zeros*(M, N: static[int]): auto = constantMatrix(M, N, 0'f64)
 
 proc zeros*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N, 0'f32)
