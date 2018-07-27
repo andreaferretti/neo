@@ -168,6 +168,22 @@ iterator pairs*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): auto {. inline 
     for j in 0 ..< N:
       yield ((i, j), m[i, j])
 
+iterator columns*[M, N: static[int], A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for c in dyn(m, A).columns:
+    yield c.asStatic(M)
+
+iterator rows*[M, N: static[int], A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for r in dyn(m, A).rows:
+    yield r.asStatic(N)
+
+iterator columnsSlow*[M, N: static[int], A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for c in dyn(m, A).columnsSlow:
+    yield c.asStatic(M)
+
+iterator rowsSlow*[M, N: static[int], A](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  for r in dyn(m, A).rowsSlow:
+    yield r.asStatic(N)
+
 # Conversion
 
 proc clone*[N: static[int]; A](v: StaticVector[N, A]): StaticVector[N, A] =
