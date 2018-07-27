@@ -12,8 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, neo/dense
+import unittest, neo/dense, sequtils
 
+
+suite "slicing vectors":
+  test "getting a slice of a vector":
+    let
+      v = vector(toSeq(1 .. 5))
+      w = v[2 .. 3]
+
+    check w == vector(3, 4)
+
+  test "assigning to a slice":
+    var v = vector(toSeq(1 .. 5))
+    let w = vector(6, 7)
+
+    v[2 .. 3] = w
+    check v == vector(1, 2, 6, 7, 5)
+
+  test "assigning to a slice with BLAS operations":
+    var v = vector(toSeq(1 .. 5).mapIt(it.float64))
+    let
+      w = vector(6'f64, 7'f64)
+      expected = vector(1'f64, 2'f64, 6'f64, 7'f64, 5'f64)
+
+    v[2 .. 3] = w
+    check v == expected
+
+  test "assigning a slice to another slice":
+    var v = vector(toSeq(1 .. 5))
+    let w = vector(toSeq(6 .. 10))
+
+    v[2 .. 3] = w[3 .. 4]
+    check v == vector(1, 2, 9, 10, 5)
 
 suite "slicing column major matrices":
   test "slice of a full matrix":
@@ -75,6 +106,52 @@ suite "slicing column major matrices":
       ])
 
     check s2 == expected
+
+  test "assigning to a slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ])
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9
+    check m[3, 2] == 12
+
+  test "assigning a slice to another slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = makeMatrixIJ(int, 5, 5, 2 * i + 2 * j)
+    m[1 .. 3, 1 .. 3] = n[2 .. 4, 2 .. 4]
+    check m[2, 2] == 12
+    check m[3, 2] == 14
+
+  test "assigning to a slice on columns only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = makeMatrixIJ(int, 5, 3, 2 * i + 2 * j)
+
+    m[All, 2 .. 4] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
+  test "assigning to a slice on rows only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j)
+    let n = makeMatrixIJ(int, 3, 5, 2 * i + 2 * j)
+
+    m[2 .. 4, All] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
+  test "assigning to a slice with BLAS operations":
+    var m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64)
+    let n = matrix(@[
+        @[5'f64, 6, 7],
+        @[8'f64, 9, 10],
+        @[11'f64, 12, 13]
+      ])
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9'f64
+    check m[3, 2] == 12'f64
+
   test "slice of a matrix should share storage":
     var
       m = makeMatrixIJ(int, 5, 5, 3 * i + j)
@@ -234,6 +311,7 @@ suite "slicing row major matrices":
       ])
 
     check s2 == expected
+
   test "slice a sliced matrix on rows only":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
@@ -246,6 +324,52 @@ suite "slicing row major matrices":
       ])
 
     check s2 == expected
+
+  test "assigning to a slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = matrix(@[
+        @[5, 6, 7],
+        @[8, 9, 10],
+        @[11, 12, 13]
+      ], rowMajor)
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9
+    check m[3, 2] == 12
+
+  test "assigning a slice to another slice":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = makeMatrixIJ(int, 5, 5, 2 * i + 2 * j, rowMajor)
+    m[1 .. 3, 1 .. 3] = n[2 .. 4, 2 .. 4]
+    check m[2, 2] == 12
+    check m[3, 2] == 14
+
+  test "assigning to a slice on columns only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = makeMatrixIJ(int, 5, 3, 2 * i + 2 * j, rowMajor)
+
+    m[All, 2 .. 4] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
+  test "assigning to a slice on rows only":
+    var m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)
+    let n = makeMatrixIJ(int, 3, 5, 2 * i + 2 * j, rowMajor)
+
+    m[2 .. 4, All] = n
+    check m[2, 2] == 4
+    check m[3, 2] == 6
+
+  test "assigning to a slice with BLAS operations":
+    var m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64, rowMajor)
+    let n = matrix(@[
+        @[5'f64, 6, 7],
+        @[8'f64, 9, 10],
+        @[11'f64, 12, 13]
+      ], rowMajor)
+    m[1 .. 3, 1 .. 3] = n
+    check m[2, 2] == 9'f64
+    check m[3, 2] == 12'f64
+
   test "slice of a matrix should share storage":
     var
       m = makeMatrixIJ(int, 5, 5, 3 * i + j, rowMajor)

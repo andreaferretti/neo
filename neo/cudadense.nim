@@ -107,6 +107,21 @@ proc clone*[A](m: CudaMatrix[A]): CudaMatrix[A] =
   init(result, m.M, m.N)
   check cublasSetMatrix(m.M, m.N, sizeof(A).int32, m.fp, m.ld, result.fp, result.ld)
 
+# CUBLAS overloads
+
+var defaultHandle: cublasHandle_t
+check cublasCreate_v2(addr defaultHandle)
+
+overload(scal, cublasSscal, cublasDscal)
+overload(axpy, cublasSaxpy, cublasDaxpy)
+overload(asum, cublasSasum, cublasDasum)
+overload(nrm2, cublasSnrm2, cublasDnrm2)
+overload(dot, cublasSdot, cublasDdot)
+overload(copy, cublasScopy, cublasDcopy)
+overload(gemv, cublasSgemv, cublasDgemv)
+overload(gemm, cublasSgemm, cublasDgemm)
+overload(geam, cublasSgeam, cublasDgeam)
+
   # Slicing
 
 proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
@@ -120,6 +135,15 @@ proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
     data: v.data,
     fp: fp
   )
+
+proc pointerAt[A](v: CudaVector[A], i: int): ptr A {. inline .} =
+  let s = cast[CPointer[A]](v.fp)
+  addr s[i]
+
+proc `[]=`*[A: SomeFloat](v: var CudaVector[A], s: Slice[int], val: CudaVector[A]) {. inline .} =
+  checkBounds(s.a >= 0 and s.b < v.len)
+  checkDim(s.len == val.len)
+  check copy(defaultHandle, val.len, val.fp, val.step, v.pointerAt(s.a), v.step)
 
 proc `[]`*[A](m: CudaMatrix[A], rows, cols: Slice[int]): CudaMatrix[A] =
   checkBounds(rows.a >= 0 and rows.b < m.M)
@@ -140,6 +164,19 @@ proc `[]`*[A](m: CudaMatrix[A], rows: Slice[int], cols: typedesc[All]): CudaMatr
 
 proc `[]`*[A](m: CudaMatrix[A], rows: typedesc[All], cols: Slice[int]): CudaMatrix[A] =
   m[0 ..< m.M.int, cols]
+
+proc `[]=`*[A: SomeFloat](m: var CudaMatrix[A], rows, cols: Slice[int], val: CudaMatrix[A]) {. inline .} =
+  checkBounds(rows.a >= 0 and rows.b < m.M)
+  checkBounds(cols.a >= 0 and cols.b < m.N)
+  checkDim(rows.len == val.M)
+  checkDim(cols.len == val.N)
+  let
+    mp = cast[CPointer[A]](m.fp)
+    vp = cast[CPointer[A]](val.fp)
+  var col = 0
+  for c in cols:
+    check copy(defaultHandle, val.M, addr vp[col * val.ld], 1, addr mp[c * m.ld + rows.a], 1)
+    col += 1
 
 proc column*[A](m: CudaMatrix[A], j: int): CudaVector[A] {. inline .} =
   checkBounds(j >= 0 and j < m.N)
@@ -226,65 +263,50 @@ proc asVector*[A](m: CudaMatrix[A]): CudaVector[A] =
   else:
     m.clone().asVector()
 
-# CUBLAS overloads
-
-var defaultHandle: cublasHandle_t
-check cublasCreate_v2(addr defaultHandle)
-
-overload(scal, cublasSscal, cublasDscal)
-overload(axpy, cublasSaxpy, cublasDaxpy)
-overload(asum, cublasSasum, cublasDasum)
-overload(nrm2, cublasSnrm2, cublasDnrm2)
-overload(dot, cublasSdot, cublasDdot)
-overload(copy, cublasScopy, cublasDcopy)
-overload(gemv, cublasSgemv, cublasDgemv)
-overload(gemm, cublasSgemm, cublasDgemm)
-overload(geam, cublasSgeam, cublasDgeam)
-
 # BLAS level 1 operations
 
-proc `*=`*[A: SomeReal](v: var CudaVector[A], k: A) {. inline .} =
+proc `*=`*[A: SomeFloat](v: var CudaVector[A], k: A) {. inline .} =
   var k1 = k
   check scal(defaultHandle, v.len, addr(k1), v.fp, v.step)
 
-proc `*`*[A: SomeReal](v: CudaVector[A], k: A): CudaVector[A]  {. inline .} =
+proc `*`*[A: SomeFloat](v: CudaVector[A], k: A): CudaVector[A]  {. inline .} =
   init(result, v.len)
   check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
   result *= k
 
-proc `+=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
+proc `+=`*[A: SomeFloat](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
   var alpha: A = 1
   check axpy(defaultHandle, v.len, addr(alpha), w.fp, w.step, v.fp, v.step)
 
-proc `+`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
+proc `+`*[A: SomeFloat](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
   check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
   result += w
 
-proc `-=`*[A: SomeReal](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
+proc `-=`*[A: SomeFloat](v: var CudaVector[A], w: CudaVector[A]) {. inline .} =
   checkDim(v.len == w.len)
   var alpha: A = -1
   check axpy(defaultHandle, v.len, addr(alpha), w.fp, w.step, v.fp, v.step)
 
-proc `-`*[A: SomeReal](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
+proc `-`*[A: SomeFloat](v, w: CudaVector[A]): CudaVector[A] {. inline .} =
   checkDim(v.len == w.len)
   init(result, v.len)
   check copy(defaultHandle, v.len, v.fp, v.step, result.fp, result.step)
   result -= w
 
-proc `*`*[A: SomeReal](v, w: CudaVector[A]): A {. inline .} =
+proc `*`*[A: SomeFloat](v, w: CudaVector[A]): A {. inline .} =
   checkDim(v.len == w.len)
   check dot(defaultHandle, v.len, v.fp, v.step, w.fp, w.step, addr(result))
 
-proc l_2*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
+proc l_2*[A: SomeFloat](v: CudaVector[A]): A {. inline .} =
   check nrm2(defaultHandle, v.len, v.fp, v.step, addr(result))
 
-proc l_1*[A: SomeReal](v: CudaVector[A]): A {. inline .} =
+proc l_1*[A: SomeFloat](v: CudaVector[A]): A {. inline .} =
   check asum(defaultHandle, v.len, v.fp, v.step, addr(result))
 
-proc `*=`*[A: SomeReal](m: var CudaMatrix[A], k: A) {. inline .} =
+proc `*=`*[A: SomeFloat](m: var CudaMatrix[A], k: A) {. inline .} =
   var k1 = k
   if m.isContiguous:
     check scal(defaultHandle, m.M * m.N, addr(k1), m.fp, 1)
@@ -292,7 +314,7 @@ proc `*=`*[A: SomeReal](m: var CudaMatrix[A], k: A) {. inline .} =
     for c in m.columns:
       check scal(defaultHandle, c.len, addr(k1), c.fp, c.step)
 
-proc `*`*[A: SomeReal](m: CudaMatrix[A], k: A): CudaMatrix[A]  {. inline .} =
+proc `*`*[A: SomeFloat](m: CudaMatrix[A], k: A): CudaMatrix[A]  {. inline .} =
   if m.isContiguous:
     init(result, m.M, m.N)
     check copy(defaultHandle, m.M * m.N, m.fp, 1, result.fp, 1)
@@ -300,29 +322,29 @@ proc `*`*[A: SomeReal](m: CudaMatrix[A], k: A): CudaMatrix[A]  {. inline .} =
     result = m.clone()
   result *= k
 
-template `*`*[A: SomeReal](k: A, v: CudaVector[A] or CudaMatrix[A]): auto =
+template `*`*[A: SomeFloat](k: A, v: CudaVector[A] or CudaMatrix[A]): auto =
   v * k
 
-template `/`*[A: SomeReal](v: CudaVector[A] or CudaMatrix[A], k: A): auto =
+template `/`*[A: SomeFloat](v: CudaVector[A] or CudaMatrix[A], k: A): auto =
   v * (1 / k)
 
-template `/=`*[A: SomeReal](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
+template `/=`*[A: SomeFloat](v: var CudaVector[A] or var CudaMatrix[A], k: A) =
   v *= (1 / k)
 
-proc `+=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
+proc `+=`*[A: SomeFloat](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   var alpha: A = 1
   check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
     a.fp, a.ld, addr(alpha), b.fp, b.ld, a.fp, a.ld)
 
-proc `+`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
+proc `+`*[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   var alpha: A = 1
   check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
     a.fp, a.ld, addr(alpha), b.fp, b.ld, result.fp, result.ld)
 
-proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
+proc `-=`*[A: SomeFloat](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   var
     alpha: A = 1
@@ -330,7 +352,7 @@ proc `-=`*[A: SomeReal](a: var CudaMatrix[A], b: CudaMatrix[A]) {. inline .} =
   check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
     a.fp, a.ld, addr(beta), b.fp, b.ld, a.fp, a.ld)
 
-proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
+proc `-`*[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   checkDim(a.M == b.M and a.N == a.N)
   init(result, a.M, a.N)
   var
@@ -339,13 +361,13 @@ proc `-`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]  {. inline .} =
   check geam(defaultHandle, CUBLAS_OP_N, CUBLAS_OP_N, a.M, a.N, addr(alpha),
     a.fp, a.ld, addr(beta), b.fp, b.ld, result.fp, result.ld)
 
-proc l_2*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
+proc l_2*[A: SomeFloat](m: CudaMatrix[A]): A {. inline .} =
   if m.isContiguous:
     check nrm2(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
   else:
     result = l_2(m.clone())
 
-proc l_1*[A: SomeReal](m: CudaMatrix[A]): A {. inline .} =
+proc l_1*[A: SomeFloat](m: CudaMatrix[A]): A {. inline .} =
   if m.isContiguous:
     check asum(defaultHandle, m.M * m.N, m.fp, 1, addr(result))
   else:
@@ -361,7 +383,7 @@ proc T*[A](m: CudaMatrix[A]): CudaMatrix[A] =
 
 # BLAS level 2 operations
 
-proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
+proc `*`*[A: SomeFloat](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. inline .} =
   checkDim(a.N == v.len)
   init(result, a.M)
   var
@@ -372,7 +394,7 @@ proc `*`*[A: SomeReal](a: CudaMatrix[A], v: CudaVector[A]): CudaVector[A]  {. in
 
 # BLAS level 3 operations
 
-proc `*`*[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
+proc `*`*[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
   checkDim(a.N == b.M)
   init(result, a.M, b.N)
   var
@@ -391,8 +413,8 @@ template compareApprox(a, b: CudaVector or CudaMatrix): bool =
     dNorm = l_1(a - b)
   (dNorm / (aNorm + bNorm)) < epsilon
 
-proc `=~`*[A: SomeReal](v, w: CudaVector[A]): bool = compareApprox(v, w)
+proc `=~`*[A: SomeFloat](v, w: CudaVector[A]): bool = compareApprox(v, w)
 
-proc `=~`*[A: SomeReal](v, w: CudaMatrix[A]): bool = compareApprox(v, w)
+proc `=~`*[A: SomeFloat](v, w: CudaMatrix[A]): bool = compareApprox(v, w)
 
 template `!=~`*(a, b: CudaVector or CudaMatrix): bool = not (a =~ b)

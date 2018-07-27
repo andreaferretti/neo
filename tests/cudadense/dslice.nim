@@ -15,7 +15,29 @@
 import unittest, neo/dense, neo/cudadense
 
 
-suite "slicing column major matrices":
+suite "slicing CUDA vectors":
+  test "getting a slice of a vector":
+    let
+      v = vector(@[1'f64, 2, 3, 4, 5]).gpu()
+      w = v[2 .. 3]
+
+    check w.cpu() == vector(3'f64, 4'f64)
+
+  test "assigning to a slice":
+    var v = vector(@[1'f64, 2, 3, 4, 5]).gpu()
+    let w = vector(6'f64, 7'f64).gpu()
+
+    v[2 .. 3] = w
+    check v.cpu() == vector(@[1'f64, 2, 6, 7, 5])
+
+  test "assigning a slice to another slice":
+    var v = vector(@[1'f64, 2, 3, 4, 5]).gpu()
+    let w = vector(@[6'f64, 7, 8, 9, 10]).gpu()
+
+    v[2 .. 3] = w[3 .. 4]
+    check v.cpu() == vector(@[1'f64, 2, 9, 10, 5])
+
+suite "slicing CUDA matrices":
   test "slice of a full matrix":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j).gpu()
@@ -75,6 +97,17 @@ suite "slicing column major matrices":
       ]).gpu()
 
     check s2 == expected
+  test "assigning to a slice":
+    var m = makeMatrixIJ(float64, 5, 5, (3 * i + j).float64).gpu()
+    let n = matrix(@[
+        @[5'f64, 6, 7],
+        @[8'f64, 9, 10],
+        @[11'f64, 12, 13]
+      ]).gpu()
+    m[1 .. 3, 1 .. 3] = n
+    let m1 = m.cpu()
+    check m1[2, 2] == 9'f64
+    check m1[3, 2] == 12'f64
   test "rows of a slice of a matrix":
     let
       m = makeMatrixIJ(int, 5, 5, 3 * i + j).gpu()
