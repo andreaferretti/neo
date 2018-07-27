@@ -51,14 +51,26 @@ proc `$`*[N: static[int]; A](v: StaticVector[N, A]): string =
 proc `$`*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): string =
   $(Matrix[A](m))
 
+type Array[N: static[int]; A] = array[N, A]
+type DoubleArray[M, N: static[int], A] = array[M, array[N, A]]
+
 proc makeVector*[A](N: static[int], f: proc (i: int): A): auto =
   dense.makeVector(N, f).asStatic(N)
 
 template makeVectorI*[A](N: static[int], f: untyped): auto =
   dense.makeVectorI[A](N, f).asStatic(N)
 
+proc vector*[N: static[int]; A](v: Array[N, A]): auto =
+  dense.vector(v).asStatic(N)
+
 proc constantVector*[A](N: static[int], x: A): auto =
   dense.constantVector(N, x).asStatic(N)
+
+proc randomVector*(N: static[int], max: float64 = 1): auto =
+  dense.randomVector(N, max).asStatic(N)
+
+proc randomVector*(N: static[int], max: float32): auto =
+  dense.randomVector(N, max).asStatic(N)
 
 proc zeros*(N: static[int]): auto = constantVector(N, 0'f64)
 
