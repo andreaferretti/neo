@@ -32,14 +32,14 @@ suite "vector accessors":
     v[1] = 1.0
     check v[0] == -2.1
     check v[1] == 1.0
-  # test "cloning vectors":
-  #   var v = randomVector(5)
-  #   let
-  #     w = v.clone
-  #     f = w[0]
-  #   check v == w
-  #   v[0] = v[0] + 1
-  #   check w[0] == f
+  test "cloning vectors":
+    var v = randomVector(5)
+    let
+      w = v.clone
+      f = w[0]
+    check v == w
+    v[0] = v[0] + 1
+    check w[0] == f
   # test "mapping vectors":
   #   var v = vector([1.0, 2.0, 3.0, 4.0, 5.0])
   #   check v.map(proc(x: float64): float64 = 2 * x) ==
@@ -73,26 +73,14 @@ suite "matrix accessors":
       c = m.column(1)
     check c[0] == -2.0
     check c[1] == 1.0
-#   # test "reading matrix rows without copy":
-#   #   let
-#   #     m = makeMatrix(4, 3, proc(i, j: int): float64 = (3 * i - 2 * j).float64, rowMajor)
-#   #     r = m.row(1)
-#   #     ru = m.rowUnsafe(1)
-#   #   check r == ru
-#   # test "reading matrix columns without copy":
-#   #   let
-#   #     m = makeMatrix(3, 5, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
-#   #     c = m.column(1)
-#   #     cu = m.columnUnsafe(1)
-#   #   check c == cu
-#   test "cloning matrices":
-#     var m = randomMatrix(5, 5)
-#     let
-#       n = m.clone
-#       f = n[2, 2]
-#     check m == n
-#     m[2, 2] = m[2, 2] + 1
-#     check n[2, 2] == f
+  # test "cloning matrices":
+  #   var m = randomMatrix(5, 5)
+  #   let
+  #     n = m.clone
+  #     f = n[2, 2]
+  #   check m == n
+  #   m[2, 2] = m[2, 2] + 1
+  #   check n[2, 2] == f
 #   test "mapping matrices":
 #     let
 #       m = makeMatrix(2, 2, proc(i, j: int): float64 = (3 * i - 2 * j).float64)
