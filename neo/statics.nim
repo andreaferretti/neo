@@ -117,6 +117,12 @@ proc eye*(N: static[int], A: typedesc[float32]): auto =
 proc eye*(N: static[int], A: typedesc[float64]): auto =
   dense.eye(N, A).asStatic(N, N)
 
+proc randomMatrix*(M, N: static[int], max: float64 = 1): auto =
+  dense.randomMatrix(M, N, max).asStatic(M, N)
+
+proc randomMatrix*(M, N: static[int], max: float32): auto =
+  dense.randomMatrix(M, N, max).asStatic(M, N)
+
 # Accessors
 
 proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
@@ -142,6 +148,3 @@ proc `*`*[M, N, K: static[int]; A: SomeFloat](
   m: StaticMatrix[M, K, A],
   n: StaticMatrix[K, N, A]
 ): StaticMatrix[M, N, A] = (dyn(m, A) * dyn(n, A)).asStatic(M, N)
-
-proc randomStaticMatrix*(M, N: static[int]): auto =
-  randomMatrix(M, N).asStatic(M, N)

@@ -122,10 +122,10 @@ suite "initializaton of matrices":
     for i in 0 .. 2:
       for j in 0 .. 2:
         check m[i, j] == a[i][j]
-  # test "matrices generated randomly":
-  #   let m = randomMatrix(3, 4)
-  #   check dim(m) == (3, 4)
-  #   for i in 0 .. 2:
-  #     for j in 0 .. 3:
-  #       check m[i, j] >= 0
-  #       check m[i, j] <= 1
+  test "matrices generated randomly":
+    let m = randomMatrix(3, 4)
+    check dim(m) == (3, 4)
+    for i in 0 .. 2:
+      for j in 0 .. 3:
+        check m[i, j] >= 0
+        check m[i, j] <= 1
