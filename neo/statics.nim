@@ -96,6 +96,21 @@ proc zeros*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N
 
 proc zeros*(M, N: static[int], A: typedesc[float64]): auto = constantMatrix(M, N, 0'f64)
 
+proc ones*(M, N: static[int]): auto = constantMatrix(M, N, 1'f64)
+
+proc ones*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N, 1'f32)
+
+proc ones*(M, N: static[int], A: typedesc[float64]): auto = constantMatrix(M, N, 1'f64)
+
+proc eye*(N: static[int]): auto =
+  dense.eye(N).asStatic(N, N)
+
+proc eye*(N: static[int], A: typedesc[float32]): auto =
+  dense.eye(N, A).asStatic(N, N)
+
+proc eye*(N: static[int], A: typedesc[float64]): auto =
+  dense.eye(N, A).asStatic(N, N)
+
 # Accessors
 
 proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
