@@ -14,6 +14,6 @@
 
 {.push warning[ProveInit]: off .}
 
-import statics/initialize
+import statics/initialize, statics/access
 
 {. pop .}

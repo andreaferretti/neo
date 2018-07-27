@@ -130,13 +130,13 @@ proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
 proc `[]`*[N: static[int]; A](v: StaticVector[N, A], i: int): A {. inline .} =
   dyn(v, A)[i]
 
-proc `[]=`*[N: static[int]; A](v: StaticVector[N, A], i: int, val: A) {. inline .} =
+proc `[]=`*[N: static[int]; A](v: var StaticVector[N, A], i: int, val: A) {. inline .} =
   dyn(v, A)[i] = val
 
 proc `[]`*[M, N: static[int]; A](m: StaticMatrix[M, N, A], i, j: int): A {. inline .} =
   dyn(m, A)[i, j]
 
-proc `[]=`*[M, N: static[int]; A](v: StaticMatrix[M, N, A], i, j: int, val: A) {. inline .} =
+proc `[]=`*[M, N: static[int]; A](m: var StaticMatrix[M, N, A], i, j: int, val: A) {. inline .} =
   dyn(m, A)[i, j] = val
 
 proc dim*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): tuple[M, N: int] {. inline .} =
