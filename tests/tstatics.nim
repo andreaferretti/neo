@@ -14,6 +14,7 @@
 
 {.push warning[ProveInit]: off .}
 
-import statics/initialize, statics/access, statics/iterators
+import statics/initialize, statics/access, statics/iterators,
+  statics/collection
 
 {. pop .}

@@ -198,6 +198,48 @@ proc clone*[M, N: static[int]; A](m: StaticMatrix[M, N, A]): StaticMatrix[M, N, 
 proc map*[M, N: static[int]; A, B](m: StaticMatrix[M, N, A], f: proc(x: A): B): auto =
   dyn(m, A).map(f).asStatic(M, N)
 
+# Trivial operations
+
+proc reshape*[M, N: static[int], T](m: StaticMatrix[M, N, T], A, B: static[int]): StaticMatrix[A, B, T] =
+  static: doAssert(M * N == A * B, "The dimensions do not match: M = " & $(M) & ", N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  dyn(m, T).reshape(A, B).asStatic(A, B)
+
+proc asMatrix*[N: static[int], T](v: StaticVector[N, T], A, B: static[int], order: OrderType = colMajor): StaticMatrix[A, B, T] =
+  static: doAssert(N == A * B, "The dimensions do not match: N = " & $(N) & ", A = " & $(A) & ", B = " & $(B))
+  dyn(v, T).asMatrix(A, B, order).asStatic(A, B)
+
+proc asVector*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticVector[M * N, A] =
+  dyn(m, A).asVector().asStatic(M * N)
+
+# Collection
+
+proc cumsum*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): StaticVector[N, A] =
+  dyn(v, A).cumsum().asStatic(N)
+
+proc sum*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): A =
+  dyn(v, A).sum()
+
+proc mean*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): A =
+  dyn(v, A).mean()
+
+proc variance*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): A =
+  dyn(v, A).variance()
+
+proc stddev*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): A =
+  dyn(v, A).stddev()
+
+proc sum*[M, N: static[int]; A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  dyn(m, A).sum()
+
+proc mean*[M, N: static[int]; A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  dyn(m, A).mean()
+
+proc variance*[M, N: static[int]; A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  dyn(m, A).variance()
+
+proc stddev*[M, N: static[int]; A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  dyn(m, A).stddev()
+
 # Operations
 
 proc `*`*[M, N, K: static[int]; A: SomeFloat](
