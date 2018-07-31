@@ -45,6 +45,15 @@ proc `==`*[N: static[int]; A](v, w: StaticVector[N, A]): bool {.inline.} =
 proc `==`*[M, N: static[int]; A](m, n: StaticMatrix[M, N, A]): bool {.inline.} =
   dyn(m, A) == dyn(n, A)
 
+proc `=~`*[N: static[int]; A](v, w: StaticVector[N, A]): bool {.inline.} =
+  dyn(v, A) =~ dyn(w, A)
+
+proc `=~`*[M, N: static[int]; A](m, n: StaticMatrix[M, N, A]): bool {.inline.} =
+  dyn(m, A) =~ dyn(n, A)
+
+template `!=~`*(a, b: StaticVector or StaticMatrix): bool =
+  not(a =~ b)
+
 proc `$`*[N: static[int]; A](v: StaticVector[N, A]): string =
   $(Vector[A](v))
 
