@@ -84,29 +84,35 @@ proc ones*(N: static[int], A: typedesc[float32]): auto = constantVector(N, 1'f32
 
 proc ones*(N: static[int], A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
-proc constantMatrix*[A](M, N: static[int], x: A): auto =
-  dense.constantMatrix(M, N, x).asStatic(M, N)
+proc constantMatrix*[A](M, N: static[int], x: A, order = colMajor): auto =
+  dense.constantMatrix(M, N, x, order).asStatic(M, N)
 
-proc makeMatrix*[A](M, N: static[int], f: proc (i, j: int): A): auto =
-  dense.makeMatrix(M, N, f).asStatic(M, N)
+proc makeMatrix*[A](M, N: static[int], f: proc (i, j: int): A, order = colMajor): auto =
+  dense.makeMatrix(M, N, f, order).asStatic(M, N)
 
-template makeMatrixIJ*(A: typedesc; M, N: static[int], f: untyped): auto =
-  dense.makeMatrixIJ(A, M, N, f).asStatic(M, N)
+template makeMatrixIJ*(A: typedesc; M, N: static[int], f: untyped, order = colMajor): auto =
+  dense.makeMatrixIJ(A, M, N, f, order).asStatic(M, N)
 
-proc matrix*[M, N: static[int], A](xs: DoubleArray[M, N, A]): auto =
-  makeMatrixIJ(A, M, N, xs[i][j])
+proc matrix*[M, N: static[int], A](xs: DoubleArray[M, N, A], order = colMajor): auto =
+  makeMatrixIJ(A, M, N, xs[i][j], order)
 
-proc zeros*(M, N: static[int]): auto = constantMatrix(M, N, 0'f64)
+proc zeros*(M, N: static[int], order = colMajor): auto =
+  constantMatrix(M, N, 0'f64, order)
 
-proc zeros*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N, 0'f32)
+proc zeros*(M, N: static[int], A: typedesc[float32], order = colMajor): auto =
+  constantMatrix(M, N, 0'f32, order)
 
-proc zeros*(M, N: static[int], A: typedesc[float64]): auto = constantMatrix(M, N, 0'f64)
+proc zeros*(M, N: static[int], A: typedesc[float64], order = colMajor): auto =
+  constantMatrix(M, N, 0'f64, order)
 
-proc ones*(M, N: static[int]): auto = constantMatrix(M, N, 1'f64)
+proc ones*(M, N: static[int], order = colMajor): auto =
+  constantMatrix(M, N, 1'f64, order)
 
-proc ones*(M, N: static[int], A: typedesc[float32]): auto = constantMatrix(M, N, 1'f32)
+proc ones*(M, N: static[int], A: typedesc[float32], order = colMajor): auto =
+  constantMatrix(M, N, 1'f32, order)
 
-proc ones*(M, N: static[int], A: typedesc[float64]): auto = constantMatrix(M, N, 1'f64)
+proc ones*(M, N: static[int], A: typedesc[float64], order = colMajor): auto =
+  constantMatrix(M, N, 1'f64, order)
 
 proc eye*(N: static[int]): auto =
   dense.eye(N).asStatic(N, N)
@@ -210,6 +216,12 @@ proc asMatrix*[N: static[int], T](v: StaticVector[N, T], A, B: static[int], orde
 
 proc asVector*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticVector[M * N, A] =
   dyn(m, A).asVector().asStatic(M * N)
+
+proc t*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
+  dyn(m, A).t().asStatic(N, M)
+
+proc T*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
+  dyn(m, A).T().asStatic(N, M)
 
 # Collection
 
