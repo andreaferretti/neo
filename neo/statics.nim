@@ -237,6 +237,24 @@ proc T*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
 
 # Slice accessors
 
+# TODO: remove this workaround as soon as
+# https://github.com/nim-lang/Nim/issues/8524 is fixed
+
+proc slice[N: static[int], A](v: StaticVector[N, A], a, b: static[int]): auto =
+  dyn(v, A)[a .. b].asStatic(b - a + 1)
+
+proc sliceAssign[M, N: static[int], A](v: var StaticVector[N, A], a, b: static[int], val: StaticVector[M, A]) =
+  static: doAssert(b - a + 1 == M, "The dimensions do not match: M = " & $(M) & ", len(s) = " & $(b - a + 1))
+  dyn(v, A)[a .. b] = dyn(val, A)
+
+template `[]`*[N: static[int], A](v: StaticVector[N, A], s: untyped): auto =
+  const s2: Slice[int] = s
+  slice(v, s2.a, s2.b)
+
+template `[]=`*[M, N: static[int], A](v: var StaticVector[N, A], s: untyped, val: StaticVector[M, A]): auto =
+  const s2: Slice[int] = s
+  sliceAssign(v, s2.a, s2.b, val)
+
 # proc `[]`*[N: static[int], A](v: StaticVector[N, A], s: static[Slice[int]]): StaticVector[len(s), A] {. inline .} =
 #   (dyn(v, A)[s]).asStatic(len(s))
 
