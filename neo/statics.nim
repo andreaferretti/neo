@@ -330,60 +330,17 @@ proc `-=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: Sta
 proc `-`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
   (dyn(a, A) - dyn(b, A)).asStatic(M, N)
 
-# proc l_2*[M, N: static[int], A: SomeFloat](m: Matrix32[M, N] or StaticMatrix[M, N, A]): auto {. inline .} =
-#   nrm2(M * N, m.fp, 1)
+proc l_2*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  l_2(dyn(m, A))
 
-# proc l_2*(m: DMatrix32 or DMatrix64): auto {. inline .} = nrm2(m.len, m.fp, 1)
+proc l_1*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): auto {. inline .} =
+  l_1(dyn(m, A))
 
-# proc l_1*[M, N: static[int], A: SomeFloat](m: Matrix32[M, N] or StaticMatrix[M, N, A]): auto {. inline .} =
-#   asum(M * N, m.fp, 1)
+proc max*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  max(dyn(m, A))
 
-# proc l_1*(m: DMatrix32 or DMatrix64): auto {. inline .} = asum(m.len, m.fp, 1)
-
-# template max*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = max(m.data)
-
-# template min*(m: Matrix32 or Matrix64 or DMatrix32 or DMatrix64): auto = min(m.data)
-
-# template matrixMult(M, N, K, a, b, result: untyped): auto =
-#   new result.data
-#   if a.order == colMajor and b.order == colMajor:
-#     result.order = colMajor
-#     gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
-#   elif a.order == rowMajor and b.order == rowMajor:
-#     result.order = rowMajor
-#     gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     result.order = colMajor
-#     gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
-#   else:
-#     result.order = colMajor
-#     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
-
-# template matrixMultD(a, b, result: untyped): auto =
-#   new result
-#   let
-#     M = a.M
-#     K = a.N
-#     N = b.N
-#   assert b.M == K
-#   when a is DMatrix32:
-#     result.data = newSeq[float32](M * N)
-#   when a is DMatrix64:
-#     result.data = newSeq[float64](M * N)
-#   result.M = M
-#   result.N = N
-#   if a.order == colMajor and b.order == colMajor:
-#     result.order = colMajor
-#     gemm(colMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, M, b.fp, K, 0, result.fp, M)
-#   elif a.order == rowMajor and b.order == rowMajor:
-#     result.order = rowMajor
-#     gemm(rowMajor, noTranspose, noTranspose, M, N, K, 1, a.fp, K, b.fp, N, 0, result.fp, N)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     result.order = colMajor
-#     gemm(colMajor, noTranspose, transpose, M, N, K, 1, a.fp, M, b.fp, N, 0, result.fp, M)
-#   else:
-#     result.order = colMajor
-#     gemm(colMajor, transpose, noTranspose, M, N, K, 1, a.fp, K, b.fp, K, 0, result.fp, M)
+proc min*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): A =
+  min(dyn(m, A))
 
 # proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
 #   matrixMult(M, N, K, a, b, result)
