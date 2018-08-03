@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{.push warning[ProveInit]: off .}
+import unittest, neo, neo/statics
 
-import statics/initialize, statics/access, statics/iterators,
-  statics/collection, statics/trivial_ops, statics/compilation,
-  statics/equality, statics/ops, statics/row_major_ops, statics/mixed_ops,
-  statics/solvers, statics/eigenvalues, statics/det, statics/ufunc
 
-{. pop .}
+suite "universal functions":
+  test "universal sqrt on vectors":
+    let u = vector([1.0, 4.0, 9.0, 16.0])
+    check sqrt(u) == vector([1.0, 2.0, 3.0, 4.0])
+  test "universal sine on matrices":
+    let m = matrix([[1.0, 2.0], [4.0, 8.0]])
+    check sin(m) == matrix([[sin(1.0), sin(2.0)], [sin(4.0), sin(8.0)]])

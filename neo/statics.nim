@@ -369,6 +369,42 @@ proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVecto
 proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
   (dyn(a, A) |*| dyn(b, A)).asStatic(M, N)
 
+# Universal functions
+
+template makeUniversalS(fname: untyped) =
+  proc fname*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): StaticVector[N, A] =
+    fname(dyn(v, A)).asStatic(N)
+
+  proc fname*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
+    fname(dyn(m, A)).asStatic(M, N)
+
+  export fname
+
+makeUniversalS(sqrt)
+makeUniversalS(cbrt)
+makeUniversalS(log10)
+makeUniversalS(log2)
+makeUniversalS(log)
+makeUniversalS(exp)
+makeUniversalS(arccos)
+makeUniversalS(arcsin)
+makeUniversalS(arctan)
+makeUniversalS(cos)
+makeUniversalS(cosh)
+makeUniversalS(sin)
+makeUniversalS(sinh)
+makeUniversalS(tan)
+makeUniversalS(tanh)
+makeUniversalS(erf)
+makeUniversalS(erfc)
+makeUniversalS(lgamma)
+makeUniversalS(tgamma)
+makeUniversalS(trunc)
+makeUniversalS(floor)
+makeUniversalS(ceil)
+makeUniversalS(degToRad)
+makeUniversalS(radToDeg)
+
 # Solvers
 
 proc solve*[M, N: static[int], A: SomeFloat](a: StaticMatrix[M, M, A], b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] {.inline.} =
