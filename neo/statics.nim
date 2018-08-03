@@ -283,13 +283,6 @@ proc `-=`*[N: static[int], A: SomeFloat](v: var StaticVector[N, A], w: StaticVec
 proc `-`*[N: static[int], A: SomeFloat](v, w: StaticVector[N, A]): StaticVector[N, A]  {. inline .} =
   (dyn(v, A) - dyn(w, A)).asStatic(N)
 
-template `*`*[A: SomeFloat](k: A, v: StaticVector or StaticMatrix): auto = v * k
-
-template `/`*[A: SomeFloat](v: StaticVector or StaticMatrix, k: A): auto = v * (1 / k)
-
-template `/=`*[A: SomeFloat](v: var StaticVector or var StaticMatrix, k: A) =
-  v *= (1 / k)
-
 proc `*`*[N: static[int], A: SomeFloat](v, w: StaticVector[N, A]): float64 {. inline .} =
   dyn(v, A) * dyn(w, A)
 
@@ -309,112 +302,33 @@ proc minIndex*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): tuple[i: in
 
 template min*(v: StaticVector): auto = minIndex(v).val
 
-# proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
-#   new result
-#   let lda = if a.order == colMajor: M.int else: N.int
-#   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+proc `*`*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A], v: StaticVector[N, A]): StaticVector[M, A]  {. inline .} =
+  (dyn(m, A) * dyn(v, A)).asStatic(M)
 
-# proc `*`*(a: DMatrix32, v: DVector32): DVector32  {. inline .} =
-#   assert(a.N == v.len)
-#   result = newSeq[float32](a.M)
-#   let lda = if a.order == colMajor: a.M.int else: a.N.int
-#   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+proc `*=`*[M, N: static[int], A: SomeFloat](m: var StaticMatrix[M, N, A], k: float64) {. inline .} =
+  dyn(m, A) *= k
 
-# proc `*`*[M, N: static[int]](a: Matrix64[M, N], v: StaticVector[N, A]): Vector64[M]  {. inline .} =
-#   new result
-#   let lda = if a.order == colMajor: M.int else: N.int
-#   gemv(a.order, noTranspose, M, N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+proc `*`*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A], k: float64): StaticMatrix[M, N, A]  {. inline .} =
+  (dyn(m, A) * k).asStatic(M, N)
 
-# proc `*`*(a: DMatrix64, v: DVector64): DVector64  {. inline .} =
-#   assert(a.N == v.len)
-#   result = newSeq[float64](a.M)
-#   let lda = if a.order == colMajor: a.M.int else: a.N.int
-#   gemv(a.order, noTranspose, a.M, a.N, 1, a.fp, lda, v.fp, 1, 0, result.fp, 1)
+template `*`*[A: SomeFloat](k: A, v: StaticVector or StaticMatrix): auto = v * k
 
-# proc `*=`*[M, N: static[int]](m: var Matrix32[M, N], k: float32) {. inline .} = scal(M * N, k, m.fp, 1)
+template `/`*[A: SomeFloat](v: StaticVector or StaticMatrix, k: A): auto = v * (1 / k)
 
-# proc `*`*[M, N: static[int]](m: Matrix32[M, N], k: float32): Matrix32[M, N]  {. inline .} =
-#   new result.data
-#   result.order = m.order
-#   copy(M * N, m.fp, 1, result.fp, 1)
-#   scal(M * N, k, result.fp, 1)
+template `/=`*[A: SomeFloat](v: var StaticVector or var StaticMatrix, k: A) =
+  v *= (1 / k)
 
-# proc `*=`*(m: var DMatrix32, k: float32) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
-
-# proc `*`*(m: DMatrix32, k: float32): DMatrix32  {. inline .} =
-#   result.initLike(m)
-#   copy(m.len, m.fp, 1, result.fp, 1)
-#   scal(m.len, k, result.fp, 1)
-
-# proc `*=`*[M, N: static[int]](m: var Matrix64[M, N], k: float64) {. inline .} = scal(M * N, k, m.fp, 1)
-
-# proc `*`*[M, N: static[int]](m: Matrix64[M, N], k: float64): Matrix64[M, N]  {. inline .} =
-#   new result.data
-#   result.order = m.order
-#   copy(M * N, m.fp, 1, result.fp, 1)
-#   scal(M * N, k, result.fp, 1)
-
-# proc `*=`*(m: var DMatrix64, k: float64) {. inline .} = scal(m.M * m.N, k, m.fp, 1)
-
-# proc `*`*(m: DMatrix64, k: float64): DMatrix64  {. inline .} =
-#   result.initLike(m)
-#   copy(m.len, m.fp, 1, result.fp, 1)
-#   scal(m.len, k, result.fp, 1)
-
-# template `*`*(k: float32, v: Vector32 or Matrix32 or DVector32 or DMatrix32): untyped = v * k
-
-# template `/`*(v: Vector32 or Matrix32 or DVector32 or DMatrix32, k: float32): untyped = v * (1 / k)
-
-# template `/=`*(v: var Vector32 or var Matrix32 or var DVector32 or var DMatrix32, k: float32): untyped = v *= (1 / k)
-
-# template `*`*(k: float64, v: Vector64 or Matrix64 or DVector64 or DMatrix64): untyped = v * k
-
-# template `/`*(v: Vector64 or Matrix64 or DVector64 or DMatrix64, k: float64): untyped = v * (1 / k)
-
-# template `/=`*(v: var Vector64 or var Matrix64 or var DVector64 or var DMatrix64, k: float64): untyped = v *= (1 / k)
-
-# template matrixAdd(M, N, a, b: untyped, A: typedesc) =
-#   if a.order == b.order:
-#     axpy(M * N, 1, b.fp, 1, a.fp, 1)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     let
-#       a_data = cast[ref array[N, array[M, A]]](a.data)
-#       b_data = cast[ref array[M, array[N, A]]](b.data)
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         a_data[j][i] += b_data[i][j]
-#   else:
-#     let
-#       a_data = cast[ref array[M, array[N, A]]](a.data)
-#       b_data = cast[ref array[N, array[M, A]]](b.data)
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         a_data[i][j] += b_data[j][i]
-
-# template matrixDAdd(a, b: untyped) =
-#   assert a.M == b.M and a.N == a.N
-#   if a.order == b.order:
-#     axpy(a.M * a.N, 1, b.fp, 1, a.fp, 1)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     for i in 0 .. < a.M:
-#       for j in 0 .. < a.N:
-#         a.data[j * a.M + i] += b.data[i * b.N + j]
-#   else:
-#     for i in 0 .. < a.M:
-#       for j in 0 .. < a.N:
-#         a.data[i * a.N + j] += b.data[j * b.M + i]
-
-# proc `+=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
+# proc `+=`*[M, N: static[int], A: SomeFloat](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
 #   matrixAdd(M, N, a, b, float32)
 
 # proc `+=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDAdd(a, b)
 
-# proc `+=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+# proc `+=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
 #   matrixAdd(M, N, a, b, float64)
 
 # proc `+=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDAdd(a, b)
 
-# proc `+`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} =
+# proc `+`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} =
 #   new result.data
 #   result.order = a.order
 #   copy(M * N, a.fp, 1, result.fp, 1)
@@ -425,7 +339,7 @@ template min*(v: StaticVector): auto = minIndex(v).val
 #   copy(a.len, a.fp, 1, result.fp, 1)
 #   result += b
 
-# proc `+`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
+# proc `+`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
 #   new result.data
 #   result.order = a.order
 #   copy(M * N, a.fp, 1, result.fp, 1)
@@ -467,12 +381,12 @@ template min*(v: StaticVector): auto = minIndex(v).val
 #       for j in 0 .. < a.N:
 #         a.data[i * a.N + j] -= b.data[j * b.M + i]
 
-# proc `-=`*[M, N: static[int]](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
+# proc `-=`*[M, N: static[int], A: SomeFloat](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
 #   matrixSub(M, N, a, b, float32)
 
 # proc `-=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDSub(a, b)
 
-# proc `-`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
+# proc `-`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
 #   new result.data
 #   result.order = a.order
 #   copy(M * N, a.fp, 1, result.fp, 1)
@@ -483,12 +397,12 @@ template min*(v: StaticVector): auto = minIndex(v).val
 #   copy(a.len, a.fp, 1, result.fp, 1)
 #   result -= b
 
-# proc `-=`*[M, N: static[int]](a: var Matrix64[M, N], b: Matrix64[M, N]) {. inline .} =
+# proc `-=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
 #   matrixSub(M, N, a, b, float64)
 
 # proc `-=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDSub(a, b)
 
-# proc `-`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N]  {. inline .} =
+# proc `-`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
 #   new result.data
 #   result.order = a.order
 #   copy(M * N, a.fp, 1, result.fp, 1)
@@ -499,12 +413,12 @@ template min*(v: StaticVector): auto = minIndex(v).val
 #   copy(a.len, a.fp, 1, result.fp, 1)
 #   result -= b
 
-# proc l_2*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
+# proc l_2*[M, N: static[int], A: SomeFloat](m: Matrix32[M, N] or StaticMatrix[M, N, A]): auto {. inline .} =
 #   nrm2(M * N, m.fp, 1)
 
 # proc l_2*(m: DMatrix32 or DMatrix64): auto {. inline .} = nrm2(m.len, m.fp, 1)
 
-# proc l_1*[M, N: static[int]](m: Matrix32[M, N] or Matrix64[M, N]): auto {. inline .} =
+# proc l_1*[M, N: static[int], A: SomeFloat](m: Matrix32[M, N] or StaticMatrix[M, N, A]): auto {. inline .} =
 #   asum(M * N, m.fp, 1)
 
 # proc l_1*(m: DMatrix32 or DMatrix64): auto {. inline .} = asum(m.len, m.fp, 1)
@@ -559,7 +473,7 @@ template min*(v: StaticVector): auto = minIndex(v).val
 
 # proc `*`*(a: DMatrix32, b: DMatrix32): DMatrix32 {. inline .} = matrixMultD(a, b, result)
 
-# proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): Matrix64[M, N] {. inline .} =
+# proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): StaticMatrix[M, N, A] {. inline .} =
 #   matrixMult(M, N, K, a, b, result)
 
 # proc `*`*(a: DMatrix64, b: DMatrix64): DMatrix64 {. inline .} = matrixMultD(a, b, result)
@@ -580,9 +494,9 @@ template min*(v: StaticVector): auto = minIndex(v).val
 
 # template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
 
-# proc `=~`*[M, N: static[int]](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
+# proc `=~`*[M, N: static[int], A: SomeFloat](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
 
-# proc `=~`*[M, N: static[int]](m, n: Matrix64[M, N]): bool = compareApprox(m, n)
+# proc `=~`*[M, N: static[int], A: SomeFloat](m, n: StaticMatrix[M, N, A]): bool = compareApprox(m, n)
 
 # template `=~`*(v, w: DMatrix32): bool = compareApprox(v, w)
 
@@ -596,7 +510,7 @@ template min*(v: StaticVector): auto = minIndex(v).val
 proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVector[N, A] =
   (dyn(a, A) |*| dyn(b, A)).asStatic(N)
 
-# proc `|*|`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] =
+# proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N] =
 #   # hadamardM(M, N, a, b, float32)
 #   result = zeros(M, N, float32)
 #   if a.order == b.order:
@@ -608,7 +522,7 @@ proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVecto
 #       for j in 0 .. < N:
 #         result[i, j] = a[i, j] * b[i, j]
 
-# proc `|*|`*[M, N: static[int]](a, b: Matrix64[M, N]): Matrix64[M, N] =
+# proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
 #   # hadamardM(M, N, a, b, float64)
 #   result = zeros(M, N)
 #   if a.order == b.order:
