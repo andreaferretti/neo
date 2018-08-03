@@ -40,6 +40,7 @@ Table of contents
 - [Working on the GPU](#working-on-the-gpu)
   - [Dense linear algebra](#dense-linear-algebra-1)
   - [Sparse linear algebra](#sparse-linear-algebra-1)
+- [Static typing for dimensions](#static-typing-for-dimensions)
 - [Design](#design)
   - [On the CPU](#on-the-cpu)
   - [Why fields are public](#why-fields-are-public)
@@ -518,6 +519,62 @@ For more information, look at the tests in `tests/cudadense`.
 ### Sparse linear algebra
 
 To be documented.
+
+## Static typing for dimensions
+
+Under `neo/statics` there exist types that encode vectors and matrices whose
+dimensions are known at compile time. They are defined as aliases of their
+dynamic counterparts:
+
+```nim
+type
+  StaticVector*[N: static[int]; A] = distinct Vector[A]
+  StaticMatrix*[M, N: static[int]; A] = distinct Matrix[A]
+```
+
+In this way, these types are fully interoperable with the dynamic ones.
+One can freely convert between the two representations:
+
+```nim
+import neo, neo/statics
+
+let
+  u = randomVector(5) # static, of known dimension 5
+  v = u.asDynamic
+  w = v.asStatic(5)
+
+assert(u == w)
+```
+
+All operations implemented by neo are also avaiable for static vectors and
+matrices. The difference are that:
+
+* operations on static vectors and matrices will not compile if the dimensions
+  do not match
+* operations on static vectors and matrices will return other static vectors and
+  matrices, thereby automatically tracking dimensions.
+
+An example of an operation that will not compile is
+
+```nim
+import neo, neo/statics
+
+let
+  m = statics.randomMatrix(5, 7) # static, of known dimension 5x7
+  n = statics.randomMatrix(4, 6) # static, of known dimension 4x6
+  p = statics.randomMatrix(7, 3) # static, of known dimension 7x3
+
+discard m * n # this will not compile
+let x = m * p # this will infer dimension 5x3
+```
+
+By converting back and forth between static and dynamic vectors and matrices -
+which can be done at no cost - one can incorporate data whose dimension is only
+known at runtime, while at the same time having guaranteed dimension
+compatibility whenever enough information is known at compile time.
+
+For now, statics are only available on the CPU. It would be a nice contribution
+to extend this to GPU types.
 
 ## Design
 
