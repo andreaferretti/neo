@@ -342,85 +342,17 @@ proc max*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): A =
 proc min*[M, N: static[int], A: SomeFloat](m: StaticMatrix[M, N, A]): A =
   min(dyn(m, A))
 
-# proc `*`*[M, N, K: static[int]](a: Matrix32[M, K], b: Matrix32[K, N]): Matrix32[M, N] {. inline .} =
-#   matrixMult(M, N, K, a, b, result)
-
-# proc `*`*(a: DMatrix32, b: DMatrix32): DMatrix32 {. inline .} = matrixMultD(a, b, result)
-
-# proc `*`*[M, N, K: static[int]](a: Matrix64[M, K], b: Matrix64[K, N]): StaticMatrix[M, N, A] {. inline .} =
-#   matrixMult(M, N, K, a, b, result)
-
-# proc `*`*(a: DMatrix64, b: DMatrix64): DMatrix64 {. inline .} = matrixMultD(a, b, result)
-
-# proc compareApprox(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
-#   const epsilon = 0.000001
-#   let
-#     aNorm = l_1(a)
-#     bNorm = l_1(b)
-#     dNorm = l_1(a - b)
-#   return (dNorm / (aNorm + bNorm)) < epsilon
-
-# template `=~`*[N: static[int], A: SomeFloat](v, w: Vector32[N]): bool = compareApprox(v, w)
-
-# template `=~`*[N: static[int], A: SomeFloat](v, w: StaticVector[N, A]): bool = compareApprox(v, w)
-
-# template `=~`*(v, w: DVector32): bool = compareApprox(v, w)
-
-# template `=~`*(v, w: DVector64): bool = compareApprox(v, w)
-
-# proc `=~`*[M, N: static[int], A: SomeFloat](m, n: Matrix32[M, N]): bool = compareApprox(m, n)
-
-# proc `=~`*[M, N: static[int], A: SomeFloat](m, n: StaticMatrix[M, N, A]): bool = compareApprox(m, n)
-
-# template `=~`*(v, w: DMatrix32): bool = compareApprox(v, w)
-
-# template `=~`*(v, w: DMatrix64): bool = compareApprox(v, w)
-
-# template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
-#   not (a =~ b)
-
-# Hadamard (component-wise) product
-
-proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVector[N, A] =
-  (dyn(a, A) |*| dyn(b, A)).asStatic(N)
-
-# proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N] =
-#   # hadamardM(M, N, a, b, float32)
-#   result = zeros(M, N, float32)
-#   if a.order == b.order:
-#     result.order = a.order
-#     for i in 0 .. < (M * N):
-#       result.data[i] = a.data[i] * b.data[i]
-#   else:
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         result[i, j] = a[i, j] * b[i, j]
-
-# proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
-#   # hadamardM(M, N, a, b, float64)
-#   result = zeros(M, N)
-#   if a.order == b.order:
-#     result.order = a.order
-#     for i in 0 .. < (M * N):
-#       result.data[i] = a.data[i] * b.data[i]
-#   else:
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         result[i, j] = a[i, j] * b[i, j]
-
-# proc `|*|`*(a, b: DMatrix32): DMatrix32 =
-#   assert a.dim == b.dim
-#   let (m, n) = a.dim
-#   return hadamardM(m, n, a, b, float32)
-
-# proc `|*|`*(a, b: DMatrix64): DMatrix64 =
-#   assert a.dim == b.dim
-#   let (m, n) = a.dim
-#   return hadamardM(m, n, a, b, float64)
-
 # BLAS level 3 operations
 
 proc `*`*[M, N, K: static[int]; A: SomeFloat](
   m: StaticMatrix[M, K, A],
   n: StaticMatrix[K, N, A]
 ): StaticMatrix[M, N, A] = (dyn(m, A) * dyn(n, A)).asStatic(M, N)
+
+# Hadamard (component-wise) product
+
+proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVector[N, A] =
+  (dyn(a, A) |*| dyn(b, A)).asStatic(N)
+
+proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
+  (dyn(a, A) |*| dyn(b, A)).asStatic(M, N)
