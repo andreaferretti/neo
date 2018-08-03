@@ -138,6 +138,9 @@ proc randomMatrix*(M, N: static[int], max: float64 = 1): auto =
 proc randomMatrix*(M, N: static[int], max: float32): auto =
   dense.randomMatrix(M, N, max).asStatic(M, N)
 
+proc diag*[N: static[int]; A](v: Array[N, A]): auto =
+  dense.diag(v).asStatic(N, N)
+
 # Accessors
 
 proc len*[N: static[int]; A](v: StaticVector[N, A]): int {. inline .} = N
@@ -234,19 +237,12 @@ proc T*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
 
 # Slice accessors
 
-proc `[]`*[N: static[int], A](v: StaticVector[N, A], s: static[Slice[int]]): StaticVector[2, A] {. inline .} =
-  (dyn(v, A)[s]).asStatic(2)
+# proc `[]`*[N: static[int], A](v: StaticVector[N, A], s: static[Slice[int]]): StaticVector[len(s), A] {. inline .} =
+#   (dyn(v, A)[s]).asStatic(len(s))
 
-# proc `[]=`*[A](v: var Vector[A], s: Slice[int], val: Vector[A]) {. inline .} =
-#   checkBounds(s.a >= 0 and s.b < v.len)
-#   checkDim(s.b - s.a + 1 == val.len)
-#   when A is SomeFloat:
-#     copy(val.len, val.fp, val.step, v.pointerAt(s.a), v.step)
-#   else:
-#     var count = 0
-#     for i in s:
-#       v[i] = val[count]
-#       count += 1
+# proc `[]=`*[M, N: static[int], A](v: StaticVector[N, A], s: static[Slice[int]], val: StaticVector[M, A]) {. inline .} =
+#   static: doAssert(len(s) == M, "The dimensions do not match: M = " & $(M) & ", len(s) = " & $(len(s)))
+#   dyn(v, A)[s] = dyn(val, A)
 
 # Collection
 
@@ -387,3 +383,40 @@ template `\`*(a: StaticMatrix, b: StaticVector): auto = solve(a, b)
 
 proc inv*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): StaticMatrix[N, N, A] {.inline.} =
   inv(dyn(a, A)).asStatic(N, N)
+
+# Eigenvalues
+
+type
+  StaticBalanceResult*[N: static[int], A] = object
+    matrix*: StaticMatrix[N, N, A]
+    ihi*, ilo*: cint
+    scale*: seq[A]
+  StaticSchurResult*[N: static[int], A] = object
+    factorization*: StaticMatrix[N, N, A]
+    eigenvalues*: EigenValues[A]
+
+proc asStatic[A](b: BalanceResult[A], N: static[int]): auto {.inline.} =
+  StaticBalanceResult[N, A](matrix: b.matrix.asStatic(N, N), ihi: b.ihi, ilo: b.ilo, scale: b.scale)
+
+proc asStatic[A](s: SchurResult[A], N: static[int]): auto {.inline.} =
+  StaticSchurResult[N, A](factorization: s.factorization.asStatic(N, N), eigenvalues: s.eigenvalues)
+
+proc balance*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A], op = BalanceOp.Both): StaticBalanceResult[N, A] =
+  balance(dyn(a, A), op).asStatic(N)
+
+proc hessenberg*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): StaticMatrix[N, N, A] =
+  hessenberg(dyn(a, A)).asStatic(N, N)
+
+proc eigenvalues*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): EigenValues[A] =
+  eigenvalues(dyn(a, A))
+
+proc schur*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): StaticSchurResult[N, A] =
+  schur(dyn(a, A)).asStatic(N)
+
+# Trace and determinant
+
+proc tr*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): A =
+  tr(dyn(m, A))
+
+proc det*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): A =
+  det(dyn(m, A))

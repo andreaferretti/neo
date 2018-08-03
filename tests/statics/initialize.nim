@@ -129,3 +129,8 @@ suite "initializaton of matrices":
       for j in 0 .. 3:
         check m[i, j] >= 0
         check m[i, j] <= 1
+  test "diagonal matrices":
+    let
+      a = diag([0.0, 1.0, 2.0])
+      b = makeMatrixIJ(float64, 3, 3, if i == j: i.float64 else: 0.0)
+    check a == b
