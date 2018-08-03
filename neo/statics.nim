@@ -262,6 +262,20 @@ template `[]=`*[M, N: static[int], A](v: var StaticVector[N, A], s: untyped, val
 #   static: doAssert(len(s) == M, "The dimensions do not match: M = " & $(M) & ", len(s) = " & $(len(s)))
 #   dyn(v, A)[s] = dyn(val, A)
 
+proc slice[M, N: static[int], A](m: StaticMatrix[M, N, A], a, b, c, d: static[int]): auto =
+  dyn(m, A)[a .. b, c .. d].asStatic(b - a + 1, d - c + 1)
+
+template `[]`*[M, N: static[int], A](m: StaticMatrix[M, N, A], rows, cols: untyped): auto =
+  when rows is typedesc[All]:
+    const rows2: Slice[int] = 0 ..< M
+  else:
+    const rows2: Slice[int] = rows
+  when cols is typedesc[All]:
+    const cols2: Slice[int] = 0 ..< N
+  else:
+    const cols2: Slice[int] = cols
+  slice(m, rows2.a, rows2.b, cols2.a, cols2.b)
+
 # Collection
 
 proc cumsum*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): StaticVector[N, A] =
