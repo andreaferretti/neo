@@ -232,6 +232,22 @@ proc t*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
 proc T*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
   dyn(m, A).T().asStatic(N, M)
 
+# Slice accessors
+
+proc `[]`*[N: static[int], A](v: StaticVector[N, A], s: static[Slice[int]]): StaticVector[2, A] {. inline .} =
+  (dyn(v, A)[s]).asStatic(2)
+
+# proc `[]=`*[A](v: var Vector[A], s: Slice[int], val: Vector[A]) {. inline .} =
+#   checkBounds(s.a >= 0 and s.b < v.len)
+#   checkDim(s.b - s.a + 1 == val.len)
+#   when A is SomeFloat:
+#     copy(val.len, val.fp, val.step, v.pointerAt(s.a), v.step)
+#   else:
+#     var count = 0
+#     for i in s:
+#       v[i] = val[count]
+#       count += 1
+
 # Collection
 
 proc cumsum*[N: static[int]; A: SomeFloat](v: StaticVector[N, A]): StaticVector[N, A] =
@@ -356,3 +372,18 @@ proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVecto
 
 proc `|*|`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] =
   (dyn(a, A) |*| dyn(b, A)).asStatic(M, N)
+
+# Solvers
+
+proc solve*[M, N: static[int], A: SomeFloat](a: StaticMatrix[M, M, A], b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A] {.inline.} =
+  solve(dyn(a, A), dyn(b, A)).asStatic(M, N)
+
+proc solve*[M: static[int], A: SomeFloat](a: StaticMatrix[M, M, A], b: StaticVector[M, A]): StaticVector[M, A] {.inline.} =
+  solve(dyn(a, A), dyn(b, A)).asStatic(M)
+
+template `\`*[M, N: static[int], A: SomeFloat](a: StaticMatrix[M, M, A], b: StaticMatrix[M, N, A]): auto = solve(a, b)
+
+template `\`*(a: StaticMatrix, b: StaticVector): auto = solve(a, b)
+
+proc inv*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): StaticMatrix[N, N, A] {.inline.} =
+  inv(dyn(a, A)).asStatic(N, N)
