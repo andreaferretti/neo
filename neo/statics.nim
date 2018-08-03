@@ -265,6 +265,11 @@ template `[]=`*[M, N: static[int], A](v: var StaticVector[N, A], s: untyped, val
 proc slice[M, N: static[int], A](m: StaticMatrix[M, N, A], a, b, c, d: static[int]): auto =
   dyn(m, A)[a .. b, c .. d].asStatic(b - a + 1, d - c + 1)
 
+proc sliceAssign[M, N, P, Q: static[int], A](m: var StaticMatrix[M, N, A], a, b, c, d: static[int], val: StaticMatrix[P, Q, A]) =
+  static: doAssert(b - a + 1 == P, "The dimensions do not match: P = " & $(P) & ", len(rows) = " & $(b - a + 1))
+  static: doAssert(d - c + 1 == Q, "The dimensions do not match: M = " & $(M) & ", len(cols) = " & $(d - c + 1))
+  dyn(m, A)[a .. b, c .. d] = dyn(val, A)
+
 template `[]`*[M, N: static[int], A](m: StaticMatrix[M, N, A], rows, cols: untyped): auto =
   when rows is typedesc[All]:
     const rows2: Slice[int] = 0 ..< M
@@ -275,6 +280,17 @@ template `[]`*[M, N: static[int], A](m: StaticMatrix[M, N, A], rows, cols: untyp
   else:
     const cols2: Slice[int] = cols
   slice(m, rows2.a, rows2.b, cols2.a, cols2.b)
+
+template `[]=`*[M, N, P, Q: static[int], A](m: var StaticMatrix[M, N, A], rows, cols: untyped, val: StaticMatrix[P, Q, A]) =
+  when rows is typedesc[All]:
+    const rows2: Slice[int] = 0 ..< M
+  else:
+    const rows2: Slice[int] = rows
+  when cols is typedesc[All]:
+    const cols2: Slice[int] = 0 ..< N
+  else:
+    const cols2: Slice[int] = cols
+  sliceAssign(m, rows2.a, rows2.b, cols2.a, cols2.b, val)
 
 # Collection
 
