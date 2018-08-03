@@ -318,100 +318,17 @@ template `/`*[A: SomeFloat](v: StaticVector or StaticMatrix, k: A): auto = v * (
 template `/=`*[A: SomeFloat](v: var StaticVector or var StaticMatrix, k: A) =
   v *= (1 / k)
 
-# proc `+=`*[M, N: static[int], A: SomeFloat](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
-#   matrixAdd(M, N, a, b, float32)
+proc `+=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
+  dyn(a, A) += dyn(b, A)
 
-# proc `+=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDAdd(a, b)
+proc `+`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
+  (dyn(a, A) + dyn(b, A)).asStatic(M, N)
 
-# proc `+=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
-#   matrixAdd(M, N, a, b, float64)
+proc `-=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
+  dyn(a, A) -= dyn(b, A)
 
-# proc `+=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDAdd(a, b)
-
-# proc `+`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N] {. inline .} =
-#   new result.data
-#   result.order = a.order
-#   copy(M * N, a.fp, 1, result.fp, 1)
-#   result += b
-
-# proc `+`*(a, b: DMatrix32): DMatrix32 {. inline .} =
-#   result.initLike(a)
-#   copy(a.len, a.fp, 1, result.fp, 1)
-#   result += b
-
-# proc `+`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
-#   new result.data
-#   result.order = a.order
-#   copy(M * N, a.fp, 1, result.fp, 1)
-#   result += b
-
-# proc `+`*(a, b: DMatrix64): DMatrix64 {. inline .} =
-#   result.initLike(a)
-#   copy(a.len, a.fp, 1, result.fp, 1)
-#   result += b
-
-# template matrixSub(M, N, a, b: untyped, A: typedesc) =
-#   if a.order == b.order:
-#     axpy(M * N, -1, b.fp, 1, a.fp, 1)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     let
-#       a_data = cast[ref array[N, array[M, A]]](a.data)
-#       b_data = cast[ref array[M, array[N, A]]](b.data)
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         a_data[j][i] -= b_data[i][j]
-#   else:
-#     let
-#       a_data = cast[ref array[M, array[N, A]]](a.data)
-#       b_data = cast[ref array[N, array[M, A]]](b.data)
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         a_data[i][j] -= b_data[j][i]
-
-# template matrixDSub(a, b: untyped) =
-#   assert a.M == b.M and a.N == a.N
-#   if a.order == b.order:
-#     axpy(a.M * a.N, -1, b.fp, 1, a.fp, 1)
-#   elif a.order == colMajor and b.order == rowMajor:
-#     for i in 0 .. < a.M:
-#       for j in 0 .. < a.N:
-#         a.data[j * a.M + i] -= b.data[i * b.N + j]
-#   else:
-#     for i in 0 .. < a.M:
-#       for j in 0 .. < a.N:
-#         a.data[i * a.N + j] -= b.data[j * b.M + i]
-
-# proc `-=`*[M, N: static[int], A: SomeFloat](a: var Matrix32[M, N], b: Matrix32[M, N]) {. inline .} =
-#   matrixSub(M, N, a, b, float32)
-
-# proc `-=`*(a: var DMatrix32, b: DMatrix32) {. inline .} = matrixDSub(a, b)
-
-# proc `-`*[M, N: static[int], A: SomeFloat](a, b: Matrix32[M, N]): Matrix32[M, N]  {. inline .} =
-#   new result.data
-#   result.order = a.order
-#   copy(M * N, a.fp, 1, result.fp, 1)
-#   result -= b
-
-# proc `-`*(a, b: DMatrix32): DMatrix32 {. inline .} =
-#   result.initLike(a)
-#   copy(a.len, a.fp, 1, result.fp, 1)
-#   result -= b
-
-# proc `-=`*[M, N: static[int], A: SomeFloat](a: var StaticMatrix[M, N, A], b: StaticMatrix[M, N, A]) {. inline .} =
-#   matrixSub(M, N, a, b, float64)
-
-# proc `-=`*(a: var DMatrix64, b: DMatrix64) {. inline .} = matrixDSub(a, b)
-
-# proc `-`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
-#   new result.data
-#   result.order = a.order
-#   copy(M * N, a.fp, 1, result.fp, 1)
-#   result -= b
-
-# proc `-`*(a, b: DMatrix64): DMatrix64 {. inline .} =
-#   result.initLike(a)
-#   copy(a.len, a.fp, 1, result.fp, 1)
-#   result -= b
+proc `-`*[M, N: static[int], A: SomeFloat](a, b: StaticMatrix[M, N, A]): StaticMatrix[M, N, A]  {. inline .} =
+  (dyn(a, A) - dyn(b, A)).asStatic(M, N)
 
 # proc l_2*[M, N: static[int], A: SomeFloat](m: Matrix32[M, N] or StaticMatrix[M, N, A]): auto {. inline .} =
 #   nrm2(M * N, m.fp, 1)
