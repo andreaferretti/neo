@@ -14,45 +14,47 @@
 
 import unittest, neo/dense, neo/cudadense
 
+proc run() =
+  suite "iterators on matrices":
+    test "rows matrix iterator":
+      let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
+      var
+        sum = zeros(2).gpu()
+        count = 0
+      for r in m.rows:
+        sum += r
+        count += 1
+      check sum == vector(6.0, 12.0).gpu()
+      check count == 3
+    test "columns matrix iterator":
+      let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
+      var
+        sum = zeros(3).gpu()
+        count = 0
+      for c in m.columns:
+        sum += c
+        count += 1
+      check sum == vector(4.0, 6.0, 8.0).gpu()
+      check count == 2
+    test "rows matrix iterator":
+      let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
+      var
+        sum = zeros(2).gpu()
+        count = 0
+      for r in m.rowsSlow:
+        sum += r
+        count += 1
+      check sum == vector(6.0, 12.0).gpu()
+      check count == 3
+    test "columns matrix iterator":
+      let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
+      var
+        sum = zeros(3).gpu()
+        count = 0
+      for c in m.columnsSlow:
+        sum += c
+        count += 1
+      check sum == vector(4.0, 6.0, 8.0).gpu()
+      check count == 2
 
-suite "iterators on matrices":
-  test "rows matrix iterator":
-    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
-    var
-      sum = zeros(2).gpu()
-      count = 0
-    for r in m.rows:
-      sum += r
-      count += 1
-    check sum == vector(6.0, 12.0).gpu()
-    check count == 3
-  test "columns matrix iterator":
-    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
-    var
-      sum = zeros(3).gpu()
-      count = 0
-    for c in m.columns:
-      sum += c
-      count += 1
-    check sum == vector(4.0, 6.0, 8.0).gpu()
-    check count == 2
-  test "rows matrix iterator":
-    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
-    var
-      sum = zeros(2).gpu()
-      count = 0
-    for r in m.rowsSlow:
-      sum += r
-      count += 1
-    check sum == vector(6.0, 12.0).gpu()
-    check count == 3
-  test "columns matrix iterator":
-    let m = makeMatrix(3, 2, proc(i, j: int): float64 = (i + 2 * j + 1).float64).gpu()
-    var
-      sum = zeros(3).gpu()
-      count = 0
-    for c in m.columnsSlow:
-      sum += c
-      count += 1
-    check sum == vector(4.0, 6.0, 8.0).gpu()
-    check count == 2
+run()

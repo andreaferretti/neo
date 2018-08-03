@@ -14,29 +14,31 @@
 
 import unittest, neo/dense, neo/cudadense
 
+proc run() =
+  suite "copying back and forth":
+    test "copy of a 32-bit vector":
+      let
+        v1 = randomVector(10, max=1'f32)
+        v2 = v1.gpu()
+        v3 = v2.cpu()
+      check v1 == v3
+    test "copy of a 64-bit vector":
+      let
+        v1 = randomVector(10, max=1.0)
+        v2 = v1.gpu()
+        v3 = v2.cpu()
+      check v1 == v3
+    test "copy of a 32-bit matrix":
+      let
+        m1 = randomMatrix(10, 7, max=1'f32)
+        m2 = m1.gpu()
+        m3 = m2.cpu()
+      check m1 == m3
+    test "copy of a 64- bit matrix":
+      let
+        m1 = randomMatrix(10, 7, max=1.0)
+        m2 = m1.gpu()
+        m3 = m2.cpu()
+      check m1 == m3
 
-suite "copying back and forth":
-  test "copy of a 32-bit vector":
-    let
-      v1 = randomVector(10, max=1'f32)
-      v2 = v1.gpu()
-      v3 = v2.cpu()
-    check v1 == v3
-  test "copy of a 64-bit vector":
-    let
-      v1 = randomVector(10, max=1.0)
-      v2 = v1.gpu()
-      v3 = v2.cpu()
-    check v1 == v3
-  test "copy of a 32-bit matrix":
-    let
-      m1 = randomMatrix(10, 7, max=1'f32)
-      m2 = m1.gpu()
-      m3 = m2.cpu()
-    check m1 == m3
-  test "copy of a 64- bit matrix":
-    let
-      m1 = randomMatrix(10, 7, max=1.0)
-      m2 = m1.gpu()
-      m3 = m2.cpu()
-    check m1 == m3
+run()

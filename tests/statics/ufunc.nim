@@ -14,11 +14,13 @@
 
 import unittest, neo, neo/statics
 
+proc run() =
+  suite "universal functions":
+    test "universal sqrt on vectors":
+      let u = vector([1.0, 4.0, 9.0, 16.0])
+      check sqrt(u) == vector([1.0, 2.0, 3.0, 4.0])
+    test "universal sine on matrices":
+      let m = matrix([[1.0, 2.0], [4.0, 8.0]])
+      check sin(m) == matrix([[sin(1.0), sin(2.0)], [sin(4.0), sin(8.0)]])
 
-suite "universal functions":
-  test "universal sqrt on vectors":
-    let u = vector([1.0, 4.0, 9.0, 16.0])
-    check sqrt(u) == vector([1.0, 2.0, 3.0, 4.0])
-  test "universal sine on matrices":
-    let m = matrix([[1.0, 2.0], [4.0, 8.0]])
-    check sin(m) == matrix([[sin(1.0), sin(2.0)], [sin(4.0), sin(8.0)]])
+run()

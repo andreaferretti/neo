@@ -14,19 +14,21 @@
 
 import unittest, neo/dense, neo/cudadense
 
+proc run() =
+  suite "cloning":
+    test "cloning a vector":
+      let
+        v1 = randomVector(10)
+        v2 = v1.gpu()
+        v3 = v2.clone()
+        v4 = v3.cpu()
+      check v1 == v4
+    test "cloning a matrix":
+      let
+        m1 = randomMatrix(10, 7)
+        m2 = m1.gpu()
+        m3 = m2.clone()
+        m4 = m3.cpu()
+      check m1 == m4
 
-suite "cloning":
-  test "cloning a vector":
-    let
-      v1 = randomVector(10)
-      v2 = v1.gpu()
-      v3 = v2.clone()
-      v4 = v3.cpu()
-    check v1 == v4
-  test "cloning a matrix":
-    let
-      m1 = randomMatrix(10, 7)
-      m2 = m1.gpu()
-      m3 = m2.clone()
-      m4 = m3.cpu()
-    check m1 == m4
+run()

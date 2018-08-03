@@ -14,22 +14,24 @@
 
 import unittest, neo/sparse, neo/cudasparse
 
+proc run() =
+  suite "copying back and forth":
+    test "copy of a 64-bit vector":
+      let
+        v1 = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
+        v2 = v1.gpu()
+        v3 = v2.cpu()
+      check v1 == v3
+    test "copy of a 64-bit matrix":
+      let
+        m1 = csr(
+          rows = @[0'i32, 3, 4, 7, 9],
+          cols = @[0'i32, 2, 3, 1, 0, 2, 3, 1, 3],
+          vals = @[1'f64, 2, 3, 4, 5, 6, 7, 8, 9],
+          numCols = 4
+        )
+        m2 = m1.gpu()
+        m3 = m2.cpu()
+      check m1 == m3
 
-suite "copying back and forth":
-  test "copy of a 64-bit vector":
-    let
-      v1 = sparseVector(10, @[3'i32, 5, 7], @[2.0, 3, -1])
-      v2 = v1.gpu()
-      v3 = v2.cpu()
-    check v1 == v3
-  test "copy of a 64-bit matrix":
-    let
-      m1 = csr(
-        rows = @[0'i32, 3, 4, 7, 9],
-        cols = @[0'i32, 2, 3, 1, 0, 2, 3, 1, 3],
-        vals = @[1'f64, 2, 3, 4, 5, 6, 7, 8, 9],
-        numCols = 4
-      )
-      m2 = m1.gpu()
-      m3 = m2.cpu()
-    check m1 == m3
+run()

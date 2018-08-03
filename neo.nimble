@@ -71,6 +71,16 @@ task testmkl, "run CPU tests on mkl":
   --dynlibOverride:mkl_intel_lp64
   setCommand "c", "tests/all.nim"
 
+task compilecuda, "only compile GPU tests (when not having a GPU)":
+  --hints: off
+  --linedir: on
+  --stacktrace: on
+  --linetrace: on
+  --debuginfo
+  --path: "."
+  --compileOnly
+  setCommand "c", "tests/allcuda.nim"
+
 task testcuda, "run GPU tests":
   configForTests()
   --gc:markAndSweep # TODO: remove temporary workaround
