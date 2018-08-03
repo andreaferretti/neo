@@ -290,73 +290,24 @@ template `/`*[A: SomeFloat](v: StaticVector or StaticMatrix, k: A): auto = v * (
 template `/=`*[A: SomeFloat](v: var StaticVector or var StaticMatrix, k: A) =
   v *= (1 / k)
 
-# proc `*`*[N: static[int], A: SomeFloat](v, w: StaticVector[N, A]): float64 {. inline .} = dot(N, v.fp, 1, w.fp, 1)
+proc `*`*[N: static[int], A: SomeFloat](v, w: StaticVector[N, A]): float64 {. inline .} =
+  dyn(v, A) * dyn(w, A)
 
-# proc `*`*(v, w: DVector32): float32 {. inline .} =
-#   assert(v.len == w.len)
-#   let N = v.len
-#   dot(N, v.fp, 1, w.fp, 1)
+proc l_2*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): auto {. inline .} =
+  l_2(dyn(v, A))
 
-# proc `*`*(v, w: DVector64): float64 {. inline .} =
-#   assert(v.len == w.len)
-#   let N = v.len
-#   dot(N, v.fp, 1, w.fp, 1)
+proc l_1*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): auto {. inline .} =
+  l_1(dyn(v, A))
 
-# proc l_2*[N: static[int], A: SomeFloat](v: Vector32[N] or StaticVector[N, A]): auto {. inline .} = nrm2(N, v.fp, 1)
+proc maxIndex*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): tuple[i: int, val: A] =
+  maxIndex(dyn(v, A))
 
-# proc l_2*(v: DVector32 or DVector64): auto {. inline .} = nrm2(v.len, v.fp, 1)
+template max*(v: StaticVector): auto = maxIndex(v).val
 
-# proc l_1*[N: static[int], A: SomeFloat](v: Vector32[N] or StaticVector[N, A]): auto {. inline .} = asum(N, v.fp, 1)
+proc minIndex*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): tuple[i: int, val: A] =
+  minIndex(dyn(v, A))
 
-# proc l_1*(v: DVector32 or DVector64): auto {. inline .} = asum(v.len, v.fp, 1)
-
-# template maxIndexPrivate(N, v: untyped): auto =
-#   var
-#     j = 0
-#     m = v[0]
-#   for i, val in v:
-#     if val > m:
-#       j = i
-#       m = val
-#   (j, m)
-
-# proc maxIndex*[N: static[int], A: SomeFloat](v: Vector32[N]): tuple[i: int, val: float32] =
-#   maxIndexPrivate(N, v)
-
-# proc maxIndex*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): tuple[i: int, val: float64] =
-#   maxIndexPrivate(N, v)
-
-# proc maxIndex*(v: DVector32): tuple[i: int, val: float32] =
-#   maxIndexPrivate(v.len, v)
-
-# proc maxIndex*(v: DVector64): tuple[i: int, val: float64] =
-#   maxIndexPrivate(v.len, v)
-
-# template max*(v: Vector32 or Vector64): auto = maxIndex(v).val
-
-# template minIndexPrivate(N, v: untyped): auto =
-#   var
-#     j = 0
-#     m = v[0]
-#   for i, val in v:
-#     if val < m:
-#       j = i
-#       m = val
-#   return (j, m)
-
-# proc minIndex*[N: static[int], A: SomeFloat](v: Vector32[N]): tuple[i: int, val: float32] =
-#   minIndexPrivate(N, v)
-
-# proc minIndex*[N: static[int], A: SomeFloat](v: StaticVector[N, A]): tuple[i: int, val: float64] =
-#   minIndexPrivate(N, v)
-
-# proc minIndex*(v: DVector32): tuple[i: int, val: float32] =
-#   minIndexPrivate(v.len, v)
-
-# proc minIndex*(v: DVector64): tuple[i: int, val: float64] =
-#   minIndexPrivate(v.len, v)
-
-# template min*(v: Vector32 or Vector64): auto = minIndex(v).val
+template min*(v: StaticVector): auto = minIndex(v).val
 
 # proc `*`*[M, N: static[int]](a: Matrix32[M, N], v: Vector32[N]): Vector32[M]  {. inline .} =
 #   new result
@@ -640,38 +591,10 @@ template `/=`*[A: SomeFloat](v: var StaticVector or var StaticMatrix, k: A) =
 # template `!=~`*(a, b: Vector32 or Vector64 or DVector32 or DVector64 or Matrix32 or Matrix64 or DMatrix32 or DMatrix64): bool =
 #   not (a =~ b)
 
-# # Hadamard (component-wise) product
-# template hadamardV(N, a, b: untyped, T: typedesc): auto =
-#   var x = zeros(N, T)
-#   for i in 0 .. < N:
-#     x[i] = a[i] * b[i]
-#   x
+# Hadamard (component-wise) product
 
-# template hadamardM(M, N, a, b: untyped, T: typedesc): auto =
-#   var x = zeros(M, N, T)
-#   if a.order == b.order:
-#     x.order = a.order
-#     for i in 0 .. < (M * N):
-#       x.data[i] = a.data[i] * b.data[i]
-#   else:
-#     for i in 0 .. < M:
-#       for j in 0 .. < N:
-#         x[i, j] = a[i, j] * b[i, j]
-#   x
-
-# proc `|*|`*[N: static[int], A: SomeFloat](a, b: Vector32[N]): Vector32[N] =
-#   hadamardV(N, a, b, float32)
-
-# proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVector[N, A] =
-#   hadamardV(N, a, b, float64)
-
-# proc `|*|`*(a, b: DVector32): DVector32 =
-#   assert a.len == b.len
-#   hadamardV(a.len, a, b, float32)
-
-# proc `|*|`*(a, b: DVector64): DVector64 =
-#   assert a.len == b.len
-#   hadamardV(a.len, a, b, float64)
+proc `|*|`*[N: static[int], A: SomeFloat](a, b: StaticVector[N, A]): StaticVector[N, A] =
+  (dyn(a, A) |*| dyn(b, A)).asStatic(N)
 
 # proc `|*|`*[M, N: static[int]](a, b: Matrix32[M, N]): Matrix32[M, N] =
 #   # hadamardM(M, N, a, b, float32)

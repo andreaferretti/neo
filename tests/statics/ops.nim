@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, neo/statics
+import unittest, neo, neo/statics
 
 
 suite "vector operations":
@@ -51,28 +51,28 @@ suite "vector operations":
     let w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
     v -= w
     check v == vector([-1.0, 4.0, 0.0, 8.0, -6.0])
-  # test "dot product":
-  #   let
-  #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #     w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
-  #   check(v * w == -5.0)
-  # test "ℓ² norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
-  #   check l_2(v) == 8.0
-  # test "ℓ¹ norm":
-  #   let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
-  #   check l_1(v) == 14.0
-  # test "max and min of vectors":
-  #   let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #   check max(v) == 8.0
-  #   check maxIndex(v) == (3, 8.0)
-  #   check min(v) == -2.0
-  #   check minIndex(v) == (4, -2.0)
-  # test "vector Hadamard multiplication":
-  #   let
-  #     v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
-  #     w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
-  #   check((v |*| w) == vector([2.0, -3.0, 4.0, 0.0, -8.0]))
+  test "dot product":
+    let
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    check(v * w == -5.0)
+  test "ℓ² norm":
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
+    check l_2(v) == 8.0
+  test "ℓ¹ norm":
+    let v = vector([1.0, 1.0, 2.0, 3.0, -7.0])
+    check l_1(v) == 14.0
+  test "max and min of vectors":
+    let v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+    check max(v) == 8.0
+    check maxIndex(v) == (3, 8.0)
+    check min(v) == -2.0
+    check minIndex(v) == (4, -2.0)
+  test "vector Hadamard multiplication":
+    let
+      v = vector([1.0, 3.0, 2.0, 8.0, -2.0])
+      w = vector([2.0, -1.0, 2.0, 0.0, 4.0])
+    check((v |*| w) == vector([2.0, -3.0, 4.0, 0.0, -8.0]))
 
 
 # suite "matrix/vector operations":
