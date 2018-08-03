@@ -415,8 +415,8 @@ proc schur*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): StaticSchur
 
 # Trace and determinant
 
-proc tr*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): A =
-  tr(dyn(m, A))
+proc tr*[N: static[int], A](a: StaticMatrix[N, N, A]): A =
+  tr(dyn(a, A))
 
 proc det*[N: static[int], A: SomeFloat](a: StaticMatrix[N, N, A]): A =
-  det(dyn(m, A))
+  det(dyn(a, A))
