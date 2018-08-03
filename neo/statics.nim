@@ -241,10 +241,16 @@ proc T*[M, N: static[int], A](m: StaticMatrix[M, N, A]): StaticMatrix[N, M, A] =
 # https://github.com/nim-lang/Nim/issues/8524 is fixed
 
 proc slice[N: static[int], A](v: StaticVector[N, A], a, b: static[int]): auto =
+  static:
+    doAssert(a >= 0, "Out of bounds: a = " & $(a))
+    doAssert(b < N, "Out of bounds: b = " & $(b))
   dyn(v, A)[a .. b].asStatic(b - a + 1)
 
 proc sliceAssign[M, N: static[int], A](v: var StaticVector[N, A], a, b: static[int], val: StaticVector[M, A]) =
-  static: doAssert(b - a + 1 == M, "The dimensions do not match: M = " & $(M) & ", len(s) = " & $(b - a + 1))
+  static:
+    doAssert(a >= 0, "Out of bounds: a = " & $(a))
+    doAssert(b < N, "Out of bounds: b = " & $(b))
+    doAssert(b - a + 1 == M, "The dimensions do not match: M = " & $(M) & ", len(s) = " & $(b - a + 1))
   dyn(v, A)[a .. b] = dyn(val, A)
 
 template `[]`*[N: static[int], A](v: StaticVector[N, A], s: untyped): auto =
@@ -263,11 +269,21 @@ template `[]=`*[M, N: static[int], A](v: var StaticVector[N, A], s: untyped, val
 #   dyn(v, A)[s] = dyn(val, A)
 
 proc slice[M, N: static[int], A](m: StaticMatrix[M, N, A], a, b, c, d: static[int]): auto =
+  static:
+    doAssert(a >= 0, "Out of bounds: a = " & $(a))
+    doAssert(b < M, "Out of bounds: b = " & $(b))
+    doAssert(c >= 0, "Out of bounds: c = " & $(c))
+    doAssert(d < N, "Out of bounds: b = " & $(d))
   dyn(m, A)[a .. b, c .. d].asStatic(b - a + 1, d - c + 1)
 
 proc sliceAssign[M, N, P, Q: static[int], A](m: var StaticMatrix[M, N, A], a, b, c, d: static[int], val: StaticMatrix[P, Q, A]) =
-  static: doAssert(b - a + 1 == P, "The dimensions do not match: P = " & $(P) & ", len(rows) = " & $(b - a + 1))
-  static: doAssert(d - c + 1 == Q, "The dimensions do not match: M = " & $(M) & ", len(cols) = " & $(d - c + 1))
+  static:
+    doAssert(a >= 0, "Out of bounds: a = " & $(a))
+    doAssert(b < M, "Out of bounds: b = " & $(b))
+    doAssert(c >= 0, "Out of bounds: c = " & $(c))
+    doAssert(d < N, "Out of bounds: b = " & $(d))
+    doAssert(b - a + 1 == P, "The dimensions do not match: P = " & $(P) & ", len(rows) = " & $(b - a + 1))
+    doAssert(d - c + 1 == Q, "The dimensions do not match: M = " & $(M) & ", len(cols) = " & $(d - c + 1))
   dyn(m, A)[a .. b, c .. d] = dyn(val, A)
 
 template `[]`*[M, N: static[int], A](m: StaticMatrix[M, N, A], rows, cols: untyped): auto =

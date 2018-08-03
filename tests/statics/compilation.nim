@@ -44,6 +44,15 @@ suite "compilation errors":
       v = statics.vector([1.0, 2.0, 3.0, 4.0])
     when compiles(u += v): fail()
     when compiles(u -= v): fail()
+  test "vector slicing should not work for out of bounds slices":
+    let v = statics.vector([1, 2, 3, 4, 5])
+    when compiles(v[-3 .. 3]): fail()
+    when compiles(v[3 .. 7]): fail()
+  test "vector slice assignment should not work for wrong dimensions":
+    let
+      u = statics.vector([1, 2, 3])
+      v = statics.vector([1, 2, 3, 4, 5])
+    when compiles(v[2 .. 3] = u): fail()
   test "making an array into a matrix should not work for wrong dimensions":
     let u = statics.vector([1.0, 2.0, 3.0, 4.0])
     when compiles(u.asMatrix(3, 5)): fail()
@@ -77,3 +86,12 @@ suite "compilation errors":
       m = statics.randomMatrix(6, 7)
       n = statics.randomMatrix(8, 18)
     when compiles(m * n): fail()
+  test "matrix slicing should not work for out of bounds slices":
+    let m = statics.randomMatrix(3, 4)
+    when compiles(m[-3 .. 3]): fail()
+    when compiles(m[2 .. 5]): fail()
+  test "matrix slice assignment should not work for wrong dimensions":
+    let
+      m = statics.randomMatrix(6, 7)
+      n = statics.randomMatrix(8, 18)
+    when compiles(n[2 .. 5, 3 .. 10] = m): fail()
