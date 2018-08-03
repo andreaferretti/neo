@@ -17,5 +17,6 @@
 import statics/initialize, statics/access, statics/iterators,
   statics/collection, statics/trivial_ops, statics/compilation,
   statics/equality, statics/ops, statics/row_major_ops, statics/mixed_ops
+  # statics/slice
 
 {. pop .}
