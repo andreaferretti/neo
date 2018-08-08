@@ -1,7 +1,7 @@
 mode = ScriptMode.Verbose
 
 packageName   = "neo"
-version       = "0.2.0"
+version       = "0.2.1"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
@@ -52,6 +52,11 @@ task testsparse, "run CPU sparse tests":
 task teststatic, "run CPU static tests":
   configForTests()
   setCommand "c", "tests/tstatics.nim"
+
+task testshared, "run CPU shared heap tests":
+  configForTests()
+  --threads:on
+  setCommand "c", "tests/tshared.nim"
 
 task testopenblas, "run CPU tests on openblas":
   configForTests()
