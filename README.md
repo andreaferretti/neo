@@ -636,7 +636,9 @@ leave `data` nil. This allows to support
 * matrices and vectors with data on the stack, which can be constructed
   using the `stackVector` and `stackMatrix` constructors (and which are
   only valid as long as the relevant data lives on the stack), and
-* matrices and vectors allocated manually on the shared heap.
+* matrices and vectors allocated manually on the shared heap, which can
+  be constructed using the `sharedVector` and `sharedMatrix` constructors,
+  and destructed with `dealloc`.
 
 ### Why fields are public
 

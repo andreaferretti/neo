@@ -17,7 +17,7 @@ import unittest, neo/dense
 proc run() =
   suite "shared vectors and matrices":
     test "creating and accessing shared vectors":
-      var v = sharedVector[float64](5)
+      var v = sharedVector(5, float64)
 
       check v.len == 5
 
@@ -27,7 +27,7 @@ proc run() =
       check v.sum == 2.0
 
     test "operations on shared vectors":
-      var v = sharedVector[float64](6)
+      var v = sharedVector(6, float64)
       let w = vector(1.0, 2.0, 3.0, 1.0, 2.0, 3.0)
       for i in 0 .. 5:
         v[i] = (i + 1).float64
@@ -39,60 +39,74 @@ proc run() =
 
       check v + w == w + v
 
-    # test "creating and accessing shared matrices":
-    #   var
-    #     data = [
-    #       [1'f64, 2, 3],
-    #       [4'f64, 5, 6],
-    #       [7'f64, 8, 9]
-    #     ]
-    #     m = stackMatrix(data)
+    test "creating and accessing shared matrices":
+      let data = [
+          [1'f64, 2, 3],
+          [4'f64, 5, 6],
+          [7'f64, 8, 9]
+        ]
+      var m = sharedMatrix(3, 3, float64)
+      for i in 0 .. 2:
+        for j in 0 .. 2:
+          m[i, j] = data[j][i]
 
-    #   check m.M == 3
-    #   check m.N == 3
-    #   check m[2, 1] == 6.0
+      check m.M == 3
+      check m.N == 3
+      check m[2, 1] == 6.0
 
-    #   m[2, 0] = -1.0
-    #   check data[0][2] == -1.0
+      m[2, 0] = -1.0
+      check m[2, 0] == -1.0
 
-    # test "operations on shared matrices":
-    #   var
-    #     data = [
-    #       [1'f64, 2, 3],
-    #       [4'f64, 5, 6],
-    #       [7'f64, 8, 9]
-    #     ]
-    #     m = stackMatrix(data)
-    #     v = vector(1.0, 2.0, 3.0)
+    test "operations on shared matrices":
+      let
+        data = [
+          [1'f64, 2, 3],
+          [4'f64, 5, 6],
+          [7'f64, 8, 9]
+        ]
+        v = vector(1.0, 2.0, 3.0)
+      var m = sharedMatrix(3, 3, float64)
+      for i in 0 .. 2:
+        for j in 0 .. 2:
+          m[i, j] = data[j][i]
 
-    #   check m * v == vector(30.0, 36.0, 42.0)
+      check m * v == vector(30.0, 36.0, 42.0)
 
-    # test "slicing shared matrices":
-    #   var
-    #     data = [
-    #       [1'f64, 2, 3],
-    #       [4'f64, 5, 6],
-    #       [7'f64, 8, 9]
-    #     ]
-    #     m = stackMatrix(data)
+    test "slicing shared matrices":
+      let
+        data = [
+          [1'f64, 2, 3],
+          [4'f64, 5, 6],
+          [7'f64, 8, 9]
+        ]
+        v = vector(1.0, 2.0, 3.0)
+      var m = sharedMatrix(3, 3, float64)
+      for i in 0 .. 2:
+        for j in 0 .. 2:
+          m[i, j] = data[j][i]
 
-    #   check m[1 .. 2, 1 .. 2] == matrix(@[@[5.0, 8.0], @[6.0, 9.0]])
-    #   check m.column(2) == vector(7.0, 8.0, 9.0)
+      check m * v == vector(30.0, 36.0, 42.0)
 
-    # test "row major shared matrices":
-    #   var
-    #     data = [
-    #       [1'f64, 2, 3],
-    #       [4'f64, 5, 6],
-    #       [7'f64, 8, 9]
-    #     ]
-    #     m = stackMatrix(data, rowMajor)
+      check m[1 .. 2, 1 .. 2] == matrix(@[@[5.0, 8.0], @[6.0, 9.0]])
+      check m.column(2) == vector(7.0, 8.0, 9.0)
 
-    #   check m.M == 3
-    #   check m.N == 3
-    #   check m[2, 1] == 8.0
+    test "row major shared matrices":
+      let
+        data = [
+          [1'f64, 2, 3],
+          [4'f64, 5, 6],
+          [7'f64, 8, 9]
+        ]
+      var m = sharedMatrix(3, 3, float64, rowMajor)
+      for i in 0 .. 2:
+        for j in 0 .. 2:
+          m[i, j] = data[i][j]
 
-    #   m[2, 0] = -1.0
-    #   check data[2][0] == -1.0
+      check m.M == 3
+      check m.N == 3
+      check m[2, 1] == 8.0
+
+      m[2, 0] = -1.0
+      check m[2, 0] == -1.0
 
 run()
