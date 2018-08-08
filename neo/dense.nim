@@ -98,6 +98,9 @@ proc stackVector*[N: static[int]](a: var Array32[N]): Vector[float32] =
 proc stackVector*[N: static[int]](a: var Array64[N]): Vector[float64] =
   Vector[float64](fp: addr a[0], len: N, step: 1)
 
+proc sharedVector*[A](n: int): Vector[A] =
+  Vector[A](fp: cast[ptr A](allocShared0(n * sizeof(A))), len: n, step: 1)
+
 proc makeVector*[A](N: int, f: proc (i: int): A): Vector[A] =
   result = vector(newSeq[A](N))
   for i in 0 ..< N:
