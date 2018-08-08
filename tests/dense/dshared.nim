@@ -18,6 +18,8 @@ proc run() =
   suite "shared vectors and matrices":
     test "creating and accessing shared vectors":
       var v = sharedVector(5, float64)
+      defer:
+        dealloc(v)
 
       check v.len == 5
 
@@ -28,6 +30,8 @@ proc run() =
 
     test "operations on shared vectors":
       var v = sharedVector(6, float64)
+      defer:
+        dealloc(v)
       let w = vector(1.0, 2.0, 3.0, 1.0, 2.0, 3.0)
       for i in 0 .. 5:
         v[i] = (i + 1).float64
@@ -46,6 +50,8 @@ proc run() =
           [7'f64, 8, 9]
         ]
       var m = sharedMatrix(3, 3, float64)
+      defer:
+        dealloc(m)
       for i in 0 .. 2:
         for j in 0 .. 2:
           m[i, j] = data[j][i]
@@ -66,6 +72,8 @@ proc run() =
         ]
         v = vector(1.0, 2.0, 3.0)
       var m = sharedMatrix(3, 3, float64)
+      defer:
+        dealloc(m)
       for i in 0 .. 2:
         for j in 0 .. 2:
           m[i, j] = data[j][i]
@@ -81,6 +89,8 @@ proc run() =
         ]
         v = vector(1.0, 2.0, 3.0)
       var m = sharedMatrix(3, 3, float64)
+      defer:
+        dealloc(m)
       for i in 0 .. 2:
         for j in 0 .. 2:
           m[i, j] = data[j][i]
@@ -98,6 +108,8 @@ proc run() =
           [7'f64, 8, 9]
         ]
       var m = sharedMatrix(3, 3, float64, rowMajor)
+      defer:
+        dealloc(m)
       for i in 0 .. 2:
         for j in 0 .. 2:
           m[i, j] = data[i][j]

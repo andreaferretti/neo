@@ -101,6 +101,9 @@ proc stackVector*[N: static[int]](a: var Array64[N]): Vector[float64] =
 proc sharedVector*(N: int, A: typedesc): Vector[A] =
   Vector[A](fp: cast[ptr A](allocShared0(N * sizeof(A))), len: N, step: 1)
 
+proc dealloc*[A](v: Vector[A]) =
+  deallocShared(cast[pointer](v.fp))
+
 proc makeVector*[A](N: int, f: proc (i: int): A): Vector[A] =
   result = vector(newSeq[A](N))
   for i in 0 ..< N:
@@ -228,6 +231,9 @@ proc sharedMatrix*(M, N: int, A: typedesc, order = colMajor): Matrix[A] =
     N: if order == colMajor: M else: N,
     ld: N
   )
+
+proc dealloc*[A](m: Matrix[A]) =
+  deallocShared(cast[pointer](m.fp))
 
 proc diag*[A: SomeFloat](xs: varargs[A]): Matrix[A] =
   let n = xs.len
