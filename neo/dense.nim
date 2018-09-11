@@ -204,6 +204,9 @@ proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
       checkDim(xs[0].len == x.len, "The dimensions do not match")
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
+proc matrix*[A](xs: seq[Vector[A]], order = colMajor): Matrix[A] =
+  makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
+
 proc stackMatrix*[M, N: static[int]](a: var DoubleArray32[M, N], order = colMajor): Matrix[float32] =
   let M1: int = if order == colMajor: N else: M
   let N1: int = if order == colMajor: M else: N
@@ -505,6 +508,16 @@ proc asVector*[A](m: Matrix[A]): Vector[A] =
     vector(m.data)
   else:
     vector(toSeq(m.items))
+
+proc concat*[A](v, w: Vector[A]): Vector[A] =
+  result = vector(concat(v.data, w.data))
+
+proc hstack*[A](v, w: Vector[A]): Vector[A] =
+  concat(v, w)
+
+proc vstack*[A](v, w: Vector[A]): Matrix[A] =
+  matrix(@[v, w])
+
 
 # Slice accessors
 
