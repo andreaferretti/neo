@@ -205,6 +205,9 @@ proc matrix*[A](xs: seq[seq[A]], order = colMajor): Matrix[A] =
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
 proc matrix*[A](xs: seq[Vector[A]], order = colMajor): Matrix[A] =
+  when compileOption("assertions"):
+    for x in xs:
+      checkDim(xs[0].len == x.len, "The dimensions do not match")
   makeMatrixIJ(A, xs.len, xs[0].len, xs[i][j], order)
 
 proc stackMatrix*[M, N: static[int]](a: var DoubleArray32[M, N], order = colMajor): Matrix[float32] =
