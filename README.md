@@ -99,7 +99,8 @@ let
   v3 = constantVector(5, 3.5)
   v4 = zeros(8)
   v5 = ones(9)
-  v6 = vector(1.0, 2.0, 3.0, 4.0, 5.0) # `vector` also accepts a seq
+  v6 = vector(1.0, 2.0, 3.0, 4.0, 5.0)
+  v7 = vector([1.2, 3.4, 5.6])
   m1 = makeMatrix(6, 3, proc(i, j: int): float64 = (i + j).float64)
   m2 = randomMatrix(2, 8, max = 1.6) # max is optional, default 1
   m3 = constantMatrix(3, 5, 1.8, order = rowMajor) # order is optional, default colMajor
@@ -130,14 +131,15 @@ let
   v3 = constantVector(5, 3.5'f32)
   v4 = zeros(8, float32)
   v5 = ones(9, float32)
-  v6 = vector(@[1'f32, 2'f32, 3'f32, 4'f32, 5'f32]) # this `seq` shares data with the vector
+  v6 = vector(1'f32, 2'f32, 3'f32, 4'f32, 5'f32)
+  v7 = vector([1.2'f32, 3.4'f32, 5.6'f32])
   m1 = makeMatrix(6, 3, proc(i, j: int): float32 = (i + j).float32)
   m2 = randomMatrix(2, 8, max = 1.6'f32)
   m3 = constantMatrix(3, 5, 1.8'f32, order = rowMajor) # order is optional, default colMajor
   m4 = ones(3, 6, float32)
   m5 = zeros(5, 2, float32)
   m6 = eye(7, float32)
-  m7: Matrix32[2, 3] = matrix(@[
+  m7 = matrix(@[
     @[1.2'f32, 3.5'f32, 4.3'f32],
     @[1.1'f32, 4.2'f32, 1.7'f32]
   ])
