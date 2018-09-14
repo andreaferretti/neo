@@ -18,11 +18,20 @@ proc run() =
   suite "stacking of vectors":
     test "concat (horizontal stack) of two vectors":
       let
-        v1 = vector([1.0, 2.0, 3.0])
+        v1 = vector([1.0, 2.0])
         v2 = vector([5.0, 7.0, 9.0])
-        v = vector([1.0, 2.0, 3.0, 5.0, 7.0, 9.0])
+        v = vector([1.0, 2.0, 5.0, 7.0, 9.0])
       check concat(v1, v2) == v
       check hstack(v1, v2) == v
+
+    test "concat (horizontal stack) of three vectors":
+      let
+        v1 = vector([1.0, 2.0])
+        v2 = vector([5.0, 7.0, 9.0])
+        v3 = vector([9.9, 8.8, 7.7, 6.6])
+        v = vector([1.0, 2.0, 5.0, 7.0, 9.0, 9.9, 8.8, 7.7, 6.6])
+      check concat(v1, v2, v3) == v
+      check hstack(v1, v2, v3) == v
 
     test "vertical stack of two vectors":
       let
@@ -34,6 +43,19 @@ proc run() =
         ])
       check matrix(@[v1, v2]) == m
       check vstack(v1, v2) == m
+
+    test "vertical stack of three vectors":
+      let
+        v1 = vector([1.0, 2.0, 3.0])
+        v2 = vector([5.0, 7.0, 9.0])
+        v3 = vector([9.9, 8.8, 7.7])
+        m = matrix(@[
+          @[1.0, 2.0, 3.0],
+          @[5.0, 7.0, 9.0],
+          @[9.9, 8.8, 7.7]
+        ])
+      check matrix(@[v1, v2, v3]) == m
+      check vstack(v1, v2, v3) == m
 
 
 run()

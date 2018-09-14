@@ -509,14 +509,14 @@ proc asVector*[A](m: Matrix[A]): Vector[A] =
   else:
     vector(toSeq(m.items))
 
-proc concat*[A](v, w: Vector[A]): Vector[A] =
-  result = vector(concat(v.data, w.data))
+proc concat*[A](vectors: varargs[Vector[A]]): Vector[A] =
+  result = vector(concat(vectors.mapIt(it.data)))
 
-proc hstack*[A](v, w: Vector[A]): Vector[A] =
-  concat(v, w)
+proc hstack*[A](vectors: varargs[Vector[A]]): Vector[A] =
+  concat(vectors)
 
-proc vstack*[A](v, w: Vector[A]): Matrix[A] =
-  matrix(@[v, w])
+proc vstack*[A](vectors: varargs[Vector[A]]): Matrix[A] =
+  matrix(@vectors)
 
 
 # Slice accessors
