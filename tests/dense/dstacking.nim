@@ -48,6 +48,42 @@ proc run() =
       check concat(v1, v2) == v
       check hstack(v1, v2) == v
 
+    test "horizontal stack of two matrices":
+      let
+        m1 = matrix(@[
+          @[1.0, 2.0],
+          @[3.0, 4.0]
+        ])
+        m2 = matrix(@[
+          @[5.0, 7.0, 9.0],
+          @[6.0, 2.0, 1.0]
+        ])
+        m = matrix(@[
+          @[1.0, 2.0, 5.0, 7.0, 9.0],
+          @[3.0, 4.0, 6.0, 2.0, 1.0]
+        ])
+      check hstack(m1, m2) == m
+
+    test "horizontal stack of three matrices":
+      let
+        m1 = matrix(@[
+          @[1.0, 2.0],
+          @[3.0, 4.0]
+        ])
+        m2 = matrix(@[
+          @[5.0, 7.0, 9.0],
+          @[6.0, 2.0, 1.0]
+        ])
+        m3 = matrix(@[
+          @[2.0, 2.0],
+          @[1.0, 3.0]
+        ])
+        m = matrix(@[
+          @[1.0, 2.0, 5.0, 7.0, 9.0, 2.0, 2.0],
+          @[3.0, 4.0, 6.0, 2.0, 1.0, 1.0, 3.0]
+        ])
+      check hstack(m1, m2, m3) == m
+
     test "vertical stack of two vectors":
       let
         v1 = vector([1.0, 2.0, 3.0])
@@ -72,5 +108,24 @@ proc run() =
       check matrix(@[v1, v2, v3]) == m
       check vstack(v1, v2, v3) == m
 
+    test "vertical stack of three matrices":
+      let
+        m1 = matrix(@[
+          @[1.0, 2.0],
+          @[3.0, 4.0]
+        ]).T
+        m2 = matrix(@[
+          @[5.0, 7.0, 9.0],
+          @[6.0, 2.0, 1.0]
+        ]).T
+        m3 = matrix(@[
+          @[2.0, 2.0],
+          @[1.0, 3.0]
+        ]).T
+        m = matrix(@[
+          @[1.0, 2.0, 5.0, 7.0, 9.0, 2.0, 2.0],
+          @[3.0, 4.0, 6.0, 2.0, 1.0, 1.0, 3.0]
+        ]).T
+      check vstack(m1, m2, m3) == m
 
 run()

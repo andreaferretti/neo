@@ -1,7 +1,7 @@
 mode = ScriptMode.Verbose
 
 packageName   = "neo"
-version       = "0.2.2"
+version       = "0.2.3"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"

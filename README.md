@@ -485,6 +485,29 @@ echo vstack(v1, v2, v3)
 
 Also, `concat` is an alias for `hstack`.
 
+Matrices can be stacked similarly, for instance
+
+```nim
+let
+  m1 = matrix(@[
+    @[1.0, 2.0],
+    @[3.0, 4.0]
+  ])
+  m2 = matrix(@[
+    @[5.0, 7.0, 9.0],
+    @[6.0, 2.0, 1.0]
+  ])
+  m3 = matrix(@[
+    @[2.0, 2.0],
+    @[1.0, 3.0]
+  ])
+echo hstack(m1, m2, m3)
+# m = matrix(@[
+#   @[1.0, 2.0, 5.0, 7.0, 9.0, 2.0, 2.0],
+#   @[3.0, 4.0, 6.0, 2.0, 1.0, 1.0, 3.0]
+# ])
+```
+
 TODO: stack matrices
 
 #### Solving linear systems

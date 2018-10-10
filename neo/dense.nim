@@ -532,6 +532,37 @@ template concat*[A](vectors: varargs[Vector[A]]): Vector[A] =
 template vstack*[A](vectors: varargs[Vector[A]]): Matrix[A] =
   matrix(@vectors)
 
+proc hstack*[A](matrices: varargs[Matrix[A]]): Matrix[A] =
+  let M = matrices[0].M
+  when compileOption("assertions"):
+    for m in matrices:
+      checkDim(M == m.M, "The vertical dimensions do not match")
+  var N = 0
+  for m in matrices:
+    N += m.N
+  result = matrix[A](colMajor, M, N, newSeq[A](M * N))
+  var pos = 0
+  for m in matrices:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        result[i, pos + j] = m[i, j]
+    pos += m.N
+
+proc vstack*[A](matrices: varargs[Matrix[A]]): Matrix[A] =
+  let N = matrices[0].N
+  when compileOption("assertions"):
+    for m in matrices:
+      checkDim(N == m.N, "The horizontal dimensions do not match")
+  var M = 0
+  for m in matrices:
+    M += m.M
+  result = matrix[A](colMajor, M, N, newSeq[A](M * N))
+  var pos = 0
+  for m in matrices:
+    for i in 0 ..< m.M:
+      for j in 0 ..< m.N:
+        result[pos + i, j] = m[i, j]
+    pos += m.M
 
 # Slice accessors
 
