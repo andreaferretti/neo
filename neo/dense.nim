@@ -15,6 +15,7 @@ import nimblas, nimlapack, sequtils, random, math
 import ./core, ./private/neocommon
 
 export nimblas.OrderType
+export core
 
 type
   MatrixShape* = enum
@@ -973,11 +974,13 @@ template countRw() =
     inc numRewrites
 
 proc linearCombination[A: SomeFloat](a: A, v, w: Vector[A]): Vector[A]  {. inline .} =
+  checkDim(v.len == w.len)
   result = vector(newSeq[A](v.len))
   copy(v.len, v.fp, v.step, result.fp, result.step)
   axpy(v.len, a, w.fp, w.step, result.fp, result.step)
 
 proc linearCombinationMut[A: SomeFloat](a: A, v: var Vector[A], w: Vector[A])  {. inline .} =
+  checkDim(v.len == w.len)
   axpy(v.len, a, w.fp, w.step, v.fp, v.step)
 
 template rewriteLinearCombination*{v + `*`(w, a)}[A: SomeFloat](a: A, v, w: Vector[A]): auto =

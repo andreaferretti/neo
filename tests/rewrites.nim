@@ -26,6 +26,14 @@ suite "rewrite macros tests":
 
     check getRewriteCount() == 1
 
+  test "vector linear combination still checks dimension":
+    let
+      a = vector(1.0, 2.0)
+      b = vector(2.0, -1.0, 3.0)
+
+    expect DimensionError:
+      discard a + 3.0 * b
+
   test "mutable vector linear combination":
     resetRewriteCount()
     var a = vector(1.0, 2.0, 3.0)
@@ -34,6 +42,13 @@ suite "rewrite macros tests":
     a += 3.0 * b
 
     check getRewriteCount() == 1
+
+  test "mutable vector linear combination still checks dimension":
+    var a = vector(1.0, 2.0)
+    let b = vector(2.0, -1.0, 3.0)
+
+    expect DimensionError:
+      a += 3.0 * b
 
   test "vector linear combination after template application":
     resetRewriteCount()

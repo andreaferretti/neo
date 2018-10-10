@@ -15,6 +15,8 @@
 import sequtils
 import ./core, ./dense
 
+export core
+
 type
   SparseVector*[A] = ref object
     N*: int32
