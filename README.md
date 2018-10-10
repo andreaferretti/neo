@@ -34,6 +34,7 @@ Table of contents
     - [BLAS Operations](#blas-operations)
     - [Universal functions](#universal-functions)
     - [Rewrite rules](#rewrite-rules)
+    - [Stacking vectors and matrices](#stacking-vectors-and-matrices)
     - [Solving linear systems](#solving-linear-systems)
     - [Computing eigenvalues and eigenvectors](#computing-eigenvalues-and-eigenvectors)
   - [Sparse linear algebra](#sparse-linear-algebra)
@@ -452,6 +453,39 @@ echo v1 + 5.3 * v2
 
 this is not implemented as a scalar multiplication followed by a sum, but it
 is turned into a single function call.
+
+#### Stacking vectors and matrices
+
+Vectors can be stacked both horizontally (which gives a new vector)
+
+```nim
+let
+  v1 = vector([1.0, 2.0])
+  v2 = vector([5.0, 7.0, 9.0])
+  v3 = vector([9.9, 8.8, 7.7, 6.6])
+
+echo hstack(v1, v2, v3) #  vector([1.0, 2.0, 5.0, 7.0, 9.0, 9.9, 8.8, 7.7, 6.6])
+```
+
+or vertically (which gives a matrix having the vectors as rows)
+
+```nim
+let
+  v1 = vector([1.0, 2.0, 3.0])
+  v2 = vector([5.0, 7.0, 9.0])
+  v3 = vector([9.9, 8.8, 7.7])
+
+echo vstack(v1, v2, v3)
+# matrix(@[
+#   @[1.0, 2.0, 3.0],
+#   @[5.0, 7.0, 9.0],
+#   @[9.9, 8.8, 7.7]
+# ])
+```
+
+Also, `concat` is an alias for `hstack`.
+
+TODO: stack matrices
 
 #### Solving linear systems
 

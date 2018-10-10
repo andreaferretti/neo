@@ -33,6 +33,21 @@ proc run() =
       check concat(v1, v2, v3) == v
       check hstack(v1, v2, v3) == v
 
+    test "concat (horizontal stack) of two non-contiguous vectors":
+      let
+        v1 = matrix(@[
+          @[1.0, 0.0],
+          @[2.0, 0.0]
+        ], order=rowMajor).column(0)
+        v2 = matrix(@[
+          @[5.0, 0.0],
+          @[7.0, 0.0],
+          @[9.0, 0.0]
+        ], order=rowMajor).column(0)
+        v = vector([1.0, 2.0, 5.0, 7.0, 9.0])
+      check concat(v1, v2) == v
+      check hstack(v1, v2) == v
+
     test "vertical stack of two vectors":
       let
         v1 = vector([1.0, 2.0, 3.0])

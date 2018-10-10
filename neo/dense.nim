@@ -513,13 +513,23 @@ proc asVector*[A](m: Matrix[A]): Vector[A] =
   else:
     vector(toSeq(m.items))
 
-proc concat*[A](vectors: varargs[Vector[A]]): Vector[A] =
-  result = vector(concat(vectors.mapIt(it.data)))
+# Stacking
 
 proc hstack*[A](vectors: varargs[Vector[A]]): Vector[A] =
-  concat(vectors)
+  var L = 0
+  for v in vectors:
+    L += v.len
+  result = vector(newSeq[A](L))
+  var pos = 0
+  for v in vectors:
+    for j, x in v:
+      result.data[pos + j] = x
+    pos += v.len
 
-proc vstack*[A](vectors: varargs[Vector[A]]): Matrix[A] =
+template concat*[A](vectors: varargs[Vector[A]]): Vector[A] =
+  hstack(vectors)
+
+template vstack*[A](vectors: varargs[Vector[A]]): Matrix[A] =
   matrix(@vectors)
 
 
