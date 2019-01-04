@@ -264,11 +264,24 @@ proc `[]`*[A](v: Vector[A], i: int): A {. inline .} =
   checkBounds(i >= 0 and i < v.len)
   return cast[CPointer[A]](v.fp)[v.step * i]
 
+proc `[]`*[A](v: var Vector[A], i: int): var A {. inline .} =
+  checkBounds(i >= 0 and i < v.len)
+  return cast[CPointer[A]](v.fp)[v.step * i]
+
 proc `[]=`*[A](v: Vector[A], i: int, val: A) {. inline .} =
   checkBounds(i >= 0 and i < v.len)
   cast[CPointer[A]](v.fp)[v.step * i] = val
 
 proc `[]`*[A](m: Matrix[A], i, j: int): A {. inline .} =
+  checkBounds(i >= 0 and i < m.M)
+  checkBounds(j >= 0 and j < m.N)
+  let mp = cast[CPointer[A]](m.fp)
+  if m.order == colMajor:
+    return elColMajor(mp, m, i, j)
+  else:
+    return elRowMajor(mp, m, i, j)
+
+proc `[]`*[A](m: var Matrix[A], i, j: int): var A {. inline .} =
   checkBounds(i >= 0 and i < m.M)
   checkBounds(j >= 0 and j < m.N)
   let mp = cast[CPointer[A]](m.fp)

@@ -26,6 +26,12 @@ proc run() =
       check v[2] == 4.0
       check v[3] == 7.0
       check v[4] == 10.0
+    test "mutating vector elements":
+      var v = zeros(3)
+      v[0] += 2.1
+      v[1] -= 1.0
+      check v[0] == 2.1
+      check v[1] == -1.0
     test "writing vector elements":
       var v = zeros(3)
       v[0] = -2.1
@@ -55,6 +61,12 @@ proc run() =
       check m[0, 1] == -2.0
       check m[1, 0] == 3.0
       check m[1, 1] == 1.0
+    test "mutating matrix elements":
+      var m = zeros(3, 3)
+      m[0, 2] += 2.1
+      m[1, 1] -= 1.0
+      check m[0, 2] == 2.1
+      check m[1, 1] == -1.0
     test "writing matrix elements":
       var m = zeros(3, 3)
       m[0, 2] = -2.1
