@@ -19,6 +19,9 @@ when defined(nimdistros):
     foreignDep "libblas-dev"
     foreignDep "libopenblas-dev"
     foreignDep "liblapack-dev"
+  elif detectOs(MacOsX):
+    foreignDep "liblas"
+    foreignDep "lapack"
   else:
     foreignDep "libblas"
     foreignDep "liblapack"
