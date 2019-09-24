@@ -20,7 +20,7 @@ proc matrixMult() =
     m2 = randomMatrix(987, 876)
     startTime = epochTime()
 
-  for i in 0 .. < 100:
+  for i in 0 ..< 100:
     discard m1 * m2
   let endTime = epochTime()
 

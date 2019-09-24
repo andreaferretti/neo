@@ -1,14 +1,14 @@
 mode = ScriptMode.Verbose
 
 packageName   = "neo"
-version       = "0.2.5"
+version       = "0.3.0"
 author        = "Andrea Ferretti"
 description   = "Linear Algebra for Nim"
 license       = "Apache2"
 skipDirs      = @["tests", "benchmarks", "htmldocs"]
 skipFiles     = @["_config.yml"]
 
-requires "nim >= 0.18.0", "nimblas >= 0.2.0", "nimcuda >= 0.1.4",
+requires "nim >= 0.18.0", "nimblas >= 0.2.0", "nimcuda >= 0.1.6",
   "nimlapack >= 0.1.1"
 
 --forceBuild
