@@ -830,7 +830,6 @@ globally set, you can pass suitable options to the Nim compiler, such as
 Support for CUDA is under the package `neo/cuda`, that needs to be imported
 explicitly.
 
-
 ## TODO
 
 See the [issue list](https://github.com/unicredit/neo/issues)
