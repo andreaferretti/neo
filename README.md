@@ -12,13 +12,13 @@ GPU support has been tested using NVIDIA CUDA 8.0.
 
 The library is currently aligned with latest Nim devel.
 
-API documentation is [here](https://cdn.rawgit.com/unicredit/neo/master/htmldocs/neo.html)
+API documentation is [here](https://unicredit.github.io/neo/htmldocs/neo.html)
 
 A lot of examples are available in the tests.
 
 Table of contents
 -----------------
-<!-- TOC depthFrom:2 depthTo:6 orderedList:false updateOnSave:true withLinks:true -->
+<!-- TOC depthfrom:2 depthto:6 orderedlist:false updateonsave:true withlinks:true -->
 
 - [Introduction](#introduction)
 - [Working on the CPU](#working-on-the-cpu)
@@ -39,8 +39,8 @@ Table of contents
     - [Computing eigenvalues and eigenvectors](#computing-eigenvalues-and-eigenvectors)
   - [Sparse linear algebra](#sparse-linear-algebra)
 - [Working on the GPU](#working-on-the-gpu)
-  - [Dense linear algebra](#dense-linear-algebra-1)
-  - [Sparse linear algebra](#sparse-linear-algebra-1)
+  - [Dense linear algebra](#dense-linear-algebra)
+  - [Sparse linear algebra](#sparse-linear-algebra)
 - [Static typing for dimensions](#static-typing-for-dimensions)
 - [Design](#design)
   - [On the CPU](#on-the-cpu)
