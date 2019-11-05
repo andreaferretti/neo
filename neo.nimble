@@ -118,5 +118,6 @@ task benchmarkcuda, "run GPU benchmarks":
 task docs, "generate documentation":
   exec("mkdir -p htmldocs/neo")
   --project
-  --docSeeSrcUrl: "https://github.com/unicredit/neo/blob/master"
-  setCommand "doc2", "neo.nim"
+  --git.url: "https://github.com/unicredit/neo"
+  --git.commit: master
+  setCommand "doc", "neo.nim"

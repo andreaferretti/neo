@@ -12,11 +12,11 @@
 <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA=="/>
 
 <!-- Google fonts -->
-<link href='https://fonts.googleapis.com/css?family=Raleway:400,600,900' rel='stylesheet' type='text/css'/>
+<link href='https://fonts.googleapis.com/css?family=Lato:400,600,900' rel='stylesheet' type='text/css'/>
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>Module sparse</title>
+<title>sparse</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -27,220 +27,130 @@ customize this style sheet.
 Modified from Chad Skeeters' rst2html-style
 https://bitbucket.org/cskeeters/rst2html-style/
 
-Modified by Boyd Greenfield
+Modified by Boyd Greenfield and narimiran
 */
-/* SCSS variables */
-/* Text weights */
-/* Body colors */
-/* Text colors */
-/* Link colors */
-/* Syntax highlighting colors */
-/* Pct changes */
-/* Mixins */
-/* Body/layout */
+
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%; }
 
-/* Where we want fancier font if available */
-h1, h2, h3, h4, h5, h6, p.module-desc, table.docinfo + blockquote p, table.docinfo blockquote p, h1 + blockquote p {
-  font-family: "Raleway", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif !important; }
-
-h1.title {
-  font-weight: 900; }
-
 body {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: #666;
-  background-color: rgba(252, 248, 244, 0.75); }
+  font-size: 1.125em;
+  line-height: 1.5;
+  color: #222;
+  background-color: #FCFCFC; }
 
 /* Skeleton grid */
 .container {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
   box-sizing: border-box; }
 
 .column,
 .columns {
   width: 100%;
   float: left;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  margin-left: 1%;
+}
 
-/* For devices larger than 400px */
-@media (min-width: 400px) {
-  .container {
-    width: 100%;
-    padding: 0; } }
-/* For devices larger than 650px */
-@media (min-width: 650px) {
-  .container {
-    width: 100%; }
+.column:first-child,
+.columns:first-child {
+  margin-left: 0; }
 
-  .column,
-  .columns {
-    margin-left: 4%; }
+.three.columns {
+  width: 19%; }
 
-  .column:first-child,
-  .columns:first-child {
-    margin-left: 0; }
+.nine.columns {
+  width: 80.0%; }
 
-  .one.column,
-  .one.columns {
-    width: 4.66666666667%; }
+.twelve.columns {
+  width: 100%;
+  margin-left: 0; }
 
-  .two.columns {
-    width: 13.3333333333%; }
-
+@media screen and (max-width: 860px) {
   .three.columns {
-    width: 22%; }
-
-  .four.columns {
-    width: 30.6666666667%; }
-
-  .five.columns {
-    width: 39.3333333333%; }
-
-  .six.columns {
-    width: 48%; }
-
-  .seven.columns {
-    width: 56.6666666667%; }
-
-  .eight.columns {
-    width: 65.3333333333%; }
-
+    display: none;
+  }
   .nine.columns {
-    width: 74.0%; }
-
-  .ten.columns {
-    width: 82.6666666667%; }
-
-  .eleven.columns {
-    width: 91.3333333333%; }
-
-  .twelve.columns {
-    width: 100%;
-    margin-left: 0; }
-
-  .one-third.column {
-    width: 30.6666666667%; }
-
-  .two-thirds.column {
-    width: 65.3333333333%; } }
-/* Customer Overrides */
-.footer {
-  text-align: center;
-  color: #969696;
-  padding-top: 10%; }
-
-p.module-desc {
-  font-size: 1.1em;
-  color: #666666; }
-
-a.link-seesrc {
-  color: #aec7d2;
-  font-style: italic; }
-
-a.link-seesrc:hover {
-  color: #6c9aae; }
-
-#toc-list {
-  word-wrap: break-word; }
-
-ul.simple-toc {
-  list-style: none; }
-
-ul.simple-toc a.reference-toplevel {
-  font-weight: bold;
-  color: #0077b3; }
-
-ul.simple-toc-section {
-  list-style-type: circle;
-  color: #6c9aae; }
-
-ul.simple-toc-section a.reference {
-  color: #0077b3; }
+    width: 98.0%;
+  }
+  body {
+    font-size: 1em;
+    line-height: 1.35;
+  }
+}
 
 cite {
   font-style: italic !important; }
 
-dt > pre {
-  border-color: rgba(0, 0, 0, 0.15);
-  background-color: transparent;
-  margin: 15px 0px 5px; }
 
-dd > pre {
-  border-color: rgba(0, 0, 0, 0.1);
-  background-color: whitesmoke;
-  margin-top: 8px; }
+/* Nim search input */
+div#searchInputDiv {
+  margin-bottom: 1em;
+}
+input#searchInput {
+  width: 80%;
+}
 
-.item > dd {
-  margin-left: 10px;
-  margin-bottom: 30px; }
-
-/* Nim line-numbered tables */
-.line-nums-table {
-  width: 100%;
-  table-layout: fixed; }
-
-table.line-nums-table {
-  border-radius: 4px;
-  border: 1px solid #cccccc;
-  background-color: whitesmoke;
-  border-collapse: separate;
-  margin-top: 15px;
-  margin-bottom: 25px; }
-
-.line-nums-table tbody {
-  border: none; }
-
-.line-nums-table td pre {
-  border: none;
-  background-color: transparent; }
-
-.line-nums-table td.blob-line-nums {
-  width: 28px; }
-
-.line-nums-table td.blob-line-nums pre {
-  color: #b0b0b0;
-  -webkit-filter: opacity(75%);
-  text-align: right;
-  border-color: transparent;
-  background-color: transparent;
-  padding-left: 0px;
-  margin-left: 0px;
-  padding-right: 0px;
-  margin-right: 0px; }
+/*
+ * Some custom formatting for input forms.
+ * This also fixes input form colors on Firefox with a dark system theme on Linux.
+ */
+input {
+  -moz-appearance: none;
+  color: #333;
+  background-color: #f8f8f8;
+  border: 1px solid #aaa;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  padding: 6px;
+}
+input:focus {
+  border: 1px solid #1fa0eb;
+  box-shadow: 0 0 2px #1fa0eb;
+}
 
 /* Docgen styles */
 /* Links */
 a {
-  color: #0077b3;
-  text-decoration: none; }
+  color: #07b;
+  text-decoration: none;
+}
+
+a span.Identifier {
+  text-decoration: underline;
+  text-decoration-color: #aab;
+}
+
+a.reference-toplevel {
+  font-weight: bold;
+}
+
+a.toc-backref {
+  text-decoration: none;
+  color: #222; }
+
+a.link-seesrc {
+  color: #607c9f;
+  font-size: 0.9em;
+  font-style: italic; }
 
 a:hover,
 a:focus {
-  color: #00334d;
+  color: #607c9f;
   text-decoration: underline; }
 
-a:visited {
-  color: #00334d; }
+a:hover span.Identifier {
+  color: #607c9f;
+}
 
-a:focus {
-  outline: thin dotted #2d2d2d;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px; }
-
-a:hover,
-a:active {
-  outline: 0; }
 
 sub,
 sup {
@@ -317,378 +227,258 @@ img {
 
   h2,
   h3 {
-    page-break-after: avoid; } }
-.img-rounded {
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px; }
+    page-break-after: avoid; }
+}
 
-.img-polaroid {
-  padding: 4px;
-  background-color: rgba(252, 248, 244, 0.75);
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
 
 p {
-  margin: 0 0 12px; }
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
 
 small {
   font-size: 85%; }
 
 strong {
-  font-weight: 600; }
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #3c3c3c;
+}
 
 em {
   font-style: italic; }
 
-cite {
-  font-style: normal; }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: 600;
-  line-height: 20px;
-  color: inherit;
-  text-rendering: optimizelegibility; }
-
 h1 {
-  font-size: 2em;
-  padding-bottom: .15em;
-  border-bottom: 1px solid #aaaaaa;
-  margin-top: 1.0em;
+  font-size: 1.8em;
+  font-weight: 400;
+  padding-bottom: .25em;
+  border-bottom: 1px solid #aaa;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
   line-height: 1.2em; }
 
 h1.title {
   padding-bottom: 1em;
   border-bottom: 0px;
-  font-size: 2.75em; }
+  font-size: 2.5em;
+  text-align: center;
+  font-weight: 900;
+  margin-top: 0.75em;
+  margin-bottom: 0em;
+}
 
 h2 {
-  font-size: 1.5em;
-  margin-top: 1.5em; }
+  font-size: 1.3em;
+  margin-top: 2em; }
+
+h2.subtitle {
+  text-align: center; }
 
 h3 {
-  font-size: 1.3em;
+  font-size: 1.125em;
   font-style: italic;
-  margin-top: 0.75em; }
+  margin-top: 1.5em; }
 
 h4 {
-  font-size: 1.3em;
-  margin-top: 0.5em; }
+  font-size: 1.125em;
+  margin-top: 1em; }
 
 h5 {
-  font-size: 1.2em;
-  margin-top: 0.25em; }
+  font-size: 1.125em;
+  margin-top: 0.75em; }
 
 h6 {
   font-size: 1.1em; }
 
+
 ul,
 ol {
   padding: 0;
-  margin: 0 0 0px 15px; }
+  margin-top: 0.5em;
+  margin-left: 0.75em; }
 
 ul ul,
 ul ol,
 ol ol,
 ol ul {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  margin-left: 1.25em; }
 
 li {
-  line-height: 20px; }
-
-dl {
-  margin-bottom: 20px; }
-
-dt,
-dd {
-  line-height: 20px; }
-
-dt {
-  font-weight: bold; }
-
-dd {
-  margin-left: 10px;
-  margin-bottom: 26px; }
-
-hr {
-  margin: 20px 0;
-  border: 0;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #ffffff; }
-
-abbr[title],
-abbr[data-original-title] {
-  cursor: help;
-  border-bottom: 1px dotted #999999; }
-
-abbr.initialism {
-  font-size: 90%;
-  text-transform: uppercase; }
-
-blockquote {
-  padding: 0 0 0 15px;
-  margin: 0 0 20px;
-  border-left: 5px solid #EFEBE0; }
-
-table.docinfo + blockquote, table.docinfo blockquote, h1 + blockquote {
-  border-left: 5px solid #c9c9c9;
+    list-style-type: circle;
 }
 
-table.docinfo + blockquote p, table.docinfo blockquote p, h1 + blockquote p {
-  margin-bottom: 0;
-  font-size: 15px;
-  font-weight: 200;
-  line-height: 1.5;
-  font-style: italic; }
+ul.simple-boot li {
+    list-style-type: none;
+    margin-left: 0em;
+    margin-bottom: 0.5em;
+}
 
-q:before,
-q:after,
-blockquote:before,
-blockquote:after {
-  content: ""; }
+ol.simple > li, ul.simple > li {
+  margin-bottom: 0.25em;
+  margin-left: 0.4em }
 
-address {
-  display: block;
-  margin-bottom: 20px;
-  font-style: normal;
-  line-height: 20px; }
+ul.simple.simple-toc > li {
+    margin-top: 1em;
+}
 
-code,
-pre {
-  font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
-  padding: 0 3px 2px;
-  font-weight: 500;
-  font-size: 12px;
-  color: #444444;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px; }
+ul.simple-toc {
+  list-style: none;
+  font-size: 0.9em;
+  margin-left: -0.3em;
+  margin-top: 1em; }
+
+ul.simple-toc > li {
+    list-style-type: none;
+}
+
+ul.simple-toc-section {
+  list-style-type: circle;
+  margin-left: 1em;
+  color: #6c9aae; }
+
+
+ol.arabic {
+  list-style: decimal; }
+
+ol.loweralpha {
+  list-style: lower-alpha; }
+
+ol.upperalpha {
+  list-style: upper-alpha; }
+
+ol.lowerroman {
+  list-style: lower-roman; }
+
+ol.upperroman {
+  list-style: upper-roman; }
+
+ul.auto-toc {
+  list-style-type: none; }
+
+
+dl {
+  margin-bottom: 1.5em; }
+
+dt {
+  margin-bottom: -0.5em;
+  margin-left: 0.0em; }
+
+dd {
+  margin-left: 2.0em;
+  margin-bottom: 3.0em;
+  margin-top: 0.5em; }
+
+
+hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid #aaa; }
+
+blockquote {
+  font-size: 0.9em;
+  font-style: italic;
+  padding-left: 0.5em;
+  margin-left: 0;
+  border-left: 5px solid #bbc;
+}
 
 .pre {
   font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-weight: 600;
-  /*color: #504da6;*/
+  font-weight: 500;
+  font-size: 0.85em;
+  background-color: #f0f3ff;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 4px;
 }
 
-code {
-  padding: 2px 4px;
-  color: #444444;
-  white-space: nowrap;
-  background-color: white;
-  border: 1px solid #777777; }
-
 pre {
+  font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
+  color: #222;
+  font-weight: 500;
   display: inline-block;
   box-sizing: border-box;
-  min-width: calc(100% - 19.5px);
-  padding: 9.5px;
-  margin: 0.25em 10px 0.25em 10px;
-  font-size: 14px;
-  line-height: 20px;
+  min-width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
   white-space: pre !important;
   overflow-y: hidden;
   overflow-x: visible;
-  background-color: whitesmoke;
-  border: 1px solid #cccccc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px; }
-
-pre.prettyprint {
-  margin-bottom: 20px; }
-
-pre code {
-  padding: 0;
-  color: inherit;
-  white-space: pre;
-  overflow-x: visible;
-  background-color: transparent;
-  border: 0; }
+  background-color: ghostwhite;
+  border: 1px solid #dde;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px; }
 
 .pre-scrollable {
   max-height: 340px;
   overflow-y: scroll; }
 
+
+/* Nim line-numbered tables */
+.line-nums-table {
+  width: 100%;
+  table-layout: fixed; }
+
+table.line-nums-table {
+  border-radius: 4px;
+  border: 1px solid #cccccc;
+  background-color: ghostwhite;
+  border-collapse: separate;
+  margin-top: 15px;
+  margin-bottom: 25px; }
+
+.line-nums-table tbody {
+  border: none; }
+
+.line-nums-table td pre {
+  border: none;
+  background-color: transparent; }
+
+.line-nums-table td.blob-line-nums {
+  width: 28px; }
+
+.line-nums-table td.blob-line-nums pre {
+  color: #b0b0b0;
+  -webkit-filter: opacity(75%);
+  text-align: right;
+  border-color: transparent;
+  background-color: transparent;
+  padding-left: 0px;
+  margin-left: 0px;
+  padding-right: 0px;
+  margin-right: 0px; }
+
+
 table {
   max-width: 100%;
   background-color: transparent;
+  margin-top: 0.5em;
+  margin-bottom: 1.5em;
   border-collapse: collapse;
-  border-spacing: 0; }
-
-table th, table td {
-  padding: 0px 8px 0px;
+  border-color: #ccc;
+  border-spacing: 0;
+  font-size: 0.9em;
 }
 
-.table {
-  width: 100%;
-  margin-bottom: 20px; }
+table th, table td {
+  padding: 0px 0.5em 0px;
+}
 
-.table th,
-.table td {
-  padding: 8px;
-  line-height: 20px;
-  text-align: left;
-  vertical-align: top;
-  border-top: 1px solid #444444; }
-
-.table th {
+table th {
+  background-color: #e8e8e8;
   font-weight: bold; }
 
-.table thead th {
-  vertical-align: bottom; }
+table th.docinfo-name {
+    background-color: transparent;
+}
 
-.table caption + thead tr:first-child th,
-.table caption + thead tr:first-child td,
-.table colgroup + thead tr:first-child th,
-.table colgroup + thead tr:first-child td,
-.table thead:first-child tr:first-child th,
-.table thead:first-child tr:first-child td {
-  border-top: 0; }
+table tr:hover {
+  background-color: ghostwhite; }
 
-.table tbody + tbody {
-  border-top: 2px solid #444444; }
-
-.table .table {
-  background-color: rgba(252, 248, 244, 0.75); }
-
-.table-condensed th,
-.table-condensed td {
-  padding: 4px 5px; }
-
-.table-bordered {
-  border: 1px solid #444444;
-  border-collapse: separate;
-  *border-collapse: collapse;
-  border-left: 0;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px; }
-
-.table-bordered th,
-.table-bordered td {
-  border-left: 1px solid #444444; }
-
-.table-bordered caption + thead tr:first-child th,
-.table-bordered caption + tbody tr:first-child th,
-.table-bordered caption + tbody tr:first-child td,
-.table-bordered colgroup + thead tr:first-child th,
-.table-bordered colgroup + tbody tr:first-child th,
-.table-bordered colgroup + tbody tr:first-child td,
-.table-bordered thead:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child td {
-  border-top: 0; }
-
-.table-bordered thead:first-child tr:first-child > th:first-child,
-.table-bordered tbody:first-child tr:first-child > td:first-child,
-.table-bordered tbody:first-child tr:first-child > th:first-child {
-  -webkit-border-top-left-radius: 4px;
-  border-top-left-radius: 4px;
-  -moz-border-radius-topleft: 4px; }
-
-.table-bordered thead:first-child tr:first-child > th:last-child,
-.table-bordered tbody:first-child tr:first-child > td:last-child,
-.table-bordered tbody:first-child tr:first-child > th:last-child {
-  -webkit-border-top-right-radius: 4px;
-  border-top-right-radius: 4px;
-  -moz-border-radius-topright: 4px; }
-
-.table-bordered thead:last-child tr:last-child > th:first-child,
-.table-bordered tbody:last-child tr:last-child > td:first-child,
-.table-bordered tbody:last-child tr:last-child > th:first-child,
-.table-bordered tfoot:last-child tr:last-child > td:first-child,
-.table-bordered tfoot:last-child tr:last-child > th:first-child {
-  -webkit-border-bottom-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  -moz-border-radius-bottomleft: 4px; }
-
-.table-bordered thead:last-child tr:last-child > th:last-child,
-.table-bordered tbody:last-child tr:last-child > td:last-child,
-.table-bordered tbody:last-child tr:last-child > th:last-child,
-.table-bordered tfoot:last-child tr:last-child > td:last-child,
-.table-bordered tfoot:last-child tr:last-child > th:last-child {
-  -webkit-border-bottom-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  -moz-border-radius-bottomright: 4px; }
-
-.table-bordered tfoot + tbody:last-child tr:last-child td:first-child {
-  -webkit-border-bottom-left-radius: 0;
-  border-bottom-left-radius: 0;
-  -moz-border-radius-bottomleft: 0; }
-
-.table-bordered tfoot + tbody:last-child tr:last-child td:last-child {
-  -webkit-border-bottom-right-radius: 0;
-  border-bottom-right-radius: 0;
-  -moz-border-radius-bottomright: 0; }
-
-.table-bordered caption + thead tr:first-child th:first-child,
-.table-bordered caption + tbody tr:first-child td:first-child,
-.table-bordered colgroup + thead tr:first-child th:first-child,
-.table-bordered colgroup + tbody tr:first-child td:first-child {
-  -webkit-border-top-left-radius: 4px;
-  border-top-left-radius: 4px;
-  -moz-border-radius-topleft: 4px; }
-
-.table-bordered caption + thead tr:first-child th:last-child,
-.table-bordered caption + tbody tr:first-child td:last-child,
-.table-bordered colgroup + thead tr:first-child th:last-child,
-.table-bordered colgroup + tbody tr:first-child td:last-child {
-  -webkit-border-top-right-radius: 4px;
-  border-top-right-radius: 4px;
-  -moz-border-radius-topright: 4px; }
-
-table.docutils th {
-  background-color: #e8e8e8; }
-
-table.docutils tr:hover {
-  background-color: whitesmoke; }
-
-.table-striped tbody > tr:nth-child(odd) > td,
-.table-striped tbody > tr:nth-child(odd) > th {
-  background-color: rgba(252, 248, 244, 0.75); }
-
-.table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
-  background-color: rgba(241, 222, 204, 0.75); }
-
-table td[class*="span"],
-table th[class*="span"],
-.row-fluid table td[class*="span"],
-.row-fluid table th[class*="span"] {
-  display: table-cell;
-  float: none;
-  margin-left: 0; }
-
-.hero-unit {
-  padding: 60px;
-  margin-bottom: 30px;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  color: inherit;
-  background-color: rgba(230, 197, 164, 0.75);
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px; }
-
-.hero-unit h1 {
-  margin-bottom: 0;
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
-  color: inherit; }
-
-.hero-unit li {
-  line-height: 30px; }
 
 /* rst2html default used to remove borders from tables and images */
 .borderless, table.borderless td, table.borderless th {
@@ -709,10 +499,6 @@ table.borderless td, table.borderless th {
 .hidden {
   display: none; }
 
-a.toc-backref {
-  text-decoration: none;
-  color: #444444; }
-
 blockquote.epigraph {
   margin: 2em 5em; }
 
@@ -722,85 +508,6 @@ dl.docutils dd {
 object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
   overflow: hidden; }
 
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-div.abstract {
-  margin: 2em 5em; }
-
-div.abstract p.topic-title {
-  font-weight: bold;
-  text-align: center; }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em;
-  border: medium outset;
-  padding: 1em; }
-
-div.note, div.warning {
-  margin: 1.5em 0px;
-  border: none; }
-
-div.note p.admonition-title,
-div.warning p.admonition-title {
-  display: none; }
-
-/* Clearfix
- * http://css-tricks.com/snippets/css/clear-fix/
- */
-div.note:after,
-div.warning:after {
-  content: "";
-  display: table;
-  clear: both; }
-
-div.note p:before,
-div.warning p:before {
-  display: block;
-  float: left;
-  font-size: 4em;
-  line-height: 1em;
-  margin-right: 20px;
-  margin-left: 0em;
-  margin-top: -10px;
-  content: '\0270D';
-  /*handwriting*/ }
-
-div.warning p:before {
-  content: '\026A0';
-  /*warning*/ }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold;
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title, .code .error {
-  color: #b30000;
-  font-weight: bold;
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-div.dedication {
-  margin: 2em 5em;
-  text-align: center;
-  font-style: italic; }
-
-div.dedication p.topic-title {
-  font-weight: bold;
-  font-style: normal; }
 
 div.figure {
   margin-left: 2em;
@@ -808,7 +515,13 @@ div.figure {
 
 div.footer, div.header {
   clear: both;
+  text-align: center;
+  color: #666;
   font-size: smaller; }
+
+div.footer {
+    padding-top: 5em;
+}
 
 div.line-block {
   display: block;
@@ -820,45 +533,24 @@ div.line-block div.line-block {
   margin-bottom: 0;
   margin-left: 1.5em; }
 
-div.sidebar {
-  margin: 0 0 0.5em 1em;
-  border: medium outset;
-  padding: 1em;
-  background-color: rgba(252, 248, 244, 0.75);
-  width: 40%;
-  float: right;
-  clear: right; }
-
-div.sidebar p.rubric {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-size: medium; }
-
-div.system-messages {
-  margin: 5em; }
-
-div.system-messages h1 {
-  color: #b30000; }
-
-div.system-message {
-  border: medium outset;
-  padding: 1em; }
-
-div.system-message p.system-message-title {
-  color: #b30000;
-  font-weight: bold; }
-
 div.topic {
   margin: 2em; }
 
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em; }
+div.search_results {
+  background-color: antiquewhite;
+  margin: 3em;
+  padding: 1em;
+  border: 1px solid #4d4d4d;
+}
 
-h1.title {
-  text-align: center; }
+div#global-links ul {
+  margin-left: 0;
+  list-style-type: none;
+}
 
-h2.subtitle {
-  text-align: center; }
+div#global-links > simple-boot {
+    margin-left: 3em;
+}
 
 hr.docutils {
   width: 75%; }
@@ -892,30 +584,6 @@ img.align-center, .figure.align-center, object.align-center {
 div.align-right {
   text-align: inherit; }
 
-/* div.align-center * { */
-/*   text-align: left } */
-
-ul.simple > li {
-  margin-bottom: 0.5em }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em; }
-
-ol.arabic {
-  list-style: decimal; }
-
-ol.loweralpha {
-  list-style: lower-alpha; }
-
-ol.upperalpha {
-  list-style: upper-alpha; }
-
-ol.lowerroman {
-  list-style: lower-roman; }
-
-ol.upperroman {
-  list-style: upper-roman; }
-
 p.attribution {
   text-align: right;
   margin-left: 50%; }
@@ -935,15 +603,6 @@ p.rubric {
   font-size: larger;
   color: maroon;
   text-align: center; }
-
-p.sidebar-title {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: larger; }
-
-p.sidebar-subtitle {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: bold; }
 
 p.topic-title {
   font-weight: bold; }
@@ -984,21 +643,13 @@ pre.code .inserted, code .inserted {
   background-color: #A3D289; }
 
 span.classifier {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
   font-style: oblique; }
 
 span.classifier-delimiter {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
   font-weight: bold; }
-
-span.interpreted {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
 
 span.option {
   white-space: nowrap; }
-
-span.pre {
-  white-space: pre; }
 
 span.problematic {
   color: #b30000; }
@@ -1006,44 +657,6 @@ span.problematic {
 span.section-subtitle {
   /* font-size relative to parent (h1..h6 element) */
   font-size: 80%; }
-
-table.citation {
-  border-left: solid 1px #666666;
-  margin-left: 1px; }
-
-table.docinfo {
-  margin: 0em;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  font-family: "Raleway", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif !important;
-  color: #444444; }
-
-table.docutils {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em; }
-
-table.footnote {
-  border-left: solid 1px #2d2d2d;
-  margin-left: 1px; }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  vertical-align: top; }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: 700;
-  text-align: left;
-  white-space: nowrap;
-  padding-left: 0; }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100%; }
-
-ul.auto-toc {
-  list-style-type: none; }
 
 span.DecNumber {
   color: #252dbe; }
@@ -1061,7 +674,7 @@ span.FloatNumber {
   color: #252dbe; }
 
 span.Identifier {
-  color: #3b3b3b; }
+  color: #222; }
 
 span.Keyword {
   font-weight: 600;
@@ -1126,67 +739,63 @@ dt pre > span.Identifier, dt pre > span.Operator {
   color: #155da4;
   font-weight: 700; }
 
-dt pre > span.Identifier ~ span.Identifier, dt pre > span.Operator ~ span.Identifier {
-  color: inherit;
-  font-weight: inherit; }
-
-dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator {
+dt pre > span.Keyword ~ span.Identifier, dt pre > span.Identifier ~ span.Identifier,
+dt pre > span.Operator ~ span.Identifier, dt pre > span.Other ~ span.Identifier {
   color: inherit;
   font-weight: inherit; }
 
 /* Nim sprite for the footer (taken from main page favicon) */
 .nim-sprite {
   display: inline-block;
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   background-position: 0 0;
-  background-size: 12px 12px;
+  background-size: 16px 16px;
   -webkit-filter: opacity(50%);
   background-repeat: no-repeat;
   background-image: url("data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA==");
   margin-bottom: -5px; }
-  div.pragma {
-    display: none;
-  }
-  span.pragmabegin {
-    cursor: pointer;
-  }
-  span.pragmaend {
-    cursor: pointer;
-  }
 
-div.search_results {
-  background-color: antiquewhite;
-  margin: 3em;
-  padding: 1em;
-  border: 1px solid #4d4d4d;
+span.pragmadots {
+  /* Position: relative frees us up to make the dots
+  look really nice without fucking up the layout and
+  causing bulging in the parent container */
+  position: relative;
+  /* 1px down looks slightly nicer */
+  top: 1px;
+  padding: 2px;
+  background-color: #e8e8e8;
+  border-radius: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+span.pragmadots:hover {
+  background-color: #DBDBDB;
+}
+span.pragmawrap {
+  display: none;
+}
+
+span.attachedType {
+  display: none;
+  visibility: hidden;
 }
 </style>
 
-<script type="text/javascript" src="../dochack.js"></script>
+<script type="text/javascript" src="dochack.js"></script>
 
 <script type="text/javascript">
-function togglepragma(d) {
-  if (d.style.display != 'inline')
-    d.style.display = 'inline';
-  else
-    d.style.display = 'none';
-}
-
 function main() {
-  var elements = document.getElementsByClassName("pragmabegin");
-  for (var i = 0; i < elements.length; ++i) {
-    var e = elements[i];
-    e.onclick = function(event) {
-      togglepragma(event.target.nextSibling);
-    };
-  }
-  var elements = document.getElementsByClassName("pragmaend");
-  for (var i = 0; i < elements.length; ++i) {
-    var e = elements[i];
-    e.onclick = function(event) {
-      togglepragma(event.target.previousSibling);
-    };
+  var pragmaDots = document.getElementsByClassName("pragmadots");
+  for (var i = 0; i < pragmaDots.length; i++) {
+    pragmaDots[i].onclick = function(event) {
+      // Hide tease
+      event.target.parentNode.style.display = "none";
+      // Show actual
+      event.target.parentNode.nextElementSibling.style.display = "inline";
+    }
   }
 }
 </script>
@@ -1195,10 +804,14 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">Module sparse</h1>
+    <h1 class="title">sparse</h1>
     <div class="row">
   <div class="three columns">
-  <div>
+  <div id="global-links">
+    <ul class="simple">
+    </ul>
+  </div>
+  <div id="searchInputDiv">
     Search: <input type="text" id="searchInput"
       onkeyup="search()" />
   </div>
@@ -1223,75 +836,81 @@ function main() {
     title="SparseVector[A] = ref object
   N*: int32
   indices*: seq[int32]
-  vals*: seq[A]"><wbr />Sparse<wbr />Vector<span class="attachedType" style="visibility:hidden"></span></a></li>
+  vals*: seq[A]"><wbr />Sparse<wbr />Vector<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#SparseMatrixKind"
     title="SparseMatrixKind = enum
-  CSR, CSC, COO"><wbr />Sparse<wbr />Matrix<wbr />Kind<span class="attachedType" style="visibility:hidden"></span></a></li>
+  CSR, CSC, COO"><wbr />Sparse<wbr />Matrix<wbr />Kind<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#SparseMatrixObj"
     title="SparseMatrixObj[A] = object
   kind*: SparseMatrixKind
   M*, N*, nnz*: int32
   rows*, cols*: seq[int32]
-  vals*: seq[A]"><wbr />Sparse<wbr />Matrix<wbr />Obj<span class="attachedType" style="visibility:hidden"></span></a></li>
+  vals*: seq[A]"><wbr />Sparse<wbr />Matrix<wbr />Obj<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#SparseMatrix"
-    title="SparseMatrix[A] = ref SparseMatrixObj[A]"><wbr />Sparse<wbr />Matrix<span class="attachedType" style="visibility:hidden"></span></a></li>
+    title="SparseMatrix[A] = ref SparseMatrixObj[A]"><wbr />Sparse<wbr />Matrix<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#len,SparseVector"
-    title="len(v: SparseVector): int"><wbr />len<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#nnz,SparseVector"
-    title="nnz(v: SparseVector): int32"><wbr />nnz<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#rowLen,SparseMatrix"
-    title="rowLen(m: SparseMatrix): int32"><wbr />row<wbr />Len<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#colLen,SparseMatrix"
-    title="colLen(m: SparseMatrix): int32"><wbr />col<wbr />Len<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#sparseVector,int32,seq[int32],seq[A]"
-    title="sparseVector[A](N: int32; indices: seq[int32]; vals: seq[A]): SparseVector[A]"><wbr />sparse<wbr />Vector<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#sparseMatrix,SparseMatrixKind,int32,int32,int32,seq[int32],seq[int32],seq[A]"
+      <li><a class="reference" href="#len%2CSparseVector"
+    title="len(v: SparseVector): int"><wbr />len<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#nnz%2CSparseVector"
+    title="nnz(v: SparseVector): int32"><wbr />nnz<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#rowLen%2CSparseMatrix"
+    title="rowLen(m: SparseMatrix): int32"><wbr />row<wbr />Len<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#colLen%2CSparseMatrix"
+    title="colLen(m: SparseMatrix): int32"><wbr />col<wbr />Len<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#sparseVector%2Cint32%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D"
+    title="sparseVector[A](N: int32; indices: seq[int32]; vals: seq[A]): SparseVector[A]"><wbr />sparse<wbr />Vector<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#sparseMatrix%2CSparseMatrixKind%2Cint32%2Cint32%2Cint32%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D"
     title="sparseMatrix[A: Scalar](kind: SparseMatrixKind; M, N, nnz: int32;
-                       rows, cols: seq[int32]; vals: seq[A]): SparseMatrix[A]"><wbr />sparse<wbr />Matrix<span class="attachedType" style="visibility:hidden">SparseMatrixKind</span></a></li>
-  <li><a class="reference" href="#csr,seq[int32],seq[int32],seq[A],int32"
-    title="csr[A: Scalar](rows, cols: seq[int32]; vals: seq[A]; numCols: int32): SparseMatrix[A]"><wbr />csr<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#csc,seq[int32],seq[int32],seq[A],int32"
-    title="csc[A: Scalar](rows, cols: seq[int32]; vals: seq[A]; numRows: int32): SparseMatrix[A]"><wbr />csc<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#coo,seq[int32],seq[int32],seq[A],int32,int32"
+                       rows, cols: seq[int32]; vals: seq[A]): SparseMatrix[A]"><wbr />sparse<wbr />Matrix<span class="attachedType">SparseMatrixKind</span></a></li>
+  <li><a class="reference" href="#csr%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32"
+    title="csr[A: Scalar](rows, cols: seq[int32]; vals: seq[A]; numCols: int32): SparseMatrix[A]"><wbr />csr<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#csc%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32"
+    title="csc[A: Scalar](rows, cols: seq[int32]; vals: seq[A]; numRows: int32): SparseMatrix[A]"><wbr />csc<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#coo%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32%2Cint32"
     title="coo[A: Scalar](rows, cols: seq[int32]; vals: seq[A]; numRows, numCols: int32): SparseMatrix[
-    A]"><wbr />coo<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#dense,SparseVector[A]"
-    title="dense[A](v: SparseVector[A]): Vector[A]"><wbr />dense<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#dense,SparseMatrix[A]"
-    title="dense[A](m: SparseMatrix[A]; order = colMajor): Matrix[A]"><wbr />dense<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#==,SparseVector[A],SparseVector[A]"
-    title="`==`[A](v, w: SparseVector[A]): bool"><wbr />`==`<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#==,SparseMatrix[A],SparseMatrix[A]"
-    title="`==`[A](m, n: SparseMatrix[A]): bool"><wbr />`==`<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#$,SparseVector[A]"
-    title="`$`[A](v: SparseVector[A]): string"><wbr />`$`<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#$,SparseMatrix[A]"
-    title="`$`[A](m: SparseMatrix[A]): string"><wbr />`$`<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
+    A]"><wbr />coo<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#dense%2CSparseVector%5BA%5D"
+    title="dense[A](v: SparseVector[A]): Vector[A]"><wbr />dense<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#dense%2CSparseMatrix%5BA%5D"
+    title="dense[A](m: SparseMatrix[A]; order = colMajor): Matrix[A]"><wbr />dense<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#%3D%3D%2CSparseVector%5BA%5D%2CSparseVector%5BA%5D"
+    title="`==`[A](v, w: SparseVector[A]): bool"><wbr />`==`<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#%3D%3D%2CSparseMatrix%5BA%5D%2CSparseMatrix%5BA%5D"
+    title="`==`[A](m, n: SparseMatrix[A]): bool"><wbr />`==`<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#%24%2CSparseVector%5BA%5D"
+    title="`$`[A](v: SparseVector[A]): string"><wbr />`$`<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#%24%2CSparseMatrix%5BA%5D"
+    title="`$`[A](m: SparseMatrix[A]): string"><wbr />`$`<span class="attachedType">SparseMatrix</span></a></li>
 
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#14" id="64">Iterators</a>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#items.i,SparseVector[A]"
-    title="items[A](v: SparseVector[A]): A"><wbr />items<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#pairs.i,SparseVector[A]"
-    title="pairs[A](v: SparseVector[A]): tuple[key: int32, val: A]"><wbr />pairs<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#nonzero.i,SparseVector[A]"
-    title="nonzero[A](v: SparseVector[A]): tuple[key: int32, val: A]"><wbr />nonzero<span class="attachedType" style="visibility:hidden">SparseVector</span></a></li>
-  <li><a class="reference" href="#items.i,SparseMatrix[A]"
-    title="items[A](m: SparseMatrix[A]): A"><wbr />items<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#pairs.i,SparseMatrix[A]"
-    title="pairs[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A]"><wbr />pairs<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
-  <li><a class="reference" href="#nonzero.i,SparseMatrix[A]"
-    title="nonzero[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A]"><wbr />nonzero<span class="attachedType" style="visibility:hidden">SparseMatrix</span></a></li>
+      <li><a class="reference" href="#items.i%2CSparseVector%5BA%5D"
+    title="items[A](v: SparseVector[A]): A"><wbr />items<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#pairs.i%2CSparseVector%5BA%5D"
+    title="pairs[A](v: SparseVector[A]): tuple[key: int32, val: A]"><wbr />pairs<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#nonzero.i%2CSparseVector%5BA%5D"
+    title="nonzero[A](v: SparseVector[A]): tuple[key: int32, val: A]"><wbr />nonzero<span class="attachedType">SparseVector</span></a></li>
+  <li><a class="reference" href="#items.i%2CSparseMatrix%5BA%5D"
+    title="items[A](m: SparseMatrix[A]): A"><wbr />items<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#pairs.i%2CSparseMatrix%5BA%5D"
+    title="pairs[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A]"><wbr />pairs<span class="attachedType">SparseMatrix</span></a></li>
+  <li><a class="reference" href="#nonzero.i%2CSparseMatrix%5BA%5D"
+    title="nonzero[A](m: SparseMatrix[A]): tuple[key: (int32, int32), val: A]"><wbr />nonzero<span class="attachedType">SparseMatrix</span></a></li>
 
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#19" id="69">Exports</a>
+  <ul class="simple simple-toc-section">
+    
   </ul>
 </li>
 
@@ -1300,59 +919,68 @@ function main() {
   </div>
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
+  
   <p class="module-desc"></p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="sequtils.html">sequtils</a>, <a class="reference external" href="./core.html">./core</a>, <a class="reference external" href="./dense.html">./dense</a>
+<a class="reference external" href="core.html">core</a>, <a class="reference external" href="dense.html">dense</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<dt id="SparseVector"><a name="SparseVector"></a><pre><span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
+<a id="SparseVector"></a>
+<dt><pre><a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Keyword">object</span>
   <span class="Identifier">N</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
   <span class="Identifier">indices</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
   <span class="Identifier">vals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span>
 </pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L19"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L20"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="SparseMatrixKind"><a name="SparseMatrixKind"></a><pre><span class="Identifier">SparseMatrixKind</span> <span class="Other">=</span> <span class="Keyword">enum</span>
+<a id="SparseMatrixKind"></a>
+<dt><pre><a href="sparse.html#SparseMatrixKind"><span class="Identifier">SparseMatrixKind</span></a> <span class="Other">=</span> <span class="Keyword">enum</span>
   <span class="Identifier">CSR</span><span class="Other">,</span> <span class="Identifier">CSC</span><span class="Other">,</span> <span class="Identifier">COO</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L23"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L24"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L24" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="SparseMatrixObj"><a name="SparseMatrixObj"></a><pre><span class="Identifier">SparseMatrixObj</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
-  <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">SparseMatrixKind</span>
+<a id="SparseMatrixObj"></a>
+<dt><pre><a href="sparse.html#SparseMatrixObj"><span class="Identifier">SparseMatrixObj</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+  <span class="Identifier">kind</span><span class="Operator">*</span><span class="Other">:</span> <a href="sparse.html#SparseMatrixKind"><span class="Identifier">SparseMatrixKind</span></a>
   <span class="Identifier">M</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">nnz</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
   <span class="Identifier">rows</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span>
   <span class="Identifier">vals</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span>
 </pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L25"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L26"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L26" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="SparseMatrix"><a name="SparseMatrix"></a><pre><span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ref</span> <span class="Identifier">SparseMatrixObj</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="SparseMatrix"></a>
+<dt><pre><a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ref</span> <a href="sparse.html#SparseMatrixObj"><span class="Identifier">SparseMatrixObj</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L30"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L31"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L30" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1360,203 +988,250 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<dt id="len"><a name="len,SparseVector"></a><pre><span class="Keyword">proc</span> <span class="Identifier">len</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="len,SparseVector"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#len%2CSparseVector"><span class="Identifier">len</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L32"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L33"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L32" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L33" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="nnz"><a name="nnz,SparseVector"></a><pre><span class="Keyword">proc</span> <span class="Identifier">nnz</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="nnz,SparseVector"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#nnz%2CSparseVector"><span class="Identifier">nnz</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L34"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L35"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L34" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L35" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="rowLen"><a name="rowLen,SparseMatrix"></a><pre><span class="Keyword">proc</span> <span class="Identifier">rowLen</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span></pre></dt>
+<a id="rowLen,SparseMatrix"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#rowLen%2CSparseMatrix"><span class="Identifier">rowLen</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L36"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L36" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="colLen"><a name="colLen,SparseMatrix"></a><pre><span class="Keyword">proc</span> <span class="Identifier">colLen</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span></pre></dt>
+<a id="colLen,SparseMatrix"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#colLen%2CSparseMatrix"><span class="Identifier">colLen</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">int32</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L41"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L42"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L41" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L42" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="sparseVector"><a name="sparseVector,int32,seq[int32],seq[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">;</span> <span class="Identifier">indices</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="sparseVector,int32,seq[T][int32],seq[T][A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#sparseVector%2Cint32%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D"><span class="Identifier">sparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">N</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">;</span> <span class="Identifier">indices</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L48"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L49"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L48" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L49" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="sparseMatrix"><a name="sparseMatrix,SparseMatrixKind,int32,int32,int32,seq[int32],seq[int32],seq[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">sparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">Scalar</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <span class="Identifier">SparseMatrixKind</span><span class="Other">;</span> <span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">,</span> <span class="Identifier">nnz</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">;</span>
-                           <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="sparseMatrix,SparseMatrixKind,int32,int32,int32,seq[T][int32],seq[T][int32],seq[T][A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#sparseMatrix%2CSparseMatrixKind%2Cint32%2Cint32%2Cint32%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D"><span class="Identifier">sparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <a href="core.html#Scalar"><span class="Identifier">Scalar</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">kind</span><span class="Other">:</span> <a href="sparse.html#SparseMatrixKind"><span class="Identifier">SparseMatrixKind</span></a><span class="Other">;</span> <span class="Identifier">M</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Other">,</span> <span class="Identifier">nnz</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">;</span>
+                           <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L51"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L52"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L51" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="csr"><a name="csr,seq[int32],seq[int32],seq[A],int32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">csr</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">Scalar</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numCols</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="csr,seq[T][int32],seq[T][int32],seq[T][A],int32"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#csr%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32"><span class="Identifier">csr</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <a href="core.html#Scalar"><span class="Identifier">Scalar</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numCols</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L62"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L62" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="csc"><a name="csc,seq[int32],seq[int32],seq[A],int32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">csc</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">Scalar</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numRows</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="csc,seq[T][int32],seq[T][int32],seq[T][A],int32"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#csc%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32"><span class="Identifier">csc</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <a href="core.html#Scalar"><span class="Identifier">Scalar</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numRows</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L65"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L66"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L65" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L66" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="coo"><a name="coo,seq[int32],seq[int32],seq[A],int32,int32"></a><pre><span class="Keyword">proc</span> <span class="Identifier">coo</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">Scalar</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numRows</span><span class="Other">,</span> <span class="Identifier">numCols</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span>
+<a id="coo,seq[T][int32],seq[T][int32],seq[T][A],int32,int32"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#coo%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5Bint32%5D%2Cseq%5BT%5D%5BA%5D%2Cint32%2Cint32"><span class="Identifier">coo</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <a href="core.html#Scalar"><span class="Identifier">Scalar</span></a><span class="Other">]</span><span class="Other">(</span><span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">int32</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">vals</span><span class="Other">:</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">numRows</span><span class="Other">,</span> <span class="Identifier">numCols</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span>
     <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L68"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L69"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L69" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="dense"><a name="dense,SparseVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">dense</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Vector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="dense,SparseVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#dense%2CSparseVector%5BA%5D"><span class="Identifier">dense</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="dense.html#Vector"><span class="Identifier">Vector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L223"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L224"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L224" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="dense"><a name="dense,SparseMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">dense</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">order</span> <span class="Other">=</span> <span class="Identifier">colMajor</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Matrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="dense,SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#dense%2CSparseMatrix%5BA%5D"><span class="Identifier">dense</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">order</span> <span class="Other">=</span> <span class="Identifier">colMajor</span><span class="Other">)</span><span class="Other">:</span> <a href="dense.html#Matrix"><span class="Identifier">Matrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L228"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L229"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L228" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=="><a name="==,SparseVector[A],SparseVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="==,SparseVector[A],SparseVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CSparseVector%5BA%5D%2CSparseVector%5BA%5D"><span class="Identifier">`==`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L237"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L238"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L237" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L238" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=="><a name="==,SparseMatrix[A],SparseMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="==,SparseMatrix[A],SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CSparseMatrix%5BA%5D%2CSparseMatrix%5BA%5D"><span class="Identifier">`==`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L239"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L240"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L239" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L240" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="$"><a name="$,SparseVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<a id="$,SparseVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CSparseVector%5BA%5D"><span class="Identifier">`$`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L243"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L244"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L243" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L244" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="$"><a name="$,SparseMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<a id="$,SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CSparseMatrix%5BA%5D"><span class="Identifier">`$`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L245"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L246"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L245" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L246" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
 </dl></div>
-<div class="section" id="14">
-<h1><a class="toc-backref" href="#14">Iterators</a></h1>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<dt id="items"><a name="items.i,SparseVector[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">items</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span></pre></dt>
+<a id="items.i,SparseVector[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#items.i%2CSparseVector%5BA%5D"><span class="Identifier">items</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L73"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L74"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L73" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L74" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="pairs"><a name="pairs.i,SparseVector[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">pairs</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="pairs.i,SparseVector[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#pairs.i%2CSparseVector%5BA%5D"><span class="Identifier">pairs</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L87"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L88"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L87" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="nonzero"><a name="nonzero.i,SparseVector[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">nonzero</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">SparseVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="nonzero.i,SparseVector[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#nonzero.i%2CSparseVector%5BA%5D"><span class="Identifier">nonzero</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="sparse.html#SparseVector"><span class="Identifier">SparseVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L101"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L102"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L101" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="items"><a name="items.i,SparseMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">items</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span></pre></dt>
+<a id="items.i,SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#items.i%2CSparseMatrix%5BA%5D"><span class="Identifier">items</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L106"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L107"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L107" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="pairs"><a name="pairs.i,SparseMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">pairs</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="pairs.i,SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#pairs.i%2CSparseMatrix%5BA%5D"><span class="Identifier">pairs</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L149"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L150"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L149" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L150" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="nonzero"><a name="nonzero.i,SparseMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">nonzero</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">SparseMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="nonzero.i,SparseMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#nonzero.i%2CSparseMatrix%5BA%5D"><span class="Identifier">nonzero</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="sparse.html#SparseMatrix"><span class="Identifier">SparseMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">key</span><span class="Other">:</span> <span class="Other">(</span><span class="Identifier">int32</span><span class="Other">,</span> <span class="Identifier">int32</span><span class="Other">)</span><span class="Other">,</span> <span class="Identifier">val</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/sparse.nim#L192"
+href="https://github.com/unicredit/neo/tree/master/neo/sparse.nim#L193"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/sparse.nim#L192" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/sparse.nim#L193" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
+</dl></div>
+<div class="section" id="19">
+<h1><a class="toc-backref" href="#19">Exports</a></h1>
+<dl class="item">
+<a href="core.html#checkBounds"><span class="Identifier">checkBounds</span></a>, <a class="reference external" href="core.html">core</a>, <a href="core.html#DimensionError"><span class="Identifier">DimensionError</span></a>, <a href="core.html#CPointer"><span class="Identifier">CPointer</span></a>, <a href="core.html#checkDim"><span class="Identifier">checkDim</span></a>, <a href="core.html#Scalar"><span class="Identifier">Scalar</span></a>, <a href="core.html#LinearAlgebraError"><span class="Identifier">LinearAlgebraError</span></a>, <a href="core.html#Complex"><span class="Identifier">Complex</span></a>, <a href="core.html#OutOfBoundsError"><span class="Identifier">OutOfBoundsError</span></a>
 </dl></div>
 
   </div>
@@ -1566,7 +1241,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2017-06-12 15:30:57 UTC</small>
+        <small>Made with Nim. Generated: 2019-11-05 10:43:01 UTC</small>
       </div>
     </div>
   </div>

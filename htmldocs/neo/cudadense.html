@@ -12,11 +12,11 @@
 <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA=="/>
 
 <!-- Google fonts -->
-<link href='https://fonts.googleapis.com/css?family=Raleway:400,600,900' rel='stylesheet' type='text/css'/>
+<link href='https://fonts.googleapis.com/css?family=Lato:400,600,900' rel='stylesheet' type='text/css'/>
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>Module cudadense</title>
+<title>cudadense</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -27,220 +27,130 @@ customize this style sheet.
 Modified from Chad Skeeters' rst2html-style
 https://bitbucket.org/cskeeters/rst2html-style/
 
-Modified by Boyd Greenfield
+Modified by Boyd Greenfield and narimiran
 */
-/* SCSS variables */
-/* Text weights */
-/* Body colors */
-/* Text colors */
-/* Link colors */
-/* Syntax highlighting colors */
-/* Pct changes */
-/* Mixins */
-/* Body/layout */
+
 html {
   font-size: 100%;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%; }
 
-/* Where we want fancier font if available */
-h1, h2, h3, h4, h5, h6, p.module-desc, table.docinfo + blockquote p, table.docinfo blockquote p, h1 + blockquote p {
-  font-family: "Raleway", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif !important; }
-
-h1.title {
-  font-weight: 900; }
-
 body {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: #666;
-  background-color: rgba(252, 248, 244, 0.75); }
+  font-size: 1.125em;
+  line-height: 1.5;
+  color: #222;
+  background-color: #FCFCFC; }
 
 /* Skeleton grid */
 .container {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 1050px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0;
   box-sizing: border-box; }
 
 .column,
 .columns {
   width: 100%;
   float: left;
-  box-sizing: border-box; }
+  box-sizing: border-box;
+  margin-left: 1%;
+}
 
-/* For devices larger than 400px */
-@media (min-width: 400px) {
-  .container {
-    width: 100%;
-    padding: 0; } }
-/* For devices larger than 650px */
-@media (min-width: 650px) {
-  .container {
-    width: 100%; }
+.column:first-child,
+.columns:first-child {
+  margin-left: 0; }
 
-  .column,
-  .columns {
-    margin-left: 4%; }
+.three.columns {
+  width: 19%; }
 
-  .column:first-child,
-  .columns:first-child {
-    margin-left: 0; }
+.nine.columns {
+  width: 80.0%; }
 
-  .one.column,
-  .one.columns {
-    width: 4.66666666667%; }
+.twelve.columns {
+  width: 100%;
+  margin-left: 0; }
 
-  .two.columns {
-    width: 13.3333333333%; }
-
+@media screen and (max-width: 860px) {
   .three.columns {
-    width: 22%; }
-
-  .four.columns {
-    width: 30.6666666667%; }
-
-  .five.columns {
-    width: 39.3333333333%; }
-
-  .six.columns {
-    width: 48%; }
-
-  .seven.columns {
-    width: 56.6666666667%; }
-
-  .eight.columns {
-    width: 65.3333333333%; }
-
+    display: none;
+  }
   .nine.columns {
-    width: 74.0%; }
-
-  .ten.columns {
-    width: 82.6666666667%; }
-
-  .eleven.columns {
-    width: 91.3333333333%; }
-
-  .twelve.columns {
-    width: 100%;
-    margin-left: 0; }
-
-  .one-third.column {
-    width: 30.6666666667%; }
-
-  .two-thirds.column {
-    width: 65.3333333333%; } }
-/* Customer Overrides */
-.footer {
-  text-align: center;
-  color: #969696;
-  padding-top: 10%; }
-
-p.module-desc {
-  font-size: 1.1em;
-  color: #666666; }
-
-a.link-seesrc {
-  color: #aec7d2;
-  font-style: italic; }
-
-a.link-seesrc:hover {
-  color: #6c9aae; }
-
-#toc-list {
-  word-wrap: break-word; }
-
-ul.simple-toc {
-  list-style: none; }
-
-ul.simple-toc a.reference-toplevel {
-  font-weight: bold;
-  color: #0077b3; }
-
-ul.simple-toc-section {
-  list-style-type: circle;
-  color: #6c9aae; }
-
-ul.simple-toc-section a.reference {
-  color: #0077b3; }
+    width: 98.0%;
+  }
+  body {
+    font-size: 1em;
+    line-height: 1.35;
+  }
+}
 
 cite {
   font-style: italic !important; }
 
-dt > pre {
-  border-color: rgba(0, 0, 0, 0.15);
-  background-color: transparent;
-  margin: 15px 0px 5px; }
 
-dd > pre {
-  border-color: rgba(0, 0, 0, 0.1);
-  background-color: whitesmoke;
-  margin-top: 8px; }
+/* Nim search input */
+div#searchInputDiv {
+  margin-bottom: 1em;
+}
+input#searchInput {
+  width: 80%;
+}
 
-.item > dd {
-  margin-left: 10px;
-  margin-bottom: 30px; }
-
-/* Nim line-numbered tables */
-.line-nums-table {
-  width: 100%;
-  table-layout: fixed; }
-
-table.line-nums-table {
-  border-radius: 4px;
-  border: 1px solid #cccccc;
-  background-color: whitesmoke;
-  border-collapse: separate;
-  margin-top: 15px;
-  margin-bottom: 25px; }
-
-.line-nums-table tbody {
-  border: none; }
-
-.line-nums-table td pre {
-  border: none;
-  background-color: transparent; }
-
-.line-nums-table td.blob-line-nums {
-  width: 28px; }
-
-.line-nums-table td.blob-line-nums pre {
-  color: #b0b0b0;
-  -webkit-filter: opacity(75%);
-  text-align: right;
-  border-color: transparent;
-  background-color: transparent;
-  padding-left: 0px;
-  margin-left: 0px;
-  padding-right: 0px;
-  margin-right: 0px; }
+/*
+ * Some custom formatting for input forms.
+ * This also fixes input form colors on Firefox with a dark system theme on Linux.
+ */
+input {
+  -moz-appearance: none;
+  color: #333;
+  background-color: #f8f8f8;
+  border: 1px solid #aaa;
+  font-family: "Lato", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+  font-size: 0.9em;
+  padding: 6px;
+}
+input:focus {
+  border: 1px solid #1fa0eb;
+  box-shadow: 0 0 2px #1fa0eb;
+}
 
 /* Docgen styles */
 /* Links */
 a {
-  color: #0077b3;
-  text-decoration: none; }
+  color: #07b;
+  text-decoration: none;
+}
+
+a span.Identifier {
+  text-decoration: underline;
+  text-decoration-color: #aab;
+}
+
+a.reference-toplevel {
+  font-weight: bold;
+}
+
+a.toc-backref {
+  text-decoration: none;
+  color: #222; }
+
+a.link-seesrc {
+  color: #607c9f;
+  font-size: 0.9em;
+  font-style: italic; }
 
 a:hover,
 a:focus {
-  color: #00334d;
+  color: #607c9f;
   text-decoration: underline; }
 
-a:visited {
-  color: #00334d; }
+a:hover span.Identifier {
+  color: #607c9f;
+}
 
-a:focus {
-  outline: thin dotted #2d2d2d;
-  outline: 5px auto -webkit-focus-ring-color;
-  outline-offset: -2px; }
-
-a:hover,
-a:active {
-  outline: 0; }
 
 sub,
 sup {
@@ -317,378 +227,258 @@ img {
 
   h2,
   h3 {
-    page-break-after: avoid; } }
-.img-rounded {
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px; }
+    page-break-after: avoid; }
+}
 
-.img-polaroid {
-  padding: 4px;
-  background-color: rgba(252, 248, 244, 0.75);
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); }
 
 p {
-  margin: 0 0 12px; }
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
 
 small {
   font-size: 85%; }
 
 strong {
-  font-weight: 600; }
+  font-weight: 600;
+  font-size: 0.95em;
+  color: #3c3c3c;
+}
 
 em {
   font-style: italic; }
 
-cite {
-  font-style: normal; }
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: 600;
-  line-height: 20px;
-  color: inherit;
-  text-rendering: optimizelegibility; }
-
 h1 {
-  font-size: 2em;
-  padding-bottom: .15em;
-  border-bottom: 1px solid #aaaaaa;
-  margin-top: 1.0em;
+  font-size: 1.8em;
+  font-weight: 400;
+  padding-bottom: .25em;
+  border-bottom: 1px solid #aaa;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
   line-height: 1.2em; }
 
 h1.title {
   padding-bottom: 1em;
   border-bottom: 0px;
-  font-size: 2.75em; }
+  font-size: 2.5em;
+  text-align: center;
+  font-weight: 900;
+  margin-top: 0.75em;
+  margin-bottom: 0em;
+}
 
 h2 {
-  font-size: 1.5em;
-  margin-top: 1.5em; }
+  font-size: 1.3em;
+  margin-top: 2em; }
+
+h2.subtitle {
+  text-align: center; }
 
 h3 {
-  font-size: 1.3em;
+  font-size: 1.125em;
   font-style: italic;
-  margin-top: 0.75em; }
+  margin-top: 1.5em; }
 
 h4 {
-  font-size: 1.3em;
-  margin-top: 0.5em; }
+  font-size: 1.125em;
+  margin-top: 1em; }
 
 h5 {
-  font-size: 1.2em;
-  margin-top: 0.25em; }
+  font-size: 1.125em;
+  margin-top: 0.75em; }
 
 h6 {
   font-size: 1.1em; }
 
+
 ul,
 ol {
   padding: 0;
-  margin: 0 0 0px 15px; }
+  margin-top: 0.5em;
+  margin-left: 0.75em; }
 
 ul ul,
 ul ol,
 ol ol,
 ol ul {
-  margin-bottom: 0; }
+  margin-bottom: 0;
+  margin-left: 1.25em; }
 
 li {
-  line-height: 20px; }
-
-dl {
-  margin-bottom: 20px; }
-
-dt,
-dd {
-  line-height: 20px; }
-
-dt {
-  font-weight: bold; }
-
-dd {
-  margin-left: 10px;
-  margin-bottom: 26px; }
-
-hr {
-  margin: 20px 0;
-  border: 0;
-  border-top: 1px solid #eeeeee;
-  border-bottom: 1px solid #ffffff; }
-
-abbr[title],
-abbr[data-original-title] {
-  cursor: help;
-  border-bottom: 1px dotted #999999; }
-
-abbr.initialism {
-  font-size: 90%;
-  text-transform: uppercase; }
-
-blockquote {
-  padding: 0 0 0 15px;
-  margin: 0 0 20px;
-  border-left: 5px solid #EFEBE0; }
-
-table.docinfo + blockquote, table.docinfo blockquote, h1 + blockquote {
-  border-left: 5px solid #c9c9c9;
+    list-style-type: circle;
 }
 
-table.docinfo + blockquote p, table.docinfo blockquote p, h1 + blockquote p {
-  margin-bottom: 0;
-  font-size: 15px;
-  font-weight: 200;
-  line-height: 1.5;
-  font-style: italic; }
+ul.simple-boot li {
+    list-style-type: none;
+    margin-left: 0em;
+    margin-bottom: 0.5em;
+}
 
-q:before,
-q:after,
-blockquote:before,
-blockquote:after {
-  content: ""; }
+ol.simple > li, ul.simple > li {
+  margin-bottom: 0.25em;
+  margin-left: 0.4em }
 
-address {
-  display: block;
-  margin-bottom: 20px;
-  font-style: normal;
-  line-height: 20px; }
+ul.simple.simple-toc > li {
+    margin-top: 1em;
+}
 
-code,
-pre {
-  font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
-  padding: 0 3px 2px;
-  font-weight: 500;
-  font-size: 12px;
-  color: #444444;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px; }
+ul.simple-toc {
+  list-style: none;
+  font-size: 0.9em;
+  margin-left: -0.3em;
+  margin-top: 1em; }
+
+ul.simple-toc > li {
+    list-style-type: none;
+}
+
+ul.simple-toc-section {
+  list-style-type: circle;
+  margin-left: 1em;
+  color: #6c9aae; }
+
+
+ol.arabic {
+  list-style: decimal; }
+
+ol.loweralpha {
+  list-style: lower-alpha; }
+
+ol.upperalpha {
+  list-style: upper-alpha; }
+
+ol.lowerroman {
+  list-style: lower-roman; }
+
+ol.upperroman {
+  list-style: upper-roman; }
+
+ul.auto-toc {
+  list-style-type: none; }
+
+
+dl {
+  margin-bottom: 1.5em; }
+
+dt {
+  margin-bottom: -0.5em;
+  margin-left: 0.0em; }
+
+dd {
+  margin-left: 2.0em;
+  margin-bottom: 3.0em;
+  margin-top: 0.5em; }
+
+
+hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid #aaa; }
+
+blockquote {
+  font-size: 0.9em;
+  font-style: italic;
+  padding-left: 0.5em;
+  margin-left: 0;
+  border-left: 5px solid #bbc;
+}
 
 .pre {
   font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
-  font-weight: 600;
-  /*color: #504da6;*/
+  font-weight: 500;
+  font-size: 0.85em;
+  background-color: #f0f3ff;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-radius: 4px;
 }
 
-code {
-  padding: 2px 4px;
-  color: #444444;
-  white-space: nowrap;
-  background-color: white;
-  border: 1px solid #777777; }
-
 pre {
+  font-family: "Source Code Pro", Monaco, Menlo, Consolas, "Courier New", monospace;
+  color: #222;
+  font-weight: 500;
   display: inline-block;
   box-sizing: border-box;
-  min-width: calc(100% - 19.5px);
-  padding: 9.5px;
-  margin: 0.25em 10px 0.25em 10px;
-  font-size: 14px;
-  line-height: 20px;
+  min-width: 100%;
+  padding: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 0.85em;
   white-space: pre !important;
   overflow-y: hidden;
   overflow-x: visible;
-  background-color: whitesmoke;
-  border: 1px solid #cccccc;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px; }
-
-pre.prettyprint {
-  margin-bottom: 20px; }
-
-pre code {
-  padding: 0;
-  color: inherit;
-  white-space: pre;
-  overflow-x: visible;
-  background-color: transparent;
-  border: 0; }
+  background-color: ghostwhite;
+  border: 1px solid #dde;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px; }
 
 .pre-scrollable {
   max-height: 340px;
   overflow-y: scroll; }
 
+
+/* Nim line-numbered tables */
+.line-nums-table {
+  width: 100%;
+  table-layout: fixed; }
+
+table.line-nums-table {
+  border-radius: 4px;
+  border: 1px solid #cccccc;
+  background-color: ghostwhite;
+  border-collapse: separate;
+  margin-top: 15px;
+  margin-bottom: 25px; }
+
+.line-nums-table tbody {
+  border: none; }
+
+.line-nums-table td pre {
+  border: none;
+  background-color: transparent; }
+
+.line-nums-table td.blob-line-nums {
+  width: 28px; }
+
+.line-nums-table td.blob-line-nums pre {
+  color: #b0b0b0;
+  -webkit-filter: opacity(75%);
+  text-align: right;
+  border-color: transparent;
+  background-color: transparent;
+  padding-left: 0px;
+  margin-left: 0px;
+  padding-right: 0px;
+  margin-right: 0px; }
+
+
 table {
   max-width: 100%;
   background-color: transparent;
+  margin-top: 0.5em;
+  margin-bottom: 1.5em;
   border-collapse: collapse;
-  border-spacing: 0; }
-
-table th, table td {
-  padding: 0px 8px 0px;
+  border-color: #ccc;
+  border-spacing: 0;
+  font-size: 0.9em;
 }
 
-.table {
-  width: 100%;
-  margin-bottom: 20px; }
+table th, table td {
+  padding: 0px 0.5em 0px;
+}
 
-.table th,
-.table td {
-  padding: 8px;
-  line-height: 20px;
-  text-align: left;
-  vertical-align: top;
-  border-top: 1px solid #444444; }
-
-.table th {
+table th {
+  background-color: #e8e8e8;
   font-weight: bold; }
 
-.table thead th {
-  vertical-align: bottom; }
+table th.docinfo-name {
+    background-color: transparent;
+}
 
-.table caption + thead tr:first-child th,
-.table caption + thead tr:first-child td,
-.table colgroup + thead tr:first-child th,
-.table colgroup + thead tr:first-child td,
-.table thead:first-child tr:first-child th,
-.table thead:first-child tr:first-child td {
-  border-top: 0; }
+table tr:hover {
+  background-color: ghostwhite; }
 
-.table tbody + tbody {
-  border-top: 2px solid #444444; }
-
-.table .table {
-  background-color: rgba(252, 248, 244, 0.75); }
-
-.table-condensed th,
-.table-condensed td {
-  padding: 4px 5px; }
-
-.table-bordered {
-  border: 1px solid #444444;
-  border-collapse: separate;
-  *border-collapse: collapse;
-  border-left: 0;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px; }
-
-.table-bordered th,
-.table-bordered td {
-  border-left: 1px solid #444444; }
-
-.table-bordered caption + thead tr:first-child th,
-.table-bordered caption + tbody tr:first-child th,
-.table-bordered caption + tbody tr:first-child td,
-.table-bordered colgroup + thead tr:first-child th,
-.table-bordered colgroup + tbody tr:first-child th,
-.table-bordered colgroup + tbody tr:first-child td,
-.table-bordered thead:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child th,
-.table-bordered tbody:first-child tr:first-child td {
-  border-top: 0; }
-
-.table-bordered thead:first-child tr:first-child > th:first-child,
-.table-bordered tbody:first-child tr:first-child > td:first-child,
-.table-bordered tbody:first-child tr:first-child > th:first-child {
-  -webkit-border-top-left-radius: 4px;
-  border-top-left-radius: 4px;
-  -moz-border-radius-topleft: 4px; }
-
-.table-bordered thead:first-child tr:first-child > th:last-child,
-.table-bordered tbody:first-child tr:first-child > td:last-child,
-.table-bordered tbody:first-child tr:first-child > th:last-child {
-  -webkit-border-top-right-radius: 4px;
-  border-top-right-radius: 4px;
-  -moz-border-radius-topright: 4px; }
-
-.table-bordered thead:last-child tr:last-child > th:first-child,
-.table-bordered tbody:last-child tr:last-child > td:first-child,
-.table-bordered tbody:last-child tr:last-child > th:first-child,
-.table-bordered tfoot:last-child tr:last-child > td:first-child,
-.table-bordered tfoot:last-child tr:last-child > th:first-child {
-  -webkit-border-bottom-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  -moz-border-radius-bottomleft: 4px; }
-
-.table-bordered thead:last-child tr:last-child > th:last-child,
-.table-bordered tbody:last-child tr:last-child > td:last-child,
-.table-bordered tbody:last-child tr:last-child > th:last-child,
-.table-bordered tfoot:last-child tr:last-child > td:last-child,
-.table-bordered tfoot:last-child tr:last-child > th:last-child {
-  -webkit-border-bottom-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  -moz-border-radius-bottomright: 4px; }
-
-.table-bordered tfoot + tbody:last-child tr:last-child td:first-child {
-  -webkit-border-bottom-left-radius: 0;
-  border-bottom-left-radius: 0;
-  -moz-border-radius-bottomleft: 0; }
-
-.table-bordered tfoot + tbody:last-child tr:last-child td:last-child {
-  -webkit-border-bottom-right-radius: 0;
-  border-bottom-right-radius: 0;
-  -moz-border-radius-bottomright: 0; }
-
-.table-bordered caption + thead tr:first-child th:first-child,
-.table-bordered caption + tbody tr:first-child td:first-child,
-.table-bordered colgroup + thead tr:first-child th:first-child,
-.table-bordered colgroup + tbody tr:first-child td:first-child {
-  -webkit-border-top-left-radius: 4px;
-  border-top-left-radius: 4px;
-  -moz-border-radius-topleft: 4px; }
-
-.table-bordered caption + thead tr:first-child th:last-child,
-.table-bordered caption + tbody tr:first-child td:last-child,
-.table-bordered colgroup + thead tr:first-child th:last-child,
-.table-bordered colgroup + tbody tr:first-child td:last-child {
-  -webkit-border-top-right-radius: 4px;
-  border-top-right-radius: 4px;
-  -moz-border-radius-topright: 4px; }
-
-table.docutils th {
-  background-color: #e8e8e8; }
-
-table.docutils tr:hover {
-  background-color: whitesmoke; }
-
-.table-striped tbody > tr:nth-child(odd) > td,
-.table-striped tbody > tr:nth-child(odd) > th {
-  background-color: rgba(252, 248, 244, 0.75); }
-
-.table-hover tbody tr:hover > td,
-.table-hover tbody tr:hover > th {
-  background-color: rgba(241, 222, 204, 0.75); }
-
-table td[class*="span"],
-table th[class*="span"],
-.row-fluid table td[class*="span"],
-.row-fluid table th[class*="span"] {
-  display: table-cell;
-  float: none;
-  margin-left: 0; }
-
-.hero-unit {
-  padding: 60px;
-  margin-bottom: 30px;
-  font-size: 18px;
-  font-weight: 200;
-  line-height: 30px;
-  color: inherit;
-  background-color: rgba(230, 197, 164, 0.75);
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  border-radius: 6px; }
-
-.hero-unit h1 {
-  margin-bottom: 0;
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
-  color: inherit; }
-
-.hero-unit li {
-  line-height: 30px; }
 
 /* rst2html default used to remove borders from tables and images */
 .borderless, table.borderless td, table.borderless th {
@@ -709,10 +499,6 @@ table.borderless td, table.borderless th {
 .hidden {
   display: none; }
 
-a.toc-backref {
-  text-decoration: none;
-  color: #444444; }
-
 blockquote.epigraph {
   margin: 2em 5em; }
 
@@ -722,85 +508,6 @@ dl.docutils dd {
 object[type="image/svg+xml"], object[type="application/x-shockwave-flash"] {
   overflow: hidden; }
 
-/* Uncomment (and remove this text!) to get bold-faced definition list terms
-dl.docutils dt {
-  font-weight: bold }
-*/
-div.abstract {
-  margin: 2em 5em; }
-
-div.abstract p.topic-title {
-  font-weight: bold;
-  text-align: center; }
-
-div.admonition, div.attention, div.caution, div.danger, div.error,
-div.hint, div.important, div.note, div.tip, div.warning {
-  margin: 2em;
-  border: medium outset;
-  padding: 1em; }
-
-div.note, div.warning {
-  margin: 1.5em 0px;
-  border: none; }
-
-div.note p.admonition-title,
-div.warning p.admonition-title {
-  display: none; }
-
-/* Clearfix
- * http://css-tricks.com/snippets/css/clear-fix/
- */
-div.note:after,
-div.warning:after {
-  content: "";
-  display: table;
-  clear: both; }
-
-div.note p:before,
-div.warning p:before {
-  display: block;
-  float: left;
-  font-size: 4em;
-  line-height: 1em;
-  margin-right: 20px;
-  margin-left: 0em;
-  margin-top: -10px;
-  content: '\0270D';
-  /*handwriting*/ }
-
-div.warning p:before {
-  content: '\026A0';
-  /*warning*/ }
-
-div.admonition p.admonition-title, div.hint p.admonition-title,
-div.important p.admonition-title, div.note p.admonition-title,
-div.tip p.admonition-title {
-  font-weight: bold;
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
-
-div.attention p.admonition-title, div.caution p.admonition-title,
-div.danger p.admonition-title, div.error p.admonition-title,
-div.warning p.admonition-title, .code .error {
-  color: #b30000;
-  font-weight: bold;
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
-
-/* Uncomment (and remove this text!) to get reduced vertical space in
-   compound paragraphs.
-div.compound .compound-first, div.compound .compound-middle {
-  margin-bottom: 0.5em }
-
-div.compound .compound-last, div.compound .compound-middle {
-  margin-top: 0.5em }
-*/
-div.dedication {
-  margin: 2em 5em;
-  text-align: center;
-  font-style: italic; }
-
-div.dedication p.topic-title {
-  font-weight: bold;
-  font-style: normal; }
 
 div.figure {
   margin-left: 2em;
@@ -808,7 +515,13 @@ div.figure {
 
 div.footer, div.header {
   clear: both;
+  text-align: center;
+  color: #666;
   font-size: smaller; }
+
+div.footer {
+    padding-top: 5em;
+}
 
 div.line-block {
   display: block;
@@ -820,45 +533,24 @@ div.line-block div.line-block {
   margin-bottom: 0;
   margin-left: 1.5em; }
 
-div.sidebar {
-  margin: 0 0 0.5em 1em;
-  border: medium outset;
-  padding: 1em;
-  background-color: rgba(252, 248, 244, 0.75);
-  width: 40%;
-  float: right;
-  clear: right; }
-
-div.sidebar p.rubric {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-size: medium; }
-
-div.system-messages {
-  margin: 5em; }
-
-div.system-messages h1 {
-  color: #b30000; }
-
-div.system-message {
-  border: medium outset;
-  padding: 1em; }
-
-div.system-message p.system-message-title {
-  color: #b30000;
-  font-weight: bold; }
-
 div.topic {
   margin: 2em; }
 
-h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
-h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
-  margin-top: 0.4em; }
+div.search_results {
+  background-color: antiquewhite;
+  margin: 3em;
+  padding: 1em;
+  border: 1px solid #4d4d4d;
+}
 
-h1.title {
-  text-align: center; }
+div#global-links ul {
+  margin-left: 0;
+  list-style-type: none;
+}
 
-h2.subtitle {
-  text-align: center; }
+div#global-links > simple-boot {
+    margin-left: 3em;
+}
 
 hr.docutils {
   width: 75%; }
@@ -892,30 +584,6 @@ img.align-center, .figure.align-center, object.align-center {
 div.align-right {
   text-align: inherit; }
 
-/* div.align-center * { */
-/*   text-align: left } */
-
-ul.simple > li {
-  margin-bottom: 0.5em }
-
-ol.simple, ul.simple {
-  margin-bottom: 1em; }
-
-ol.arabic {
-  list-style: decimal; }
-
-ol.loweralpha {
-  list-style: lower-alpha; }
-
-ol.upperalpha {
-  list-style: upper-alpha; }
-
-ol.lowerroman {
-  list-style: lower-roman; }
-
-ol.upperroman {
-  list-style: upper-roman; }
-
 p.attribution {
   text-align: right;
   margin-left: 50%; }
@@ -935,15 +603,6 @@ p.rubric {
   font-size: larger;
   color: maroon;
   text-align: center; }
-
-p.sidebar-title {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: larger; }
-
-p.sidebar-subtitle {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
-  font-weight: bold; }
 
 p.topic-title {
   font-weight: bold; }
@@ -984,21 +643,13 @@ pre.code .inserted, code .inserted {
   background-color: #A3D289; }
 
 span.classifier {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
   font-style: oblique; }
 
 span.classifier-delimiter {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif;
   font-weight: bold; }
-
-span.interpreted {
-  font-family: "Helvetica Neue", "HelveticaNeue", "Raleway", Helvetica, Arial, sans-serif; }
 
 span.option {
   white-space: nowrap; }
-
-span.pre {
-  white-space: pre; }
 
 span.problematic {
   color: #b30000; }
@@ -1006,44 +657,6 @@ span.problematic {
 span.section-subtitle {
   /* font-size relative to parent (h1..h6 element) */
   font-size: 80%; }
-
-table.citation {
-  border-left: solid 1px #666666;
-  margin-left: 1px; }
-
-table.docinfo {
-  margin: 0em;
-  margin-top: 2em;
-  margin-bottom: 2em;
-  font-family: "Raleway", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif !important;
-  color: #444444; }
-
-table.docutils {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em; }
-
-table.footnote {
-  border-left: solid 1px #2d2d2d;
-  margin-left: 1px; }
-
-table.docutils td, table.docutils th,
-table.docinfo td, table.docinfo th {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  vertical-align: top; }
-
-table.docutils th.field-name, table.docinfo th.docinfo-name {
-  font-weight: 700;
-  text-align: left;
-  white-space: nowrap;
-  padding-left: 0; }
-
-h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
-h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
-  font-size: 100%; }
-
-ul.auto-toc {
-  list-style-type: none; }
 
 span.DecNumber {
   color: #252dbe; }
@@ -1061,7 +674,7 @@ span.FloatNumber {
   color: #252dbe; }
 
 span.Identifier {
-  color: #3b3b3b; }
+  color: #222; }
 
 span.Keyword {
   font-weight: 600;
@@ -1126,67 +739,63 @@ dt pre > span.Identifier, dt pre > span.Operator {
   color: #155da4;
   font-weight: 700; }
 
-dt pre > span.Identifier ~ span.Identifier, dt pre > span.Operator ~ span.Identifier {
-  color: inherit;
-  font-weight: inherit; }
-
-dt pre > span.Operator ~ span.Identifier, dt pre > span.Operator ~ span.Operator {
+dt pre > span.Keyword ~ span.Identifier, dt pre > span.Identifier ~ span.Identifier,
+dt pre > span.Operator ~ span.Identifier, dt pre > span.Other ~ span.Identifier {
   color: inherit;
   font-weight: inherit; }
 
 /* Nim sprite for the footer (taken from main page favicon) */
 .nim-sprite {
   display: inline-block;
-  height: 12px;
-  width: 12px;
+  height: 16px;
+  width: 16px;
   background-position: 0 0;
-  background-size: 12px 12px;
+  background-size: 16px 16px;
   -webkit-filter: opacity(50%);
   background-repeat: no-repeat;
   background-image: url("data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA==");
   margin-bottom: -5px; }
-  div.pragma {
-    display: none;
-  }
-  span.pragmabegin {
-    cursor: pointer;
-  }
-  span.pragmaend {
-    cursor: pointer;
-  }
 
-div.search_results {
-  background-color: antiquewhite;
-  margin: 3em;
-  padding: 1em;
-  border: 1px solid #4d4d4d;
+span.pragmadots {
+  /* Position: relative frees us up to make the dots
+  look really nice without fucking up the layout and
+  causing bulging in the parent container */
+  position: relative;
+  /* 1px down looks slightly nicer */
+  top: 1px;
+  padding: 2px;
+  background-color: #e8e8e8;
+  border-radius: 4px;
+  margin: 0 2px;
+  cursor: pointer;
+  font-size: 0.8em;
+}
+
+span.pragmadots:hover {
+  background-color: #DBDBDB;
+}
+span.pragmawrap {
+  display: none;
+}
+
+span.attachedType {
+  display: none;
+  visibility: hidden;
 }
 </style>
 
-<script type="text/javascript" src="../dochack.js"></script>
+<script type="text/javascript" src="dochack.js"></script>
 
 <script type="text/javascript">
-function togglepragma(d) {
-  if (d.style.display != 'inline')
-    d.style.display = 'inline';
-  else
-    d.style.display = 'none';
-}
-
 function main() {
-  var elements = document.getElementsByClassName("pragmabegin");
-  for (var i = 0; i < elements.length; ++i) {
-    var e = elements[i];
-    e.onclick = function(event) {
-      togglepragma(event.target.nextSibling);
-    };
-  }
-  var elements = document.getElementsByClassName("pragmaend");
-  for (var i = 0; i < elements.length; ++i) {
-    var e = elements[i];
-    e.onclick = function(event) {
-      togglepragma(event.target.previousSibling);
-    };
+  var pragmaDots = document.getElementsByClassName("pragmadots");
+  for (var i = 0; i < pragmaDots.length; i++) {
+    pragmaDots[i].onclick = function(event) {
+      // Hide tease
+      event.target.parentNode.style.display = "none";
+      // Show actual
+      event.target.parentNode.nextElementSibling.style.display = "inline";
+    }
   }
 }
 </script>
@@ -1195,10 +804,14 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">Module cudadense</h1>
+    <h1 class="title">cudadense</h1>
     <div class="row">
   <div class="three columns">
-  <div>
+  <div id="global-links">
+    <ul class="simple">
+    </ul>
+  </div>
+  <div id="searchInputDiv">
     Search: <input type="text" id="searchInput"
       onkeyup="search()" />
   </div>
@@ -1223,139 +836,145 @@ function main() {
     title="CudaVector[A] = object
   data*: ref [ptr A]
   fp*: ptr A
-  len, step*: int32"><wbr />Cuda<wbr />Vector<span class="attachedType" style="visibility:hidden"></span></a></li>
+  len, step*: int32"><wbr />Cuda<wbr />Vector<span class="attachedType"></span></a></li>
   <li><a class="reference" href="#CudaMatrix"
     title="CudaMatrix[A] = object
   M*, N*, ld*: int32
   data*: ref [ptr A]
   fp*: ptr A
-  shape*: set[MatrixShape]"><wbr />Cuda<wbr />Matrix<span class="attachedType" style="visibility:hidden"></span></a></li>
+  shape*: set[MatrixShape]"><wbr />Cuda<wbr />Matrix<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#isContiguous,CudaVector"
-    title="isContiguous(v: CudaVector): bool"><wbr />is<wbr />Contiguous<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#isContiguous,CudaMatrix"
-    title="isContiguous(m: CudaMatrix): bool"><wbr />is<wbr />Contiguous<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#newCudaVector,int"
-    title="newCudaVector[A](n: int): CudaVector[A]"><wbr />new<wbr />Cuda<wbr />Vector<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#newCudaMatrix,int,int"
-    title="newCudaMatrix[A](m, n: int): CudaMatrix[A]"><wbr />new<wbr />Cuda<wbr />Matrix<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#gpu,Vector[A]"
-    title="gpu[A](v: Vector[A]): CudaVector[A]"><wbr />gpu<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#gpu,Matrix[A]"
-    title="gpu[A](m: Matrix[A]): CudaMatrix[A]"><wbr />gpu<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#cpu,CudaVector[A]"
-    title="cpu[A](v: CudaVector[A]): Vector[A]"><wbr />cpu<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#cpu,CudaMatrix[A]"
-    title="cpu[A](m: CudaMatrix[A]): Matrix[A]"><wbr />cpu<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#$,CudaVector[A]"
-    title="`$`[A](v: CudaVector[A]): string"><wbr />`$`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#$,CudaMatrix[A]"
-    title="`$`[A](m: CudaMatrix[A]): string"><wbr />`$`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#==,CudaVector[A],CudaVector[A]"
-    title="`==`[A](m, n: CudaVector[A]): bool"><wbr />`==`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#==,CudaMatrix[A],CudaMatrix[A]"
-    title="`==`[A](m, n: CudaMatrix[A]): bool"><wbr />`==`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#clone,CudaVector[A]"
-    title="clone[A](v: CudaVector[A]): CudaVector[A]"><wbr />clone<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#clone,CudaMatrix[A]"
-    title="clone[A](m: CudaMatrix[A]): CudaMatrix[A]"><wbr />clone<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#[],CudaVector[A],Slice[int]"
-    title="`[]`[A](v: CudaVector[A]; s: Slice[int]): CudaVector[A]"><wbr />`[]`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#[],CudaMatrix[A],Slice[int],Slice[int]"
-    title="`[]`[A](m: CudaMatrix[A]; rows, cols: Slice[int]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#[],CudaMatrix[A],Slice[int],typedesc[All]"
-    title="`[]`[A](m: CudaMatrix[A]; rows: Slice[int]; cols: typedesc[All]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#[],CudaMatrix[A],typedesc[All],Slice[int]"
-    title="`[]`[A](m: CudaMatrix[A]; rows: typedesc[All]; cols: Slice[int]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#column,CudaMatrix[A],int"
-    title="column[A](m: CudaMatrix[A]; j: int): CudaVector[A]"><wbr />column<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#row,CudaMatrix[A],int"
-    title="row[A](m: CudaMatrix[A]; i: int): CudaVector[A]"><wbr />row<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#reshape,CudaMatrix[A],int,int"
-    title="reshape[A](m: CudaMatrix[A]; a, b: int): CudaMatrix[A]"><wbr />reshape<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#asMatrix,CudaVector[A],int,int"
-    title="asMatrix[A](v: CudaVector[A]; a, b: int): CudaMatrix[A]"><wbr />as<wbr />Matrix<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#asVector,CudaMatrix[A]"
-    title="asVector[A](m: CudaMatrix[A]): CudaVector[A]"><wbr />as<wbr />Vector<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#*=,CudaVector[A],A"
-    title="`*=`[A: SomeReal](v: var CudaVector[A]; k: A)"><wbr />`*=`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#*,CudaVector[A],A"
-    title="`*`[A: SomeReal](v: CudaVector[A]; k: A): CudaVector[A]"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#+=,CudaVector[A],CudaVector[A]"
-    title="`+=`[A: SomeReal](v: var CudaVector[A]; w: CudaVector[A])"><wbr />`+=`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#+,CudaVector[A],CudaVector[A]"
-    title="`+`[A: SomeReal](v, w: CudaVector[A]): CudaVector[A]"><wbr />`+`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#-=,CudaVector[A],CudaVector[A]"
-    title="`-=`[A: SomeReal](v: var CudaVector[A]; w: CudaVector[A])"><wbr />`-=`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#-,CudaVector[A],CudaVector[A]"
-    title="`-`[A: SomeReal](v, w: CudaVector[A]): CudaVector[A]"><wbr />`-`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#*,CudaVector[A],CudaVector[A]"
-    title="`*`[A: SomeReal](v, w: CudaVector[A]): A"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#l_2,CudaVector[A]"
-    title="l_2[A: SomeReal](v: CudaVector[A]): A"><wbr />l_<wbr />2<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#l_1,CudaVector[A]"
-    title="l_1[A: SomeReal](v: CudaVector[A]): A"><wbr />l_<wbr />1<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#*=,CudaMatrix[A],A"
-    title="`*=`[A: SomeReal](m: var CudaMatrix[A]; k: A)"><wbr />`*=`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#*,CudaMatrix[A],A"
-    title="`*`[A: SomeReal](m: CudaMatrix[A]; k: A): CudaMatrix[A]"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#+=,CudaMatrix[A],CudaMatrix[A]"
-    title="`+=`[A: SomeReal](a: var CudaMatrix[A]; b: CudaMatrix[A])"><wbr />`+=`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#+,CudaMatrix[A],CudaMatrix[A]"
-    title="`+`[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`+`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#-=,CudaMatrix[A],CudaMatrix[A]"
-    title="`-=`[A: SomeReal](a: var CudaMatrix[A]; b: CudaMatrix[A])"><wbr />`-=`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#-,CudaMatrix[A],CudaMatrix[A]"
-    title="`-`[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`-`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#l_2,CudaMatrix[A]"
-    title="l_2[A: SomeReal](m: CudaMatrix[A]): A"><wbr />l_<wbr />2<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#l_1,CudaMatrix[A]"
-    title="l_1[A: SomeReal](m: CudaMatrix[A]): A"><wbr />l_<wbr />1<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#*,CudaMatrix[A],CudaVector[A]"
-    title="`*`[A: SomeReal](a: CudaMatrix[A]; v: CudaVector[A]): CudaVector[A]"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#*,CudaMatrix[A],CudaMatrix[A]"
-    title="`*`[A: SomeReal](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#=~,CudaVector[A],CudaVector[A]"
-    title="`=~`[A: SomeReal](v, w: CudaVector[A]): bool"><wbr />`=~`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#=~,CudaMatrix[A],CudaMatrix[A]"
-    title="`=~`[A: SomeReal](v, w: CudaMatrix[A]): bool"><wbr />`=~`<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
+      <li><a class="reference" href="#isContiguous%2CCudaVector"
+    title="isContiguous(v: CudaVector): bool"><wbr />is<wbr />Contiguous<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#isContiguous%2CCudaMatrix"
+    title="isContiguous(m: CudaMatrix): bool"><wbr />is<wbr />Contiguous<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#newCudaVector%2Cint"
+    title="newCudaVector[A](n: int): CudaVector[A]"><wbr />new<wbr />Cuda<wbr />Vector<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#newCudaMatrix%2Cint%2Cint"
+    title="newCudaMatrix[A](m, n: int): CudaMatrix[A]"><wbr />new<wbr />Cuda<wbr />Matrix<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#gpu%2CVector%5BA%5D"
+    title="gpu[A](v: Vector[A]): CudaVector[A]"><wbr />gpu<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#gpu%2CMatrix%5BA%5D"
+    title="gpu[A](m: Matrix[A]): CudaMatrix[A]"><wbr />gpu<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#cpu%2CCudaVector%5BA%5D"
+    title="cpu[A](v: CudaVector[A]): Vector[A]"><wbr />cpu<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#cpu%2CCudaMatrix%5BA%5D"
+    title="cpu[A](m: CudaMatrix[A]): Matrix[A]"><wbr />cpu<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%24%2CCudaVector%5BA%5D"
+    title="`$`[A](v: CudaVector[A]): string"><wbr />`$`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%24%2CCudaMatrix%5BA%5D"
+    title="`$`[A](m: CudaMatrix[A]): string"><wbr />`$`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%3D%3D%2CCudaVector%5BA%5D%2CCudaVector%5BA%5D"
+    title="`==`[A](m, n: CudaVector[A]): bool"><wbr />`==`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%3D%3D%2CCudaMatrix%5BA%5D%2CCudaMatrix%5BA%5D"
+    title="`==`[A](m, n: CudaMatrix[A]): bool"><wbr />`==`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#clone%2CCudaVector%5BA%5D"
+    title="clone[A](v: CudaVector[A]): CudaVector[A]"><wbr />clone<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#clone%2CCudaMatrix%5BA%5D"
+    title="clone[A](m: CudaMatrix[A]): CudaMatrix[A]"><wbr />clone<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%5B%5D%2CCudaVector%5BA%5D%2CSlice%5Bint%5D"
+    title="`[]`[A](v: CudaVector[A]; s: Slice[int]): CudaVector[A]"><wbr />`[]`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%5B%5D%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CSlice%5Bint%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`[]=`[A: SomeFloat](v: var CudaVector[A]; s: Slice[int]; val: CudaVector[A])"><wbr />`[]=`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%5B%5D%2CCudaMatrix%5BA%5D%2CSlice%5Bint%5D%2CSlice%5Bint%5D"
+    title="`[]`[A](m: CudaMatrix[A]; rows, cols: Slice[int]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%5B%5D%2CCudaMatrix%5BA%5D%2CSlice%5Bint%5D%2Ctypedesc%5BAll%5D"
+    title="`[]`[A](m: CudaMatrix[A]; rows: Slice[int]; cols: typedesc[All]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%5B%5D%2CCudaMatrix%5BA%5D%2Ctypedesc%5BAll%5D%2CSlice%5Bint%5D"
+    title="`[]`[A](m: CudaMatrix[A]; rows: typedesc[All]; cols: Slice[int]): CudaMatrix[A]"><wbr />`[]`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%5B%5D%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CSlice%5Bint%5D%2CSlice%5Bint%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`[]=`[A: SomeFloat](m: var CudaMatrix[A]; rows, cols: Slice[int]; val: CudaMatrix[A])"><wbr />`[]=`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#column%2CCudaMatrix%5BA%5D%2Cint"
+    title="column[A](m: CudaMatrix[A]; j: int): CudaVector[A]"><wbr />column<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#row%2CCudaMatrix%5BA%5D%2Cint"
+    title="row[A](m: CudaMatrix[A]; i: int): CudaVector[A]"><wbr />row<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#reshape%2CCudaMatrix%5BA%5D%2Cint%2Cint"
+    title="reshape[A](m: CudaMatrix[A]; a, b: int): CudaMatrix[A]"><wbr />reshape<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#asMatrix%2CCudaVector%5BA%5D%2Cint%2Cint"
+    title="asMatrix[A](v: CudaVector[A]; a, b: int): CudaMatrix[A]"><wbr />as<wbr />Matrix<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#asVector%2CCudaMatrix%5BA%5D"
+    title="asVector[A](m: CudaMatrix[A]): CudaVector[A]"><wbr />as<wbr />Vector<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2A%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CA"
+    title="`*=`[A: SomeFloat](v: var CudaVector[A]; k: A)"><wbr />`*=`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2A%2CCudaVector%5BA%3A+SomeFloat%5D%2CA"
+    title="`*`[A: SomeFloat](v: CudaVector[A]; k: A): CudaVector[A]"><wbr />`*`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2B%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`+=`[A: SomeFloat](v: var CudaVector[A]; w: CudaVector[A])"><wbr />`+=`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2B%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`+`[A: SomeFloat](v, w: CudaVector[A]): CudaVector[A]"><wbr />`+`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#-%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`-=`[A: SomeFloat](v: var CudaVector[A]; w: CudaVector[A])"><wbr />`-=`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#-%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`-`[A: SomeFloat](v, w: CudaVector[A]): CudaVector[A]"><wbr />`-`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2A%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`*`[A: SomeFloat](v, w: CudaVector[A]): A"><wbr />`*`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#l_2%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="l_2[A: SomeFloat](v: CudaVector[A]): A"><wbr />l_<wbr />2<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#l_1%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="l_1[A: SomeFloat](v: CudaVector[A]): A"><wbr />l_<wbr />1<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2A%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CA"
+    title="`*=`[A: SomeFloat](m: var CudaMatrix[A]; k: A)"><wbr />`*=`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CA"
+    title="`*`[A: SomeFloat](m: CudaMatrix[A]; k: A): CudaMatrix[A]"><wbr />`*`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2B%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`+=`[A: SomeFloat](a: var CudaMatrix[A]; b: CudaMatrix[A])"><wbr />`+=`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2B%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`+`[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`+`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#-%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`-=`[A: SomeFloat](a: var CudaMatrix[A]; b: CudaMatrix[A])"><wbr />`-=`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#-%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`-`[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`-`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#l_2%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="l_2[A: SomeFloat](m: CudaMatrix[A]): A"><wbr />l_<wbr />2<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#l_1%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="l_1[A: SomeFloat](m: CudaMatrix[A]): A"><wbr />l_<wbr />1<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#T%2CCudaMatrix%5BA%5D"
+    title="T[A](m: CudaMatrix[A]): CudaMatrix[A]"><wbr />T<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`*`[A: SomeFloat](a: CudaMatrix[A]; v: CudaVector[A]): CudaVector[A]"><wbr />`*`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`*`[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A]"><wbr />`*`<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%3D~%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"
+    title="`=~`[A: SomeFloat](v, w: CudaVector[A]): bool"><wbr />`=~`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%3D~%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"
+    title="`=~`[A: SomeFloat](v, w: CudaMatrix[A]): bool"><wbr />`=~`<span class="attachedType">CudaMatrix</span></a></li>
 
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#14" id="64">Iterators</a>
+  <a class="reference reference-toplevel" href="#15" id="65">Iterators</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#columns.i,CudaMatrix[A]"
-    title="columns[A](m: CudaMatrix[A]): auto"><wbr />columns<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#rows.i,CudaMatrix[A]"
-    title="rows[A](m: CudaMatrix[A]): auto"><wbr />rows<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#columnsSlow.i,CudaMatrix[A]"
-    title="columnsSlow[A](m: CudaMatrix[A]): auto"><wbr />columns<wbr />Slow<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#rowsSlow.i,CudaMatrix[A]"
-    title="rowsSlow[A](m: CudaMatrix[A]): auto"><wbr />rows<wbr />Slow<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
+      <li><a class="reference" href="#columns.i%2CCudaMatrix%5BA%5D"
+    title="columns[A](m: CudaMatrix[A]): auto"><wbr />columns<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#rows.i%2CCudaMatrix%5BA%5D"
+    title="rows[A](m: CudaMatrix[A]): auto"><wbr />rows<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#columnsSlow.i%2CCudaMatrix%5BA%5D"
+    title="columnsSlow[A](m: CudaMatrix[A]): auto"><wbr />columns<wbr />Slow<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#rowsSlow.i%2CCudaMatrix%5BA%5D"
+    title="rowsSlow[A](m: CudaMatrix[A]): auto"><wbr />rows<wbr />Slow<span class="attachedType">CudaMatrix</span></a></li>
 
   </ul>
 </li>
 <li>
-  <a class="reference reference-toplevel" href="#17" id="67">Templates</a>
+  <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#init.t,CudaVector[A],int"
-    title="init[A](v: CudaVector[A]; n: int)"><wbr />init<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#init.t,CudaMatrix[A],int,int"
-    title="init[A](v: CudaMatrix[A]; m, n: int)"><wbr />init<span class="attachedType" style="visibility:hidden">CudaMatrix</span></a></li>
-  <li><a class="reference" href="#*.t,A,"
-    title="`*`[A, ](k: A; v: CudaVector[A] or CudaMatrix[A]): auto"><wbr />`*`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#/.t,,A"
-    title="`&#x2F;`[A, ](v: CudaVector[A] or CudaMatrix[A]; k: A): auto"><wbr />`/`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#/=.t,,A"
-    title="`&#x2F;=`[A, ](v: var CudaVector[A] or var CudaMatrix[A]; k: A)"><wbr />`/=`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
-  <li><a class="reference" href="#!=~.t,,"
-    title="`!=~`(a, b: CudaVector or CudaMatrix): bool"><wbr />`!=~`<span class="attachedType" style="visibility:hidden">CudaVector</span></a></li>
+      <li><a class="reference" href="#init.t%2CCudaVector%5BA%5D%2Cint"
+    title="init[A](v: CudaVector[A]; n: int)"><wbr />init<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#init.t%2CCudaMatrix%5BA%5D%2Cint%2Cint"
+    title="init[A](v: CudaMatrix[A]; m, n: int)"><wbr />init<span class="attachedType">CudaMatrix</span></a></li>
+  <li><a class="reference" href="#%2A.t%2CA%2C"
+    title="`*`[A; ](k: A; v: CudaVector[A] or CudaMatrix[A]): auto"><wbr />`*`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2F.t%2C%2CA"
+    title="`/`[A; ](v: CudaVector[A] or CudaMatrix[A]; k: A): auto"><wbr />`/`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%2F%3D.t%2C%2CA"
+    title="`/=`[A; ](v: var CudaVector[A] or var CudaMatrix[A]; k: A)"><wbr />`/=`<span class="attachedType">CudaVector</span></a></li>
+  <li><a class="reference" href="#%21%3D~.t%2C%2C"
+    title="`!=~`(a, b: CudaVector or CudaMatrix): bool"><wbr />`!=~`<span class="attachedType">CudaVector</span></a></li>
 
   </ul>
 </li>
@@ -1365,40 +984,45 @@ function main() {
   </div>
   <div class="nine columns" id="content">
   <div id="tocRoot"></div>
+  
   <p class="module-desc"></p>
   <div class="section" id="6">
 <h1><a class="toc-backref" href="#6">Imports</a></h1>
 <dl class="item">
-<a class="reference external" href="./core.html">./core</a>, <a class="reference external" href="./dense.html">./dense</a>, <a class="reference external" href="./private/neocommon.html">./private/neocommon</a>
+<a class="reference external" href="core.html">core</a>, <a class="reference external" href="dense.html">dense</a>, <a class="reference external" href="private/neocommon.html">private/neocommon</a>
 </dl></div>
 <div class="section" id="7">
 <h1><a class="toc-backref" href="#7">Types</a></h1>
 <dl class="item">
-<dt id="CudaVector"><a name="CudaVector"></a><pre><span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+<a id="CudaVector"></a>
+<dt><pre><a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">data</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">A</span><span class="Other">]</span>
   <span class="Identifier">fp</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">A</span>
   <span class="Identifier">len</span><span class="Other">,</span> <span class="Identifier">step</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
 </pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L19"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L19"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L19" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="CudaMatrix"><a name="CudaMatrix"></a><pre><span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
+<a id="CudaMatrix"></a>
+<dt><pre><a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">object</span>
   <span class="Identifier">M</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">N</span><span class="Operator">*</span><span class="Other">,</span> <span class="Identifier">ld</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">int32</span>
   <span class="Identifier">data</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">ref</span> <span class="Other">[</span><span class="Keyword">ptr</span> <span class="Identifier">A</span><span class="Other">]</span>
   <span class="Identifier">fp</span><span class="Operator">*</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">A</span>
-  <span class="Identifier">shape</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><span class="Identifier">MatrixShape</span><span class="Other">]</span>
+  <span class="Identifier">shape</span><span class="Operator">*</span><span class="Other">:</span> <span class="Identifier">set</span><span class="Other">[</span><a href="dense.html#MatrixShape"><span class="Identifier">MatrixShape</span></a><span class="Other">]</span>
 </pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L23"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L23"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1406,500 +1030,643 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="12">
 <h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<dt id="isContiguous"><a name="isContiguous,CudaVector"></a><pre><span class="Keyword">proc</span> <span class="Identifier">isContiguous</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="isContiguous,CudaVector"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#isContiguous%2CCudaVector"><span class="Identifier">isContiguous</span></a><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L37"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L37"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L37" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="isContiguous"><a name="isContiguous,CudaMatrix"></a><pre><span class="Keyword">proc</span> <span class="Identifier">isContiguous</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="isContiguous,CudaMatrix"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#isContiguous%2CCudaMatrix"><span class="Identifier">isContiguous</span></a><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L40"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L40"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L40" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="newCudaVector"><a name="newCudaVector,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">newCudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="newCudaVector,int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#newCudaVector%2Cint"><span class="Identifier">newCudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L60"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L60"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L60" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="newCudaMatrix"><a name="newCudaMatrix,int,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">newCudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="newCudaMatrix,int,int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#newCudaMatrix%2Cint%2Cint"><span class="Identifier">newCudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L63"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L63"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L63" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="gpu"><a name="gpu,Vector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">Vector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="gpu,Vector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#gpu%2CVector%5BA%5D"><span class="Identifier">gpu</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="dense.html#Vector"><span class="Identifier">Vector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L68"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L68"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L68" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="gpu"><a name="gpu,Matrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">gpu</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">Matrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="gpu,Matrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#gpu%2CMatrix%5BA%5D"><span class="Identifier">gpu</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="dense.html#Matrix"><span class="Identifier">Matrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L72"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L72"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L72" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="cpu"><a name="cpu,CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Vector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="cpu,CudaVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#cpu%2CCudaVector%5BA%5D"><span class="Identifier">cpu</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="dense.html#Vector"><span class="Identifier">Vector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L78"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L78"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L78" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L78" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="cpu"><a name="cpu,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">cpu</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">Matrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="cpu,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#cpu%2CCudaMatrix%5BA%5D"><span class="Identifier">cpu</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="dense.html#Matrix"><span class="Identifier">Matrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L82"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L82"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L82" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="$"><a name="$,CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<a id="$,CudaVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CCudaVector%5BA%5D"><span class="Identifier">`$`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L88"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L88"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L88" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="$"><a name="$,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`$`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
+<a id="$,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%24%2CCudaMatrix%5BA%5D"><span class="Identifier">`$`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">string</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L90"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L90"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L90" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=="><a name="==,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="==,CudaVector[A],CudaVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CCudaVector%5BA%5D%2CCudaVector%5BA%5D"><span class="Identifier">`==`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L94"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L94"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L94" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=="><a name="==,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`==`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="==,CudaMatrix[A],CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D%3D%2CCudaMatrix%5BA%5D%2CCudaMatrix%5BA%5D"><span class="Identifier">`==`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L97"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L97"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L97" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="clone"><a name="clone,CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">clone</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="clone,CudaVector[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#clone%2CCudaVector%5BA%5D"><span class="Identifier">clone</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L102"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L102"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L102" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="clone"><a name="clone,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">clone</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="clone,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#clone%2CCudaMatrix%5BA%5D"><span class="Identifier">clone</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L106"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L106"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L106" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="[]"><a name="[],CudaVector[A],Slice[int]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`[]`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="[],CudaVector[A],Slice[int]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CCudaVector%5BA%5D%2CSlice%5Bint%5D"><span class="Identifier">`[]`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L112"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L127"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L112" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L127" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="[]"><a name="[],CudaMatrix[A],Slice[int],Slice[int]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`[]`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="[]=,CudaVector[A: SomeFloat],Slice[int],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CSlice%5Bint%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`[]=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">val</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma">
+    <span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L124"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L143"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L124" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L143" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="[]"><a name="[],CudaMatrix[A],Slice[int],typedesc[All]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`[]`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">typedesc</span><span class="Other">[</span><span class="Identifier">All</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="[],CudaMatrix[A],Slice[int],Slice[int]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CCudaMatrix%5BA%5D%2CSlice%5Bint%5D%2CSlice%5Bint%5D"><span class="Identifier">`[]`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L138"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L148"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L138" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L148" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="[]"><a name="[],CudaMatrix[A],typedesc[All],Slice[int]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`[]`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">:</span> <span class="Identifier">typedesc</span><span class="Other">[</span><span class="Identifier">All</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="[],CudaMatrix[A],Slice[int],typedesc[All]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CCudaMatrix%5BA%5D%2CSlice%5Bint%5D%2Ctypedesc%5BAll%5D"><span class="Identifier">`[]`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">typedesc</span><span class="Other">[</span><a href="dense.html#All"><span class="Identifier">All</span></a><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L141"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L162"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L141" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L162" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="column"><a name="column,CudaMatrix[A],int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">column</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">j</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="[],CudaMatrix[A],typedesc[All],Slice[int]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%2CCudaMatrix%5BA%5D%2Ctypedesc%5BAll%5D%2CSlice%5Bint%5D"><span class="Identifier">`[]`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">:</span> <span class="Identifier">typedesc</span><span class="Other">[</span><a href="dense.html#All"><span class="Identifier">All</span></a><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L144"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L165"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L144" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L165" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="row"><a name="row,CudaMatrix[A],int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">row</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="[]=,CudaMatrix[A: SomeFloat],Slice[int],Slice[int],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%5B%5D%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CSlice%5Bint%5D%2CSlice%5Bint%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`[]=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">rows</span><span class="Other">,</span> <span class="Identifier">cols</span><span class="Other">:</span> <span class="Identifier">Slice</span><span class="Other">[</span><span class="Identifier">int</span><span class="Other">]</span><span class="Other">;</span>
+                       <span class="Identifier">val</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L154"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L168"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L154" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L168" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="reshape"><a name="reshape,CudaMatrix[A],int,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">reshape</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="column,CudaMatrix[A],int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#column%2CCudaMatrix%5BA%5D%2Cint"><span class="Identifier">column</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">j</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L192"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L181"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L192" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L181" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="asMatrix"><a name="asMatrix,CudaVector[A],int,int"></a><pre><span class="Keyword">proc</span> <span class="Identifier">asMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="row,CudaMatrix[A],int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#row%2CCudaMatrix%5BA%5D%2Cint"><span class="Identifier">row</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">i</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L205"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L191"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L205" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L191" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="asVector"><a name="asVector,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">asVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="reshape,CudaMatrix[A],int,int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#reshape%2CCudaMatrix%5BA%5D%2Cint%2Cint"><span class="Identifier">reshape</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L218"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L229"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L218" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L229" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*="><a name="*=,CudaVector[A],A"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="asMatrix,CudaVector[A],int,int"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#asMatrix%2CCudaVector%5BA%5D%2Cint%2Cint"><span class="Identifier">asMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L245"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L242"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L245" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L242" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*,CudaVector[A],A"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="asVector,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#asVector%2CCudaMatrix%5BA%5D"><span class="Identifier">asVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L249"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L255"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L249" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L255" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="+="><a name="+=,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="*=,CudaVector[A: SomeFloat],A"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CA"><span class="Identifier">`*=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L254"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L268"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L254" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L268" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="+"><a name="+,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="*,CudaVector[A: SomeFloat],A"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%2CCudaVector%5BA%3A+SomeFloat%5D%2CA"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L259"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L272"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L259" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L272" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="-="><a name="-=,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="+=,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2B%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`+=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L265"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L277"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L265" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L277" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="-"><a name="-,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="+,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2B%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`+`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L270"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L282"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L270" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L282" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="-=,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#-%3D%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`-=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L276"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L288"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L276" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L288" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="l_2"><a name="l_2,CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="-,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#-%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`-`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L280"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L293"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L280" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L293" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="l_1"><a name="l_1,CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="*,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L283"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L299"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L283" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L299" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*="><a name="*=,CudaMatrix[A],A"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="l_2,CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#l_2%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">l_2</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L286"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L303"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L286" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L303" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*,CudaMatrix[A],A"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="l_1,CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#l_1%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">l_1</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L294"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L306"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L294" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L306" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="+="><a name="+=,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="*=,CudaMatrix[A: SomeFloat],A"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CA"><span class="Identifier">`*=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L311"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L309"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L311" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L309" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="+"><a name="+,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`+`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="*,CudaMatrix[A: SomeFloat],A"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CA"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L323"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L317"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L323" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L317" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="-="><a name="-=,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="+=,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2B%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`+=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L332"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L334"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L332" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L334" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="-"><a name="-,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`-`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="+,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2B%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`+`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L344"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L340"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L344" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L340" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="l_2"><a name="l_2,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_2</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="-=,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#-%3D%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`-=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L353"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L347"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L353" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L347" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="l_1"><a name="l_1,CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">l_1</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="-,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#-%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`-`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L359"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L355"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L359" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L355" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*,CudaMatrix[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="l_2,CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#l_2%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">l_2</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L367"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L364"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L367" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L364" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="l_1,CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#l_1%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">l_1</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">A</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L378"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L370"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L378" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L370" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=~"><a name="=~,CudaVector[A],CudaVector[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="T,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#T%2CCudaMatrix%5BA%5D"><span class="Identifier">T</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L397"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L376"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L397" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L376" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="=~"><a name="=~,CudaMatrix[A],CudaMatrix[A]"></a><pre><span class="Keyword">proc</span> <span class="Identifier">`=~`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeReal</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="*,CudaMatrix[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L399"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L386"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L399" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L386" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="*,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%2A%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L397"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L397" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="=~,CudaVector[A: SomeFloat],CudaVector[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D~%2CCudaVector%5BA%3A+SomeFloat%5D%2CCudaVector%5BA%3A+SomeFloat%5D"><span class="Identifier">`=~`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L416"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L416" class="link-seesrc" target="_blank" >Edit</a>
+
+</dd>
+<a id="=~,CudaMatrix[A: SomeFloat],CudaMatrix[A: SomeFloat]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#%3D~%2CCudaMatrix%5BA%3A+SomeFloat%5D%2CCudaMatrix%5BA%3A+SomeFloat%5D"><span class="Identifier">`=~`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">:</span> <span class="Identifier">SomeFloat</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">,</span> <span class="Identifier">w</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<dd>
+
+
+&nbsp;&nbsp;<a
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L418"
+class="link-seesrc" target="_blank">Source</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L418" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
 </dl></div>
-<div class="section" id="14">
-<h1><a class="toc-backref" href="#14">Iterators</a></h1>
+<div class="section" id="15">
+<h1><a class="toc-backref" href="#15">Iterators</a></h1>
 <dl class="item">
-<dt id="columns"><a name="columns.i,CudaMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">columns</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="columns.i,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#columns.i%2CCudaMatrix%5BA%5D"><span class="Identifier">columns</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L166"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L203"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L166" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L203" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="rows"><a name="rows.i,CudaMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">rows</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="rows.i,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#rows.i%2CCudaMatrix%5BA%5D"><span class="Identifier">rows</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L174"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L211"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L174" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L211" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="columnsSlow"><a name="columnsSlow.i,CudaMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">columnsSlow</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="columnsSlow.i,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#columnsSlow.i%2CCudaMatrix%5BA%5D"><span class="Identifier">columnsSlow</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L182"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L219"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L182" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L219" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="rowsSlow"><a name="rowsSlow.i,CudaMatrix[A]"></a><pre><span class="Keyword">iterator</span> <span class="Identifier">rowsSlow</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span class="Other pragmabegin">{.</span><div class="pragma"><span class="Identifier">inline</span></div><span class="Other pragmaend">.}</span></pre></dt>
+<a id="rowsSlow.i,CudaMatrix[A]"></a>
+<dt><pre><span class="Keyword">iterator</span> <a href="#rowsSlow.i%2CCudaMatrix%5BA%5D"><span class="Identifier">rowsSlow</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">m</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L186"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L223"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L186" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L223" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
 </dl></div>
-<div class="section" id="17">
-<h1><a class="toc-backref" href="#17">Templates</a></h1>
+<div class="section" id="18">
+<h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
-<dt id="init"><a name="init.t,CudaVector[A],int"></a><pre><span class="Keyword">template</span> <span class="Identifier">init</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span></pre></dt>
+<a id="init.t,CudaVector[A],int"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#init.t%2CCudaVector%5BA%5D%2Cint"><span class="Identifier">init</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L45"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="init"><a name="init.t,CudaMatrix[A],int,int"></a><pre><span class="Keyword">template</span> <span class="Identifier">init</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span></pre></dt>
+<a id="init.t,CudaMatrix[A],int,int"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#init.t%2CCudaMatrix%5BA%5D%2Cint%2Cint"><span class="Identifier">init</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">m</span><span class="Other">,</span> <span class="Identifier">n</span><span class="Other">:</span> <span class="Identifier">int</span><span class="Other">)</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L52"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L52"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L52" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="*"><a name="*.t,A,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`*`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">,</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
+<a id="*.t,A,"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#%2A.t%2CA%2C"><span class="Identifier">`*`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">;</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">;</span> <span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L302"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L325"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L302" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L325" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="/"><a name="/.t,,A"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">,</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
+<a id="/.t,,A"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#%2F.t%2C%2CA"><span class="Identifier">`/`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">;</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L305"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L328"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L305" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L328" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="/="><a name="/=.t,,A"></a><pre><span class="Keyword">template</span> <span class="Identifier">`/=`</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">,</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">CudaVector</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <span class="Identifier">CudaMatrix</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span></pre></dt>
+<a id="/=.t,,A"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#%2F%3D.t%2C%2CA"><span class="Identifier">`/=`</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">;</span> <span class="Other">]</span><span class="Other">(</span><span class="Identifier">v</span><span class="Other">:</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Keyword">or</span> <span class="Keyword">var</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span><span class="Other">;</span> <span class="Identifier">k</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">)</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L308"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L331"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L308" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L331" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<dt id="!=~"><a name="!=~.t,,"></a><pre><span class="Keyword">template</span> <span class="Identifier">`!=~`</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <span class="Identifier">CudaVector</span> <span class="Keyword">or</span> <span class="Identifier">CudaMatrix</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
+<a id="!=~.t,,"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#%21%3D~.t%2C%2C"><span class="Identifier">`!=~`</span></a><span class="Other">(</span><span class="Identifier">a</span><span class="Other">,</span> <span class="Identifier">b</span><span class="Other">:</span> <a href="cudadense.html#CudaVector"><span class="Identifier">CudaVector</span></a> <span class="Keyword">or</span> <a href="cudadense.html#CudaMatrix"><span class="Identifier">CudaMatrix</span></a><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">bool</span></pre></dt>
 <dd>
 
+
 &nbsp;&nbsp;<a
-href="/tree/master/neo/cudadense.nim#L401"
+href="https://github.com/unicredit/neo/tree/master/neo/cudadense.nim#L420"
 class="link-seesrc" target="_blank">Source</a>
-<a href="/edit/devel/neo/cudadense.nim#L401" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/cudadense.nim#L420" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -1912,7 +1679,7 @@ class="link-seesrc" target="_blank">Source</a>
       <div class="twelve-columns footer">
         <span class="nim-sprite"></span>
         <br/>
-        <small>Made with Nim. Generated: 2017-06-12 15:30:57 UTC</small>
+        <small>Made with Nim. Generated: 2019-11-05 10:43:01 UTC</small>
       </div>
     </div>
   </div>

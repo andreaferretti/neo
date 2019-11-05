@@ -16,7 +16,7 @@
 <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600' rel='stylesheet' type='text/css'/>
 
 <!-- CSS -->
-<title>core</title>
+<title>neocommon</title>
 <style type="text/css" >
 /*
 Stylesheet for use with Docutils/rst2html.
@@ -804,7 +804,7 @@ function main() {
 <body onload="main()">
 <div class="document" id="documentId">
   <div class="container">
-    <h1 class="title">core</h1>
+    <h1 class="title">neocommon</h1>
     <div class="row">
   <div class="three columns">
   <div id="global-links">
@@ -824,30 +824,30 @@ function main() {
   </div>
   <ul class="simple simple-toc" id="toc-list">
 <li>
-  <a class="reference reference-toplevel" href="#7" id="57">Types</a>
+  <a class="reference reference-toplevel" href="#12" id="62">Procs</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#Complex"
-    title="Complex[A] = tuple[re, im: A]"><wbr />Complex<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#Scalar"
-    title="Scalar = float32 or float64 or Complex[float32] or Complex[float64]"><wbr />Scalar<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#CPointer"
-    title="CPointer[A] = ptr UncheckedArray[A]"><wbr />CPointer<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#DimensionError"
-    title="DimensionError = object of ValueError"><wbr />Dimension<wbr />Error<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#OutOfBoundsError"
-    title="OutOfBoundsError = object of ValueError"><wbr />Out<wbr />Of<wbr />Bounds<wbr />Error<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#LinearAlgebraError"
-    title="LinearAlgebraError = object of FloatingPointError"><wbr />Linear<wbr />Algebra<wbr />Error<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#first%2Cseq%5BT%5D%5BT%5D"
+    title="first[T](a: var seq[T]): ptr T"><wbr />first<span class="attachedType"></span></a></li>
+
+  </ul>
+</li>
+<li>
+  <a class="reference reference-toplevel" href="#17" id="67">Macros</a>
+  <ul class="simple simple-toc-section">
+      <li><a class="reference" href="#overload.m%2Cuntyped%2Ctyped"
+    title="overload(s: untyped; p: typed): auto"><wbr />overload<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#fortran.m%2Cuntyped%2Cvarargs%5Btyped%5D"
+    title="fortran(f: untyped; callArgs: varargs[typed]): auto"><wbr />fortran<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
 <li>
   <a class="reference reference-toplevel" href="#18" id="68">Templates</a>
   <ul class="simple simple-toc-section">
-      <li><a class="reference" href="#checkDim.t%2Cuntyped%2Cstring"
-    title="checkDim(cond: untyped; msg = &quot;&quot;)"><wbr />check<wbr />Dim<span class="attachedType"></span></a></li>
-  <li><a class="reference" href="#checkBounds.t%2Cuntyped%2Cstring"
-    title="checkBounds(cond: untyped; msg = &quot;&quot;)"><wbr />check<wbr />Bounds<span class="attachedType"></span></a></li>
+      <li><a class="reference" href="#pointerTo.t%2Cuntyped"
+    title="pointerTo(x: untyped)"><wbr />pointer<wbr />To<span class="attachedType"></span></a></li>
+  <li><a class="reference" href="#overload.t%2Cuntyped%2Ctyped%2Ctyped"
+    title="overload(s: untyped; p, q: typed)"><wbr />overload<span class="attachedType"></span></a></li>
 
   </ul>
 </li>
@@ -859,73 +859,45 @@ function main() {
   <div id="tocRoot"></div>
   
   <p class="module-desc"></p>
-  <div class="section" id="7">
-<h1><a class="toc-backref" href="#7">Types</a></h1>
+  <div class="section" id="12">
+<h1><a class="toc-backref" href="#12">Procs</a></h1>
 <dl class="item">
-<a id="Complex"></a>
-<dt><pre><a href="core.html#Complex"><span class="Identifier">Complex</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">tuple</span><span class="Other">[</span><span class="Identifier">re</span><span class="Other">,</span> <span class="Identifier">im</span><span class="Other">:</span> <span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="first,seq[T][T]"></a>
+<dt><pre><span class="Keyword">proc</span> <a href="#first%2Cseq%5BT%5D%5BT%5D"><span class="Identifier">first</span></a><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">(</span><span class="Identifier">a</span><span class="Other">:</span> <span class="Keyword">var</span> <span class="Identifier">seq</span><span class="Other">[</span><span class="Identifier">T</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Keyword">ptr</span> <span class="Identifier">T</span> <span><span class="Other">{</span><span class="Other pragmadots">...</span><span class="Other">}</span></span><span class="pragmawrap"><span class="Other">{.</span><span class="pragma"><span class="Identifier">inline</span></span><span class="Other">.}</span></span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L16"
+href="https://github.com/unicredit/neo/tree/master/neo/private/neocommon.nim#L18"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/private/neocommon.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<a id="Scalar"></a>
-<dt><pre><a href="core.html#Scalar"><span class="Identifier">Scalar</span></a> <span class="Other">=</span> <span class="Identifier">float32</span> <span class="Keyword">or</span> <span class="Identifier">float64</span> <span class="Keyword">or</span> <a href="core.html#Complex"><span class="Identifier">Complex</span></a><span class="Other">[</span><span class="Identifier">float32</span><span class="Other">]</span> <span class="Keyword">or</span> <a href="core.html#Complex"><span class="Identifier">Complex</span></a><span class="Other">[</span><span class="Identifier">float64</span><span class="Other">]</span></pre></dt>
+
+</dl></div>
+<div class="section" id="17">
+<h1><a class="toc-backref" href="#17">Macros</a></h1>
+<dl class="item">
+<a id="overload.m,untyped,typed"></a>
+<dt><pre><span class="Keyword">macro</span> <a href="#overload.m%2Cuntyped%2Ctyped"><span class="Identifier">overload</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">:</span> <span class="Identifier">typed</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L17"
+href="https://github.com/unicredit/neo/tree/master/neo/private/neocommon.nim#L20"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L17" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/private/neocommon.nim#L20" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<a id="CPointer"></a>
-<dt><pre><a href="core.html#CPointer"><span class="Identifier">CPointer</span></a><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span> <span class="Other">=</span> <span class="Keyword">ptr</span> <span class="Identifier">UncheckedArray</span><span class="Other">[</span><span class="Identifier">A</span><span class="Other">]</span></pre></dt>
+<a id="fortran.m,untyped,varargs[typed]"></a>
+<dt><pre><span class="Keyword">macro</span> <a href="#fortran.m%2Cuntyped%2Cvarargs%5Btyped%5D"><span class="Identifier">fortran</span></a><span class="Other">(</span><span class="Identifier">f</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span> <span class="Identifier">callArgs</span><span class="Other">:</span> <span class="Identifier">varargs</span><span class="Other">[</span><span class="Identifier">typed</span><span class="Other">]</span><span class="Other">)</span><span class="Other">:</span> <span class="Identifier">auto</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L18"
+href="https://github.com/unicredit/neo/tree/master/neo/private/neocommon.nim#L64"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L18" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="DimensionError"></a>
-<dt><pre><a href="core.html#DimensionError"><span class="Identifier">DimensionError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">ValueError</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L21"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L21" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="OutOfBoundsError"></a>
-<dt><pre><a href="core.html#OutOfBoundsError"><span class="Identifier">OutOfBoundsError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">ValueError</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L22"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L22" class="link-seesrc" target="_blank" >Edit</a>
-
-</dd>
-<a id="LinearAlgebraError"></a>
-<dt><pre><a href="core.html#LinearAlgebraError"><span class="Identifier">LinearAlgebraError</span></a> <span class="Other">=</span> <span class="Keyword">object</span> <span class="Keyword">of</span> <span class="Identifier">FloatingPointError</span></pre></dt>
-<dd>
-
-
-&nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L23"
-class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L23" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/private/neocommon.nim#L64" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
@@ -933,26 +905,26 @@ class="link-seesrc" target="_blank">Source</a>
 <div class="section" id="18">
 <h1><a class="toc-backref" href="#18">Templates</a></h1>
 <dl class="item">
-<a id="checkDim.t,untyped,string"></a>
-<dt><pre><span class="Keyword">template</span> <a href="#checkDim.t%2Cuntyped%2Cstring"><span class="Identifier">checkDim</span></a><span class="Other">(</span><span class="Identifier">cond</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span> <span class="Identifier">msg</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span></pre></dt>
+<a id="pointerTo.t,untyped"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#pointerTo.t%2Cuntyped"><span class="Identifier">pointerTo</span></a><span class="Other">(</span><span class="Identifier">x</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L25"
+href="https://github.com/unicredit/neo/tree/master/neo/private/neocommon.nim#L16"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L25" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/private/neocommon.nim#L16" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
-<a id="checkBounds.t,untyped,string"></a>
-<dt><pre><span class="Keyword">template</span> <a href="#checkBounds.t%2Cuntyped%2Cstring"><span class="Identifier">checkBounds</span></a><span class="Other">(</span><span class="Identifier">cond</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span> <span class="Identifier">msg</span> <span class="Other">=</span> <span class="StringLit">&quot;&quot;</span><span class="Other">)</span></pre></dt>
+<a id="overload.t,untyped,typed,typed"></a>
+<dt><pre><span class="Keyword">template</span> <a href="#overload.t%2Cuntyped%2Ctyped%2Ctyped"><span class="Identifier">overload</span></a><span class="Other">(</span><span class="Identifier">s</span><span class="Other">:</span> <span class="Identifier">untyped</span><span class="Other">;</span> <span class="Identifier">p</span><span class="Other">,</span> <span class="Identifier">q</span><span class="Other">:</span> <span class="Identifier">typed</span><span class="Other">)</span></pre></dt>
 <dd>
 
 
 &nbsp;&nbsp;<a
-href="https://github.com/unicredit/neo/tree/master/neo/core.nim#L31"
+href="https://github.com/unicredit/neo/tree/master/neo/private/neocommon.nim#L45"
 class="link-seesrc" target="_blank">Source</a>
-<a href="https://github.com/unicredit/neo/edit/devel/neo/core.nim#L31" class="link-seesrc" target="_blank" >Edit</a>
+<a href="https://github.com/unicredit/neo/edit/devel/neo/private/neocommon.nim#L45" class="link-seesrc" target="_blank" >Edit</a>
 
 </dd>
 
