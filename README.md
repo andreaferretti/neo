@@ -1,4 +1,4 @@
-# Neo - A Matrix library
+# 1. Neo - A Matrix library
 
 ![logo](https://raw.githubusercontent.com/unicredit/neo/master/img/neo.png)
 
@@ -54,7 +54,7 @@ Table of contents
 
 <!-- /TOC -->
 
-## Introduction
+## 1.1. Introduction
 
 The library revolves around operations on vectors and matrices of floating
 point numbers. It allows to compute operations either on the CPU or on the
@@ -73,11 +73,11 @@ Neo makes use of many standard libraries such as BLAS, LAPACK and CUDA. See
 [this section](#linking-external-libraries) to learn how to link the correct
 implementation for your platform.
 
-## Working on the CPU
+## 1.2. Working on the CPU
 
-### Dense linear algebra
+### 1.2.1. Dense linear algebra
 
-#### Initialization
+#### 1.2.1.1. Initialization
 
 Here we show a few ways to create matrices and vectors. All matrices methods
 accept a parameter to define whether to store the matrix in row-major (that is,
@@ -117,7 +117,7 @@ let
 All constructors that take as input an existing array or seq perform a copy of
 the data for memory safety.
 
-#### Working with 32-bit
+#### 1.2.1.2. Working with 32-bit
 
 Some constructors (such as `zeros`) allow a type specifier if one wants to
 create a 32-bit vector or matrix. The following example all return 32-bit
@@ -160,7 +160,7 @@ Once vectors and matrices are created, everything is inferred, so there are no
 differences in working with 32-bit or 64-bit. All examples that follow are for
 64-bit, but they would work as well for 32-bit.
 
-#### Accessors
+#### 1.2.1.3. Accessors
 
 Vectors can be accessed as expected:
 
@@ -187,7 +187,7 @@ let
   m1 = m.map(proc(x: float64): float64 = 1 / x)
 ```
 
-#### Slicing
+#### 1.2.1.4. Slicing
 
 The `row` and `column` procs will return vectors that share memory with their
 parent matrix:
@@ -223,7 +223,7 @@ drawbacks:
 In this case, it is enough to call the `.clone()` proc to obtain a copy
 of the matrix or vector with its own storage.
 
-#### Iterators
+#### 1.2.1.5. Iterators
 
 One can iterate over vector or matrix elements, as well as over rows and columns
 
@@ -278,7 +278,7 @@ for c in m.columnsSlow =
   cols.add(c)
 ```
 
-#### Equality
+#### 1.2.1.6. Equality
 
 There are two kinds of equality. The usual `==` operator will compare the
 contents of vector and matrices exactly
@@ -304,7 +304,7 @@ u == v # false
 u =~ v # true
 ```
 
-#### Pretty-print
+#### 1.2.1.7. Pretty-print
 
 Both vectors and matrix have a pretty-print operation, so one can do
 
@@ -319,7 +319,7 @@ and get something like
       [ 0.8225964245706265  0.01608615513584155 0.1442007939324697  0.7623388321096165  0.8419745686508193  0.08792951865247645 0.2902529012579151 ]
       [ 0.8488187232786935  0.422866666087792 0.1057975175658363  0.07968277822379832 0.7526946339452074  0.7698915909784674  0.02831893268471575 ] ]
 
-#### Reshape operations
+#### 1.2.1.8. Reshape operations
 
 The following operations do not change the underlying memory layout of matrices
 and vectors. This means they run in very little time even on big matrices, but
@@ -361,7 +361,7 @@ m.t == m.T
 
 always holds, although the internal representations differ.
 
-#### BLAS Operations
+#### 1.2.1.9. BLAS Operations
 
 A few linear algebra operations are available, wrapping BLAS libraries:
 
@@ -386,7 +386,7 @@ echo max(m1)
 echo min(v2)
 ```
 
-#### Universal functions
+#### 1.2.1.10. Universal functions
 
 Universal functions are real-valued functions that are extended to vectors
 and matrices by working element-wise. There are many common functions that are
@@ -442,7 +442,7 @@ makeUniversal(f)
 to turn `f` into a (public) universal function. If you do not want to export
 `f`, there is the equivalent template `makeUniversalLocal`.
 
-#### Rewrite rules
+#### 1.2.1.11. Rewrite rules
 
 A few rewrite rules allow to optimize a chain of linear algebra operations
 into a single BLAS call. For instance, if you try
@@ -454,7 +454,7 @@ echo v1 + 5.3 * v2
 this is not implemented as a scalar multiplication followed by a sum, but it
 is turned into a single function call.
 
-#### Stacking vectors and matrices
+#### 1.2.1.12. Stacking vectors and matrices
 
 Vectors can be stacked both horizontally (which gives a new vector)
 
@@ -510,7 +510,7 @@ echo hstack(m1, m2, m3)
 
 TODO: stack matrices
 
-#### Solving linear systems
+#### 1.2.1.13. Solving linear systems
 
 Some linear algebraic functions are included, currently for solving systems of
 linear equations of the form `Ax = b`, for square matrices `A`. Functions to invert
@@ -529,19 +529,19 @@ echo a \ b # equivalent
 echo a.inv()
 ```
 
-#### Computing eigenvalues and eigenvectors
+#### 1.2.1.14. Computing eigenvalues and eigenvectors
 
 These functions require a LAPACK implementation.
 
 To be documented.
 
-### Sparse linear algebra
+### 1.2.2. Sparse linear algebra
 
 To be documented.
 
-## Working on the GPU
+## 1.3. Working on the GPU
 
-### Dense linear algebra
+### 1.3.1. Dense linear algebra
 
 If you have a matrix or vector, you can move it on the GPU, and back
 like this:
@@ -575,11 +575,11 @@ m * n
 
 For more information, look at the tests in `tests/cudadense`.
 
-### Sparse linear algebra
+### 1.3.2. Sparse linear algebra
 
 To be documented.
 
-## Static typing for dimensions
+## 1.4. Static typing for dimensions
 
 Under `neo/statics` there exist types that encode vectors and matrices whose
 dimensions are known at compile time. They are defined as aliases of their
@@ -635,9 +635,9 @@ compatibility whenever enough information is known at compile time.
 For now, statics are only available on the CPU. It would be a nice contribution
 to extend this to GPU types.
 
-## Design
+## 1.5. Design
 
-### On the CPU
+### 1.5.1. On the CPU
 
 On the CPU, dense vectors and matrices are stored using this structure:
 
@@ -699,7 +699,7 @@ leave `data` nil. This allows to support
   be constructed using the `sharedVector` and `sharedMatrix` constructors,
   and destructed with `dealloc`.
 
-### Why fields are public
+### 1.5.2. Why fields are public
 
 Notice that all members of the types are public, but in general **it is not
 safe** to change them if you don't know what you are doing. These fields are
@@ -733,7 +733,7 @@ to implement a similar iteration over some minors of a matrix may need
 to perform a similar trick, and preventing to change `fp` would impede
 this optimization.
 
-### On the GPU
+### 1.5.3. On the GPU
 
 On the GPU side, the definitions are similar:
 
@@ -764,9 +764,9 @@ routines to clean up the allocated memory.
 Also, CUDA matrices are only column major for now, although this is going
 to change in the future.
 
-## Linking external libraries
+## 1.6. Linking external libraries
 
-### Linking BLAS and LAPACK implementations
+### 1.6.1. Linking BLAS and LAPACK implementations
 
 Neo requires to link some BLAS and LAPACK implementation to perform the actual
 linear algebra operations. By default, it tries to link whatever are the default
@@ -814,7 +814,21 @@ the options
 
 to enable static linking.
 
-### Linking CUDA
+On Windows, it is recommended to use [MSYS2](https://www.msys2.org/) to install
+the mingw compiler toolchain and compatible OpenBLAS library. For 64-bit builds,
+this would be:
+
+```
+pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-openblas
+```
+
+You should then add `MSYS2_ROOT\mingw64\bin` to your PATH. Programs using nimblas
+can then be compiled using the `-d:blas=libopenblas` switch. At runtime, `libopenblas,dll`
+should be loaded from the mingw64 bin directory you added to your PATH, though it
+is suggested to distribute this DLL file alongside your executable if your are
+publishing binary packages.
+
+### 1.6.2. Linking CUDA
 
 It is possible to delegate work to the GPU using CUDA. The library has been
 tested to work with NVIDIA CUDA 8.0, but it is possible that earlier
@@ -830,11 +844,11 @@ globally set, you can pass suitable options to the Nim compiler, such as
 Support for CUDA is under the package `neo/cuda`, that needs to be imported
 explicitly.
 
-## TODO
+## 1.7. TODO
 
 See the [issue list](https://github.com/unicredit/neo/issues)
 
-## Contributing
+## 1.8. Contributing
 
 Every contribution is very much appreciated! This can range from:
 
