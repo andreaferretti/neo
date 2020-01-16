@@ -19,6 +19,9 @@ proc run() =
     test "universal sqrt on vectors":
       let u = vector([1.0, 4.0, 9.0, 16.0])
       check sqrt(u) == vector([1.0, 2.0, 3.0, 4.0])
+    test "universal natural log":
+      let u = vector([1.0, 4.0, 9.0, 16.0])
+      check ln(u)[0] == 0
     test "universal sine on matrices":
       let m = matrix(@[@[1.0, 2.0], @[4.0, 8.0]])
       check sin(m) == matrix(@[@[sin(1.0), sin(2.0)], @[sin(4.0), sin(8.0)]])
@@ -33,6 +36,9 @@ proc run() =
     test "universal sqrt on vectors":
       let u = vector([1'f32, 4'f32, 9'f32, 16'f32])
       check sqrt(u) == vector([1'f32, 2'f32, 3'f32, 4'f32])
+    test "universal natural log":
+      let u = vector([1'f32, 4'f32, 9'f32, 16'f32])
+      check ln(u)[0] == 0
     test "universal sine on matrices":
       let m = matrix(@[@[1'f32, 2'f32], @[4'f32, 8'f32]])
       check sin(m) == matrix(@[@[sin(1'f32), sin(2'f32)], @[sin(4'f32), sin(8'f32)]])
