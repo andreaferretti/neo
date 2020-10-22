@@ -57,6 +57,9 @@ proc getAddress(n: NimNode): NimNode =
   elif t.kind == nnkRefTy and $(t[0]) in ["Matrix", "Matrix:ObjectType"]:
     result = quote do:
       `n`.fp
+  elif $t == "cstring":
+    result = quote do:
+      `n`
   else:
     result = quote do:
       addr `n`
