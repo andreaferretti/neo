@@ -18,6 +18,6 @@ import dense/dinitialize, dense/daccess, dense/dslice, dense/dequality,
   dense/dconversions, dense/diterators, dense/dcollection, dense/dtrivial_ops,
   dense/dops, dense/drow_major_ops, dense/dmixed_ops, dense/dufunc,
   dense/dstack, dense/dshared, dense/dsolvers, dense/deigenvalues, dense/ddet,
-  dense/dstacking
+  dense/dstacking, dense/ddecompositions
 
 {. pop .}
