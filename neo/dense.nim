@@ -923,6 +923,8 @@ proc `=~`*[A: SomeFloat](v, w: Matrix[A]): bool =
 template `!=~`*(a, b: Vector or Matrix): bool =
   not (a =~ b)
 
+
+
 # Hadamard (component-wise) product
 proc `|*|`*[A](a, b: Vector[A]): Vector[A] =
   checkDim(a.len == b.len)
@@ -1069,6 +1071,152 @@ overload(gebal, sgebal, dgebal)
 overload(gehrd, sgehrd, dgehrd)
 overload(orghr, sorghr, dorghr)
 overload(hseqr, shseqr, dhseqr)
+
+overload(gesdd,sgesdd,  dgesdd)
+
+func newSeqUninit[T](len: Natural): seq[T] {.inline.} =
+  ## Creates an uninitialzed seq.
+  ## Contrary to newSequnitialized in system.nim this works for any subtype T
+  result = newSeqOfCap[T](len)
+  result.setLen(len)
+
+
+# decomposition
+
+proc gesddimpl[T:SomeFloat](a: var Matrix[T], U: var Matrix[T], S: var Matrix[T], Vh: var Matrix[T], scratchspace: var seq[T]) =
+
+  ## this was based off of the arraymancer implementation of the same function
+  ## https://github.com/mratsim/Arraymancer/blob/master/src/arraymancer/linear_algebra/helpers/decomposition_lapack.nim#L194-L287
+
+  ## Wrapper for LAPACK gesdd routine
+  ## (GEneral Singular value Decomposition by Divide & conquer)
+  ##
+  ## Parameters:
+  ##   - a: Input - MxN matrix to factorize, in column major format
+  ##   - U: Output - Unitary matrix containing the left singular vectors as columns
+  ##   - S: Output - Singular values sorted in decreasing order
+  ##   - Vh: Output - Unitary matrix containing the right singular vectors as rows
+  ##
+  ## SVD solves the equation:
+  ## A = U S V.h
+  ##
+  ## - with S being a diagonal matrix of singular values
+  ## - with V being the right singular vectors and
+  ##   V.h being the hermitian conjugate of V
+  ##   for real matrices, this is equivalent to V.t (transpose)
+  ##
+  ## ⚠️: Input must not contain NaN
+  ##
+  ## Performance note:
+  ## - Lapack, especially with the OpenBLAS backend is much more optimized
+  ##   for input [M, N] where M > N versus N < M (2x - 3x speed difference)
+  ##   Transpose accordingly.
+  ##   Matrices must be column major.
+
+  # - https://software.intel.com/en-us/node/469238
+  # - http://www.netlib.org/lapack/explore-html/d4/dca/group__real_g_esing_gac2cd4f1079370ac908186d77efcd5ea8.html
+  # - https://software.intel.com/sites/products/documentation/doclib/mkl_sa/11/mkl_lapack_examples/sgesdd_ex.c.htm
+
+  var 
+    m = a.M.int32
+    n = a.N.int32
+    jobz = cstring"S"
+    k = min(m, n)
+    ldu = m # depends on jobz
+    ucol = k # depends on jobz
+    ldvt = k # depends on jobz
+  var
+    work_size: T
+    lwork = -1'i32 # size query
+    info: int32
+    iwork = newSeqUninit[cint](8 * k)
+
+  U = constantMatrix[T](ldu, ucol, 0.0)
+  S = constantMatrix[T](1, k, 0.0)
+  Vh = constantMatrix[T](ldvt, n, 0.0)
+  
+  fortran(gesdd, jobz, m, n,
+        a, m, # lda
+        S,
+        U, ldu,
+        Vh, ldvt,
+        work_size,
+        lwork, iwork,
+        info
+        )
+
+  lwork = work_size.int32
+  scratchspace.setLen(lwork)
+  
+  fortran(gesdd, jobz, m, n,
+        a, m, # lda
+        S,
+        U, ldu,
+        Vh, ldvt,
+        scratchspace,
+        lwork, iwork,
+        info)
+  
+
+proc svd*[T: SomeFloat](A: Matrix[T]): tuple[U: Matrix[T], S: Matrix[T], Vh: Matrix[T]] =
+  ## this was based off of the arraymancer implementation of the same function
+  ## https://github.com/mratsim/Arraymancer/blob/1a2422a1e150a9794bfaa28c62ed73e3c7c41e47/src/arraymancer/linear_algebra/decomposition.nim#L124
+
+  ## Compute the Singular Value Decomposition of an input matrix ``a``
+  ## Decomposition is done through recursive divide & conquer.
+  ##
+  ## Input:
+  ##   - ``A``, matrix of shape [M, N]
+  ##
+  ## Returns:
+  ##   with K = min(M, N)
+  ##   - ``U``: Unitary matrix of shape [M, K] with left singular vectors as columns
+  ##   - ``S``: Singular values diagonal of length K in decreasing order
+  ##   - ``Vh``: Unitary matrix of shape [K, N] with right singular vectors as rows
+  ##
+  ## SVD solves the equation:
+  ## A = U S V.h
+  ##
+  ## - with S being a diagonal matrix of singular values
+  ## - with V being the right singular vectors and
+  ##   V.h being the hermitian conjugate of V
+  ##   for real matrices, this is equivalent to V.t (transpose)
+  ##
+  ## ⚠️: Input must not contain NaN
+  ##
+  ## Compared to Numpy svd procedure, we default to "full_matrices = false".
+  ##
+  ## Exception:
+  ##   - This can throw if the algorithm did not converge.
+
+  # Checking correctness:
+  # - https://software.intel.com/en-us/articles/checking-correctness-of-lapack-svd-eigenvalue-and-one-sided-decomposition-routines
+
+  # Numpy default to full_matrices is
+  # - confusing for docs
+  # - hurts reconstruction
+  # - often not used (for example for PCA/randomized PCA)
+  # - memory inefficient
+  # thread: https://mail.python.org/pipermail/numpy-discussion/2011-January/054685.html
+  var scratchspace: seq[T]
+
+  # Lapack, especially OpenBLAS is much faster
+  # on SVD for input [M,N] when M > N than when N < M
+  # Transposing accordingly.
+  if A.M >= A.N:
+    var A = A.clone
+    gesddimpl(A, result.U, result.S, result.Vh, scratchspace)
+  else:
+    # Transposed
+    var 
+      At = A.clone.T # transpose is colMajor
+      V:  Matrix[T]
+      Ut: Matrix[T]
+    gesddimpl(At, V, result.S, Ut, scratchspace)
+
+    result.Vh = V.T
+    result.U = Ut.T
+
 
 # Solvers
 
@@ -1309,3 +1457,5 @@ proc det*[A: SomeFloat](a: Matrix[A]): A =
   let up = cast[CPointer[A]](u.fp)
   for i in 0 ..< a.M:
     result *= up[i * (1 + u.ld)]
+
+
