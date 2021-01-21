@@ -1,6 +1,6 @@
 # 1. Neo - A Matrix library
 
-![logo](https://raw.githubusercontent.com/unicredit/neo/master/img/neo.png)
+![logo](https://raw.githubusercontent.com/andreaferretti/neo/master/img/neo.png)
 
 This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
@@ -12,7 +12,7 @@ GPU support has been tested using NVIDIA CUDA 8.0.
 
 The library is currently aligned with latest Nim devel.
 
-API documentation is [here](https://unicredit.github.io/neo/htmldocs/neo.html)
+API documentation is [here](https://andreaferretti.github.io/neo/htmldocs/neo.html)
 
 A lot of examples are available in the tests.
 
@@ -788,7 +788,7 @@ You can link against different implementations by a combination of:
   say, the library `libopenblas.so.3` on Linux, you should pass to Nim the
   option `--define:lapack=openblas`.
 
-See the tasks inside [neo.nimble](https://github.com/unicredit/neo/blob/master/neo.nimble)
+See the tasks inside [neo.nimble](https://github.com/andreaferretti/neo/blob/master/neo.nimble)
 for a few examples.
 
 Packages for various BLAS or LAPACK implementations are available from the package
@@ -846,7 +846,7 @@ explicitly.
 
 ## 1.7. TODO
 
-See the [issue list](https://github.com/unicredit/neo/issues)
+See the [issue list](https://github.com/andreaferretti/neo/issues)
 
 ## 1.8. Contributing
 
@@ -858,4 +858,4 @@ Every contribution is very much appreciated! This can range from:
 * writing blog posts and tutorials
 * helping with the documentation
 * contributing actual code (see the
-  [issue list](https://github.com/unicredit/neo/issues) section)
+  [issue list](https://github.com/andreaferretti/neo/issues) section)
