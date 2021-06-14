@@ -17,6 +17,8 @@ import ./core, ./private/neocommon
 export nimblas.OrderType
 export core
 
+randomize() #initializes the default random number generator
+
 type
   MatrixShape* = enum
     Diagonal, UpperTriangular, LowerTriangular, UpperHessenberg, LowerHessenberg, Symmetric
