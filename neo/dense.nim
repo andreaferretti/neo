@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import nimblas, nimlapack, sequtils, random, math
+import nimblas, nimlapack, sequtils, random, math, sugar
 import ./core, ./private/neocommon
 
 export nimblas.OrderType
@@ -1293,7 +1293,7 @@ type
   EigenValues*[A] = ref object
     real*, img*: seq[A]
   EigenVectors*[A] = ref object
-    real*, img*: seq[seq[A]]
+    real*, img*: seq[Vector[A]]
   SchurResult*[A] = object
     factorization*: Matrix[A]
     eigenvalues*: EigenValues[A]
@@ -1404,7 +1404,7 @@ proc symeig*[T: SomeFloat](a: Matrix[T]): (EigenValues[T], EigenVectors[T]) =
 
   result = (
     EigenValues[T](real: w, img: newSeq[T](a.N)),
-    EigenVectors[T](real: distribute(z, a.N), img: newSeqWith[T](a.N, newSeq[T](a.N)))
+    EigenVectors[T](real: distribute(z, a.N).map(x => vector(x)), img: newSeqWith[T](a.N, zeros(a.N)))
   )
 
 proc eigenvalues*[A: SomeFloat](a: Matrix[A]): EigenValues[A] =
