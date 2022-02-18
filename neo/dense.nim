@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import nimblas, nimlapack, sequtils, random, math
+import nimblas, nimlapack, sequtils, random, math, sugar
 import ./core, ./private/neocommon
 
 export nimblas.OrderType
@@ -1071,6 +1071,7 @@ overload(gebal, sgebal, dgebal)
 overload(gehrd, sgehrd, dgehrd)
 overload(orghr, sorghr, dorghr)
 overload(hseqr, shseqr, dhseqr)
+overload(syevr, dsyevr, ssyevr)
 
 overload(gesdd,sgesdd,  dgesdd)
 
@@ -1291,6 +1292,8 @@ type
     scale*: seq[A]
   EigenValues*[A] = ref object
     real*, img*: seq[A]
+  EigenVectors*[A] = ref object
+    real*, img*: seq[Vector[A]]
   SchurResult*[A] = object
     factorization*: Matrix[A]
     eigenvalues*: EigenValues[A]
@@ -1355,6 +1358,54 @@ proc hessenberg*[A: SomeFloat](a: Matrix[A]): Matrix[A] =
   fortran(gehrd, n, ilo, ihi, result, ldr, tau, work, workSize, info)
   if info > 0:
     raise newException(LinearAlgebraError, "Failed to reduce matrix to upper Hessenberg form")
+
+proc symeig*[T: SomeFloat](a: Matrix[T]): (EigenValues[T], EigenVectors[T]) =
+  checkDim(a.M == a.N, "`eigenvalues` requires a square matrix")
+  assert(a.order == colMajor, "`eigenvalues` requires a column-major matrix")
+  var
+    jobz: cstring = "V".cstring
+    range: cstring = "A".cstring
+    uplo: cstring = "U".cstring
+    n: cint = a.N.cint
+    h: Matrix[T] = a.clone()
+    lda: cint = a.N.cint
+    vl, vu: T # not used because range is 'A'
+    il, iu: cint # not used because range is 'A'
+    abstol: T = -1
+    m: cint = a.N.cint # modify this 'a.N' for at most M eigenvalues
+    w: seq[T] = newSeqUninitialized[T](a.N)
+    z: seq[T] = newSeq[T](a.N * a.N) # modify this 'a.N' for at most M eigenvectors
+    ldz: cint = a.N.cint
+    isuppz: seq[cint] = newSeqUninitialized[cint](2*a.N) # modify this 'a.N' for at most M eigenvalues
+    work: seq[T] = newSeqUninitialized[T](1)
+    lwork: cint = (-1).cint
+    iwork: seq[cint] = newSeqUninitialized[cint](1)
+    liwork: cint = (-1).cint
+    info: cint
+
+  fortran(syevr, jobz, range, uplo, n, h, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info)
+
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
+
+  let
+    work_size = work[0]
+    iwork_size = iwork[0]
+
+  lwork = work_size.cint
+  work.setLen(work_size.int32)
+  liwork = iwork_size.cint
+  iwork.setLen(iwork_size.int32)
+
+  fortran(syevr, jobz, range, uplo, n, h, lda, vl, vu, il, iu, abstol, m, w, z, ldz, isuppz, work, lwork, iwork, liwork, info)
+
+  if info > 0:
+    raise newException(LinearAlgebraError, "Failed to find eigenvalues")
+
+  result = (
+    EigenValues[T](real: w, img: newSeq[T](a.N)),
+    EigenVectors[T](real: distribute(z, a.N).map(x => vector(x)), img: newSeqWith[T](a.N, zeros(a.N)))
+  )
 
 proc eigenvalues*[A: SomeFloat](a: Matrix[A]): EigenValues[A] =
   checkDim(a.M == a.N, "`eigenvalues` requires a square matrix")

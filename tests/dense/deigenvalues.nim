@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import unittest, neo/dense
+import unittest, neo/dense, sequtils
 
 proc run() =
   suite "matrix reductions for eigenvalue computations":
@@ -76,5 +76,37 @@ proc run() =
       check(s.factorization == diag(3.0, 1.0, 2.0))
       check(s.eigenvalues.real == @[3.0, 1.0, 2.0])
       check(s.eigenvalues.img == @[0.0, 0.0, 0.0])
+
+  suite "computing eigenvalues and eigenvectors of real symmetric matrix":
+    test "computing the eigenvalues":
+      let
+        a = matrix(@[
+          @[0.70794509, 0.3582868 , 0.18601989, 0.66848165],
+          @[0.3582868 , 0.26329229, 0.85542206, 0.62635776],
+          @[0.18601989, 0.85542206, 0.4399633 , 0.30754615],
+          @[0.66848165, 0.62635776, 0.30754615, 0.89755355]])
+
+      let (vals, vecs) = symeig(a)
+
+      let
+        expected_vals = @[-0.564026237258954, 0.112267309803938, 0.643464411048214, 2.117048755152045]
+        expected_vecs = @[vector([ 0.029732015676491, -0.777482949372466,  0.597541851617029, 0.193855632482002]),
+                          vector([-0.696167044814947, -0.015641070882148, -0.208509696605442, 0.686753601400669]),
+                          vector([ 0.543396224349132, -0.39730786159535 , -0.655220561273828, 0.342860062651875]),
+                          vector([0.46817517695895, 0.487259769990589, 0.412496615830491, 0.610930816178531])]
+
+      for (val, expected_val) in zip(vals.real, expected_vals):
+        check abs(val - expected_val) < 1.0e-7
+
+      for (vec, expected_vec) in zip(vecs.real, expected_vecs):
+        var v: Vector[float64]
+        if vec * expected_vec < 0:
+          v = -1.0 * vec - expected_vec
+        else:
+          v = vec - expected_vec
+        check v * v < 1.0e-14
+
+      check(vecs.img == newSeqWith(4, zeros(4)))
+      check(vals.img == @[0.0, 0.0, 0.0, 0.0])
 
 run()
