@@ -26,6 +26,13 @@ proc run() =
       check v[2] == 4.0
       check v[3] == 7.0
       check v[4] == 10.0
+    test "reading vector elements backwise index":
+      let v = makeVector(5, proc(i: int): float64 = (3 * i - 2).float64)
+      check v[^5] == -2.0
+      check v[^4] == 1.0
+      check v[^3] == 4.0
+      check v[^2] == 7.0
+      check v[^1] == 10.0
     test "mutating vector elements":
       var v = zeros(3)
       v[0] += 2.1
