@@ -299,6 +299,15 @@ proc `[]=`*[A](m: var Matrix[A], i, j: int, val: A) {. inline .} =
   else:
     elRowMajor(mp, m, i, j) = val
 
+proc `[]`*[A](v: Vector[A], i: BackwardsIndex): A {. inline .} =
+  return v[v.len - i.int]
+
+proc `[]`*[A](v: var Vector[A], i: BackwardsIndex): var A {. inline .} =
+  return v[v.len - i.int]
+
+proc `[]=`*[A](v: Vector[A], i: BackwardsIndex, val: A) {. inline .} =
+  v[v.len - i.int] = val
+
 proc column*[A](m: Matrix[A], j: int): Vector[A] {. inline .} =
   checkBounds(j >= 0 and j < m.N)
   let mp = cast[CPointer[A]](m.fp)
