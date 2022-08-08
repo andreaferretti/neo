@@ -6,9 +6,9 @@ This library is meant to provide basic linear algebra operations for Nim
 applications. The ambition would be to become a stable basis on which to
 develop a scientific ecosystem for Nim, much like Numpy does for Python.
 
-The library has been tested on Ubuntu Linux 16.04 64-bit using
-either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite. The
-GPU support has been tested using NVIDIA CUDA 8.0.
+The library has been tested on Ubuntu Linux 16.04 and 20.04 64-bit using
+either ATLAS, OpenBlas or Intel MKL. It was also tested on OSX Yosemite to Monterey.
+The GPU support has been tested using NVIDIA CUDA 8.0 up to 10.x.
 
 The library is currently aligned with latest Nim devel.
 
