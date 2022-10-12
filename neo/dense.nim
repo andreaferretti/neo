@@ -917,11 +917,13 @@ proc `*`*[A: SomeFloat](a, b: Matrix[A]): Matrix[A] {. inline .} =
 
 template compareApprox(a, b: Vector or Matrix): bool =
   const epsilon = 0.000001
-  let
-    aNorm = l_1(a)
-    bNorm = l_1(b)
-    dNorm = l_1(a - b)
-  (dNorm / (aNorm + bNorm)) < epsilon
+  if a == b: true
+  else:
+    let
+      aNorm = l_1(a)
+      bNorm = l_1(b)
+      dNorm = l_1(a - b)
+    (dNorm / (aNorm + bNorm)) < epsilon
 
 proc `=~`*[A: SomeFloat](v, w: Vector[A]): bool =
   compareApprox(v, w)

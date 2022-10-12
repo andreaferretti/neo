@@ -68,6 +68,12 @@ proc run() =
       check v =~ w
       check v != w
       check w !=~ z
+    test "approximate vector equality handles zero vectors":
+      let
+        N = 5
+        u = zeros(N)
+        v = zeros(N)
+      check u =~ v
     test "approximate matrix equality":
       let
         M = 3
@@ -96,5 +102,12 @@ proc run() =
       check n =~ p
       check n != p
       check p !=~ q
+    test "approximate matrix equality handles zero vectors":
+      let
+        M = 3
+        N = 5
+        m = zeros(M, N)
+        n = zeros(M, N)
+      check m =~ n
 
 run()

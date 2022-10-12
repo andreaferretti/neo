@@ -407,11 +407,13 @@ proc `*`*[A: SomeFloat](a, b: CudaMatrix[A]): CudaMatrix[A] {. inline .} =
 
 template compareApprox(a, b: CudaVector or CudaMatrix): bool =
   const epsilon = 0.000001
-  let
-    aNorm = l_1(a)
-    bNorm = l_1(b)
-    dNorm = l_1(a - b)
-  (dNorm / (aNorm + bNorm)) < epsilon
+  if a == b: true
+  else:
+    let
+      aNorm = l_1(a)
+      bNorm = l_1(b)
+      dNorm = l_1(a - b)
+    (dNorm / (aNorm + bNorm)) < epsilon
 
 proc `=~`*[A: SomeFloat](v, w: CudaVector[A]): bool = compareApprox(v, w)
 

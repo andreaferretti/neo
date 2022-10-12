@@ -57,6 +57,12 @@ proc run() =
       check v =~ w
       check v != w
       check w !=~ z
+    test "approximate vector equality handles zero vectors":
+      let
+        N = 5
+        u = zeros(N).gpu()
+        v = zeros(N).gpu()
+      check u =~ v
     test "strict 64-bit matrix equality":
       let
         m = makeMatrix(3, 5, proc(i, j: int): float64 = (i + 3 * j).float64).gpu()
@@ -64,5 +70,12 @@ proc run() =
         p = makeMatrix(3, 5, proc(i, j: int): float64 = (i - 2 * j).float64).gpu()
       check m == n
       check n != p
+    test "approximate matrix equality handles zero vectors":
+      let
+        M = 3
+        N = 5
+        m = zeros(M, N).gpu()
+        n = zeros(M, N).gpu()
+      check m =~ n
 
 run()
