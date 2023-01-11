@@ -138,7 +138,7 @@ proc `[]`*[A](v: CudaVector[A], s: Slice[int]): CudaVector[A] =
 
 proc pointerAt[A](v: CudaVector[A], i: int): ptr A {. inline .} =
   let s = cast[CPointer[A]](v.fp)
-  addr s[i]
+  addr s[i * v.step]
 
 proc `[]=`*[A: SomeFloat](v: var CudaVector[A], s: Slice[int], val: CudaVector[A]) {. inline .} =
   checkBounds(s.a >= 0 and s.b < v.len)

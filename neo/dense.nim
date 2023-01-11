@@ -590,7 +590,7 @@ proc vstack*[A](matrices: varargs[Matrix[A]]): Matrix[A] =
 
 proc pointerAt[A](v: Vector[A], i: int): ptr A {. inline .} =
   let s = cast[CPointer[A]](v.fp)
-  addr s[i]
+  addr s[i * v.step]
 
 proc `[]`*[A](v: Vector[A], s: Slice[int]): Vector[A] {. inline .} =
   Vector[A](data: v.data, fp: v.pointerAt(s.a), step: v.step, len: s.b - s.a + 1)

@@ -46,6 +46,17 @@ proc run() =
       v[2 .. 3] = w[3 .. 4]
       check v == vector(1, 2, 9, 10, 5)
 
+    test "slice a row of a matrix":
+      let
+        m = matrix(@[
+          @[1, 2, 3],
+          @[4, 5, 6],
+          @[7, 8, 9]
+        ])
+        s = m.row(1)[1..2]
+        expected = vector(@[5, 6])
+      check s == expected
+
   suite "slicing column major matrices":
     test "slice of a full matrix":
       let
