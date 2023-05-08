@@ -20,7 +20,8 @@ proc run() =
       let a = makeMatrixIJ(int, 3, 3, i + i * j - 1)
 
       check(tr(a) == 5)
-    test "determinant of a matrix":
+    
+    test "determinant of a 3x3 matrix":
       let a = matrix(@[
         @[-1.0, -1.0, 0.0],
         @[ 0.0,  1.0, 2.0],
@@ -28,5 +29,13 @@ proc run() =
       ])
 
       check((det(a) + -1) < 1e-6)
+    
+    test "determinant of a 2x2 matrix":
+      let a = matrix(@[
+        @[1.0, 1.0],
+        @[-1.0,  1.0]
+      ])
+
+      check(det(a) == 2.0)
 
 run()

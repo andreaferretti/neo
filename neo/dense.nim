@@ -1512,12 +1512,15 @@ proc tr*[A](a: Matrix[A]): A =
 # TODO: pick a faster decomposition
 proc det*[A: SomeFloat](a: Matrix[A]): A =
   checkDim(a.M == a.N, "`det` requires a square matrix")
-  result  = A(1)
-  let
-    s = schur(a)
-    u = s.factorization
-  let up = cast[CPointer[A]](u.fp)
-  for i in 0 ..< a.M:
-    result *= up[i * (1 + u.ld)]
+  if a.M == 2:
+    result = a[0, 0] * a[1, 1] - a[1, 0] * a[0, 1]
+  else:
+    result  = A(1)
+    let
+      s = schur(a)
+      u = s.factorization
+    let up = cast[CPointer[A]](u.fp)
+    for i in 0 ..< a.M:
+      result *= up[i * (1 + u.ld)]
 
 
