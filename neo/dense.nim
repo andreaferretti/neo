@@ -1170,7 +1170,7 @@ proc gesddimpl[T:SomeFloat](a: var Matrix[T], U: var Matrix[T], S: var Matrix[T]
         info)
   
 
-proc svd*[T: SomeFloat](A: Matrix[T]): tuple[U: Matrix[T], S: Matrix[T], Vh: Matrix[T]] =
+proc svd*[F: SomeFloat](A: Matrix[F]): tuple[U: Matrix[F], S: Matrix[F], Vh: Matrix[F]] =
   ## this was based off of the arraymancer implementation of the same function
   ## https://github.com/mratsim/Arraymancer/blob/1a2422a1e150a9794bfaa28c62ed73e3c7c41e47/src/arraymancer/linear_algebra/decomposition.nim#L124
 
@@ -1210,7 +1210,7 @@ proc svd*[T: SomeFloat](A: Matrix[T]): tuple[U: Matrix[T], S: Matrix[T], Vh: Mat
   # - often not used (for example for PCA/randomized PCA)
   # - memory inefficient
   # thread: https://mail.python.org/pipermail/numpy-discussion/2011-January/054685.html
-  var scratchspace: seq[T]
+  var scratchspace: seq[F]
 
   # Lapack, especially OpenBLAS is much faster
   # on SVD for input [M,N] when M > N than when N < M
@@ -1222,8 +1222,8 @@ proc svd*[T: SomeFloat](A: Matrix[T]): tuple[U: Matrix[T], S: Matrix[T], Vh: Mat
     # Transposed
     var 
       At = A.clone.T # transpose is colMajor
-      V:  Matrix[T]
-      Ut: Matrix[T]
+      V:  Matrix[F]
+      Ut: Matrix[F]
     gesddimpl(At, V, result.S, Ut, scratchspace)
 
     result.Vh = V.T
