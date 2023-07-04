@@ -167,7 +167,7 @@ template makeMatrixIJ*(A: typedesc, M1, N1: int, f: untyped, ord = colMajor): au
         r.data[i * N1 + j] = f
   r
 
-proc randomMatrix*[A: SomeFloat](M, N: int, max: A = 1, order = colMajor): Matrix[A] =
+proc randomMatrix*[A: SomeFloat](M, N: int, max: A, order = colMajor): Matrix[A] =
   result = matrix[A](order, M, N, newSeq[A](M * N))
   for i in 0 ..< (M * N):
     result.data[i] = rand(max)
