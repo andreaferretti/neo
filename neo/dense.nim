@@ -85,9 +85,9 @@ type
   DoubleArray32[M, N: static[int]] = array[M, array[N, float32]]
   DoubleArray64[M, N: static[int]] = array[M, array[N, float64]]
 
-proc vector*[A](data: seq[A]): Vector[A] =
+proc vector*[A](data: sink seq[A]): Vector[A] =
   result = Vector[A](step: 1, len: data.len)
-  shallowCopy(result.data, data)
+  result.data = data
   result.fp = addr(result.data[0])
 
 proc vector*[A](data: varargs[A]): Vector[A] =
@@ -134,14 +134,14 @@ proc ones*(N: int, A: typedesc[float32]): auto = constantVector(N, 1'f32)
 
 proc ones*(N: int, A: typedesc[float64]): auto = constantVector(N, 1'f64)
 
-proc matrix*[A](order: OrderType, M, N: int, data: seq[A]): Matrix[A] =
+proc matrix*[A](order: OrderType, M, N: int, data: sink seq[A]): Matrix[A] =
   result = Matrix[A](
     order: order,
     M: M,
     N: N,
     ld: if order == rowMajor: N else: M
   )
-  shallowCopy(result.data, data)
+  result.data = data
   result.fp = addr(result.data[0])
 
 proc makeMatrix*[A](M, N: int, f: proc (i, j: int): A, order = colMajor): Matrix[A] =
