@@ -1086,11 +1086,12 @@ overload(syevr, dsyevr, ssyevr)
 
 overload(gesdd,sgesdd,  dgesdd)
 
-func newSeqUninit[T](len: Natural): seq[T] {.inline.} =
-  ## Creates an uninitialzed seq.
-  ## Contrary to newSequnitialized in system.nim this works for any subtype T
-  result = newSeqOfCap[T](len)
-  result.setLen(len)
+when not declared(newSeqUninit):
+  func newSeqUninit[T](len: Natural): seq[T] {.inline.} =
+    ## Creates an uninitialzed seq.
+    ## Contrary to newSequnitialized in system.nim this works for any subtype T
+    result = newSeqOfCap[T](len)
+    result.setLen(len)
 
 
 # decomposition
