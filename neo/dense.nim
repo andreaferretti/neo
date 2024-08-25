@@ -1415,7 +1415,7 @@ proc symeig*[T: SomeFloat](a: Matrix[T]): (EigenValues[T], EigenVectors[T]) =
 
   result = (
     EigenValues[T](real: w, img: newSeq[T](a.N)),
-    EigenVectors[T](real: distribute(z, a.N).map(x => vector(x)), img: newSeqWith[T](a.N, zeros(a.N)))
+    EigenVectors[T](real: distribute(z, a.N).map(x => vector(x)), img: newSeqWith(a.N, zeros(a.N)))
   )
 
 proc eigenvalues*[A: SomeFloat](a: Matrix[A]): EigenValues[A] =
